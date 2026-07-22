@@ -1,0 +1,233 @@
+/* ═══════════════════════════════════════════════════════════════
+   SKILLFORGE — DESIGN TOKEN SYSTEM
+
+   This file is the single source of truth for all visual
+   values in the project.
+
+   RULES:
+   - Never hardcode colors, spacing, or typography elsewhere
+   - All values must reference variables defined here
+   - When adding a new token, add a comment explaining its purpose
+
+   USAGE: var(--token-name)
+═══════════════════════════════════════════════════════════════ */
+
+:root {
+
+  /* ─────────────────────────────────────────────────────────────
+     COLOR PALETTE — Blues (Brand Colors)
+
+     These are the raw blue shades. The number indicates
+     lightness: 100 = very light, 900 = very dark.
+     This scale is based on Tailwind CSS color naming.
+  ───────────────────────────────────────────────────────────── */
+
+  --blue-100: #e8e7ff;   /* Very light blue — backgrounds, subtle highlights */
+  --blue-200: #c4c1ff;   /* Light blue — hover states for light surfaces */
+  --blue-500: #6c63ff;   /* Primary brand blue — buttons, links, focus states */
+  --blue-600: #574fd6;   /* Darker blue — button hover, active states */
+  --blue-700: #3d35ad;   /* Very dark blue — pressed states, emphasis */
+
+
+  /* ─────────────────────────────────────────────────────────────
+     COLOR PALETTE — Grays (Neutrals)
+
+     Grays are the most-used colors in any UI. They define
+     backgrounds, borders, text, and shadows. A good gray
+     scale is the backbone of professional UI design.
+  ───────────────────────────────────────────────────────────── */
+
+  --gray-50:  #f9fafb;   /* Near-white — page background */
+  --gray-100: #f3f4f6;   /* Very light gray — secondary background */
+  --gray-200: #e5e7eb;   /* Light gray — borders, dividers */
+  --gray-300: #d1d5db;   /* Medium-light gray — disabled states */
+  --gray-400: #9ca3af;   /* Medium gray — placeholders, muted text */
+  --gray-500: #6b7280;   /* True gray — secondary text */
+  --gray-700: #374151;   /* Dark gray — body text */
+  --gray-800: #1f2937;   /* Very dark gray — headings */
+  --gray-900: #111827;   /* Near-black — primary text */
+
+
+  /* ─────────────────────────────────────────────────────────────
+     COLOR PALETTE — Status Colors
+
+     These communicate meaning: success, warning, error.
+     We include both a base shade and a light background shade
+     for badges, alerts, and notifications.
+  ───────────────────────────────────────────────────────────── */
+
+  --green-100: #d1fae5;   /* Light green background */
+  --green-500: #10b981;   /* Success green */
+  --green-600: #059669;   /* Success green hover */
+
+  --yellow-100: #fef3c7;  /* Light yellow background */
+  --yellow-500: #f59e0b;  /* Warning yellow */
+
+  --red-100: #fee2e2;     /* Light red background */
+  --red-500: #ef4444;     /* Error red */
+
+
+  /* ─────────────────────────────────────────────────────────────
+     COLOR PALETTE — Absolute Colors
+  ───────────────────────────────────────────────────────────── */
+
+  --white: #ffffff;
+  --black: #000000;
+
+    /* ─────────────────────────────────────────────────────────────
+     TYPOGRAPHY — Font Families
+
+     Inter is a professional, highly readable sans-serif font
+     designed specifically for screen reading. Used by GitHub,
+     Linear, Vercel, Notion, and hundreds of product companies.
+
+     The fallback stack ensures text is readable even if the
+     custom font fails to load — always include fallbacks.
+  ───────────────────────────────────────────────────────────── */
+
+  --font-sans:  'Inter', -apple-system, BlinkMacSystemFont,
+                'Segoe UI', Helvetica, Arial, sans-serif;
+  --font-mono:  'JetBrains Mono', 'Fira Code',
+                'Cascadia Code', Consolas, monospace;
+
+
+  /* ─────────────────────────────────────────────────────────────
+     TYPOGRAPHY — Font Size Scale
+
+     Based on a 1.25 ratio (Major Third musical interval).
+     Each size is approximately 1.25x the previous.
+     This creates visual harmony — sizes feel related.
+
+     All values use rem (not px) — critical for accessibility.
+     rem is relative to the root font size (usually 16px).
+     If a user increases their browser font size for readability,
+     rem scales automatically. px does not. This matters.
+  ───────────────────────────────────────────────────────────── */
+
+  --text-xs:   0.75rem;   /* 12px — Captions, labels */
+  --text-sm:   0.875rem;  /* 14px — Secondary text, metadata */
+  --text-base: 1rem;      /* 16px — Body text */
+  --text-lg:   1.125rem;  /* 18px — Slightly emphasized text */
+  --text-xl:   1.25rem;   /* 20px — Sub-headings */
+  --text-2xl:  1.5rem;    /* 24px — Card titles, section headers */
+  --text-3xl:  1.875rem;  /* 30px — Page section headings */
+  --text-4xl:  2.25rem;   /* 36px — Page titles */
+  --text-5xl:  3rem;      /* 48px — Hero headlines */
+
+
+  /* ─────────────────────────────────────────────────────────────
+     TYPOGRAPHY — Font Weights
+  ───────────────────────────────────────────────────────────── */
+
+  --font-normal:    400;  /* Body text */
+  --font-medium:    500;  /* Slightly emphasized */
+  --font-semibold:  600;  /* Labels, UI elements */
+  --font-bold:      700;  /* Headings, strong emphasis */
+
+
+  /* ─────────────────────────────────────────────────────────────
+     TYPOGRAPHY — Line Heights
+
+     Line height controls the vertical space between lines.
+     Too tight: text feels cramped and is hard to read.
+     Too loose: the text feels disconnected and scattered.
+     Shorter text (headings) uses tighter line height.
+     Longer text (body) uses looser line height.
+  ───────────────────────────────────────────────────────────── */
+
+  --leading-none:    1;      /* Single elements, display text */
+  --leading-tight:   1.25;   /* Headings */
+  --leading-snug:    1.375;  /* Sub-headings */
+  --leading-normal:  1.5;    /* Body text default */
+  --leading-relaxed: 1.625;  /* Comfortable reading */
+  --leading-loose:   2;      /* Spacious, accessible reading */
+
+      /* ─────────────────────────────────────────────────────────────
+     SPACING SCALE
+
+     Built on a 4px base unit — the most common spacing unit
+     in professional design systems (Material Design, Tailwind,
+     Ant Design, Primer, and hundreds of others).
+
+     Why 4px? Because it divides evenly into common screen
+     widths, creates mathematically harmonious layouts, and
+     aligns with sub-pixel rendering on modern displays.
+
+     All spacing in the project (margin, padding, gap) should
+     come from this scale — never arbitrary values.
+  ───────────────────────────────────────────────────────────── */
+
+  --space-px:  1px;       /* Borders, fine details */
+  --space-1:   0.25rem;   /* 4px  — Micro spacing */
+  --space-2:   0.5rem;    /* 8px  — Tight spacing */
+  --space-3:   0.75rem;   /* 12px — Compact spacing */
+  --space-4:   1rem;      /* 16px — Default spacing */
+  --space-5:   1.25rem;   /* 20px */
+  --space-6:   1.5rem;    /* 24px — Comfortable spacing */
+  --space-8:   2rem;      /* 32px — Section spacing */
+  --space-10:  2.5rem;    /* 40px */
+  --space-12:  3rem;      /* 48px — Large section gaps */
+  --space-16:  4rem;      /* 64px — Major sections */
+  --space-20:  5rem;      /* 80px */
+  --space-24:  6rem;      /* 96px — Page-level spacing */
+
+    /* ─────────────────────────────────────────────────────────────
+     BORDER RADIUS
+  ───────────────────────────────────────────────────────────── */
+
+  --radius-sm:   0.25rem;    /* 4px  — Subtle rounding */
+  --radius-md:   0.5rem;     /* 8px  — Default cards, inputs */
+  --radius-lg:   0.75rem;    /* 12px — Large cards */
+  --radius-xl:   1rem;       /* 16px — Modals, prominent cards */
+  --radius-2xl:  1.5rem;     /* 24px — Pills, feature cards */
+  --radius-full: 9999px;     /* Circles and pill shapes */
+
+  /* ─────────────────────────────────────────────────────────────
+     SHADOWS — Elevation System
+
+     Shadows communicate which elements are "closer" to the user.
+     Subtle shadow: flat element at page level (cards, inputs)
+     Strong shadow: floating element above the page (modals, tooltips)
+  ───────────────────────────────────────────────────────────── */
+
+  --shadow-sm:  0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md:  0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg:  0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl:  0 20px 25px -5px rgba(0, 0, 0, 0.1),
+                0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+  /* ─────────────────────────────────────────────────────────────
+     TRANSITIONS — Animation Timing
+
+     Consistent timing makes the UI feel polished.
+     Too fast: changes feel jarring and harsh.
+     Too slow: the UI feels sluggish and unresponsive.
+  ───────────────────────────────────────────────────────────── */
+
+  --duration-fast:    150ms;  /* Hover states, quick feedback */
+  --duration-normal:  250ms;  /* Most transitions */
+  --duration-slow:    350ms;  /* Modals, page transitions */
+  --ease-default:     ease;
+  --ease-in-out:      ease-in-out;
+
+  /* ─────────────────────────────────────────────────────────────
+     LAYOUT — Container and Z-index
+  ───────────────────────────────────────────────────────────── */
+
+  --container-max:  1200px;  /* Maximum page width */
+  --navbar-height:  70px;    /* Used for scroll offset calculations */
+
+  /* Z-index scale — never use arbitrary numbers like z-index: 99999
+     When every z-index is from this scale, layering is predictable. */
+  --z-base:     0;
+  --z-raised:   10;
+  --z-dropdown: 100;
+  --z-sticky:   200;
+  --z-overlay:  300;
+  --z-modal:    400;
+  --z-toast:    500;
+}
+
+
