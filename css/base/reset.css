@@ -1,0 +1,481 @@
+
+/* ═══════════════════════════════════════════════════════════════
+   SKILLFORGE — CSS RESET
+
+   Based on the Modern CSS Reset pattern (Andy Bell, updated).
+
+   PURPOSE:
+   Removes browser inconsistencies and establishes a neutral,
+   predictable baseline before any component styles are applied.
+
+   RULES:
+   - Never add component or layout styles here
+   - This file loads FIRST, before all other CSS files
+   - Every rule must be intentional — never add "just in case" rules
+
+   LAST UPDATED: Week 1, Day 4
+═══════════════════════════════════════════════════════════════ */
+/* ─────────────────────────────────────────────────────────────
+   BOX SIZING
+
+   Applies border-box to every element and every pseudo-element.
+
+   The ::before and ::after pseudo-elements create virtual child
+   elements used in CSS tricks and decorative styling. They also
+   need border-box to behave predictably.
+
+   This is the single most impactful CSS rule in this entire file.
+   Every layout in SkillForge depends on this being correct.
+───────────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+/* ─────────────────────────────────────────────────────────────
+   MARGIN AND PADDING RESET
+
+   Browsers add default margin/padding to many elements:
+   - body has 8px margin on all sides
+   - headings (h1-h6) have top and bottom margins
+   - paragraphs have bottom margins
+   - ul, ol have left padding
+   - blockquote has left margin and padding
+   - figure has margins
+
+   We reset all of them to zero because we will define spacing
+   explicitly and intentionally in component stylesheets.
+
+   This prevents the classic "mystery space" debugging sessions.
+───────────────────────────────────────────────────────────── */
+
+* {
+  margin: 0;
+  padding: 0;
+}
+/* ─────────────────────────────────────────────────────────────
+   HTML ELEMENT
+
+   scroll-behavior: smooth — enables smooth scrolling when
+   navigating to anchor links (#section-id). This is a
+   simple enhancement that makes the site feel more polished.
+
+   -webkit-text-size-adjust: 100% — prevents iOS Safari from
+   automatically increasing font sizes when the device is
+   rotated to landscape. Without this, your carefully set
+   font sizes are overridden on mobile devices.
+───────────────────────────────────────────────────────────── */
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+/* ─────────────────────────────────────────────────────────────
+   BODY ELEMENT
+
+   We apply our design tokens here so the document inherits
+   the correct font, color, and background by default.
+
+   min-height: 100vh — ensures the body always fills at least
+   the full viewport height. Without this, if a page has little
+   content, the body stops short and the footer floats in the
+   middle of the screen with a white gap below.
+
+   line-height: var(--leading-normal) — sets a sensible default
+   reading rhythm for all text.
+───────────────────────────────────────────────────────────── */
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   HEADINGS
+
+   By default, browsers make h1-h6 bold with large sizes and
+   margins. We keep font-weight inheritance but let our
+   typography.css system control actual sizes.
+
+   We do NOT reset color here — headings should inherit the
+   body color and we can override per component when needed.
+───────────────────────────────────────────────────────────── */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: var(--leading-tight);
+}
+/* ─────────────────────────────────────────────────────────────
+   PARAGRAPHS
+
+   We remove the default bottom margin that browsers add.
+   Spacing between paragraphs should be controlled by the
+   parent layout or a specific typography class — not a default.
+───────────────────────────────────────────────────────────── */
+
+p {
+  line-height: var(--leading-relaxed);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   TEXT THAT OVERFLOWS
+
+   overflow-wrap: break-word — prevents long words or URLs from
+   overflowing their container. Without this, a long unbroken
+   string like a URL will push past the card boundary and create
+   a horizontal scroll or an overflow bug.
+───────────────────────────────────────────────────────────── */
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+li,
+figcaption {
+  overflow-wrap: break-word;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   ANCHOR LINKS
+
+   By default, links are blue, underlined, and have a distinct
+   visited color (purple). These are useful in body text but
+   create problems in navigation, cards, and buttons.
+
+   We reset color to "inherit" so links take the color of their
+   parent element. We remove text-decoration as a default —
+   it is added back intentionally where it should appear
+   (e.g., in body text via a .prose or .link class).
+
+   ACCESSIBILITY NOTE:
+   Links should still be visually distinguishable from surrounding
+   text by more than just color alone (WCAG 1.4.1). We will
+   ensure this when we style specific link types in components.
+───────────────────────────────────────────────────────────── */
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   LISTS
+
+   Browsers add list-style (bullets/numbers) and left padding
+   to ul and ol. This makes sense for prose content but is
+   wrong for navigation menus, card lists, and UI components.
+
+   We remove list styles globally and add them back when
+   a list is genuinely being used as a document list
+   (e.g., inside an article or a .prose container).
+
+   ACCESSIBILITY NOTE:
+   VoiceOver (Apple's screen reader) removes list semantics
+   when list-style is none. To preserve list semantics for
+   screen readers while removing visual bullets, we add
+   role="list" directly in HTML when it matters. This is a
+   known pattern and is the correct solution.
+───────────────────────────────────────────────────────────── */
+
+ul,
+ol {
+  list-style: none;
+}
+/* ─────────────────────────────────────────────────────────────
+   IMAGES AND MEDIA
+
+   max-width: 100% — the single most important image rule.
+   Without this, images render at their natural size regardless
+   of their container. A 2000px wide photo inside a 400px card
+   will overflow the card. With max-width: 100%, images
+   shrink to fit their container but never stretch beyond their
+   natural size.
+
+   display: block — inline elements (which images are by default)
+   have a 3-4px gap below them caused by space reserved for text
+   descenders (letters like g, j, p that hang below the baseline).
+   Setting display: block removes this gap entirely.
+
+   height: auto — when max-width shrinks an image, height: auto
+   preserves the original aspect ratio automatically.
+───────────────────────────────────────────────────────────── */
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+/* ─────────────────────────────────────────────────────────────
+   FORM ELEMENTS
+
+   This is one of the most important sections in any CSS reset.
+
+   PROBLEM:
+   Browsers treat form elements differently from regular HTML.
+   By default, inputs, buttons, textareas, and selects:
+   - Do NOT inherit font-family from the body
+   - Do NOT inherit font-size from the body
+   - Have their own system-specific visual styles
+
+   This means even if you set font-family on body, your input
+   fields will use a different font — usually a system default.
+   On macOS this is San Francisco. On Windows it is Segoe UI.
+   They look completely different from your chosen font.
+
+   SOLUTION:
+   font: inherit tells form elements to use the same font
+   stack as their parent element — which inherits from body.
+   This makes forms visually consistent with the rest of the UI.
+───────────────────────────────────────────────────────────── */
+
+input,
+button,
+textarea,
+select,
+optgroup {
+  font: inherit;
+  color: inherit;
+}
+/* ─────────────────────────────────────────────────────────────
+   BUTTON SPECIFIC RESET
+
+   Buttons have a remarkable amount of browser-applied styling:
+   - Background color (gray or system-colored)
+   - Border (usually a 2px outset border)
+   - Padding
+   - Their own font (overridden above)
+   - cursor: default (not pointer — this is wrong for buttons)
+
+   We strip all of this so we can style buttons from scratch.
+
+   cursor: pointer is not just aesthetic — it is a usability
+   signal. The pointer cursor (hand icon) tells users "this is
+   clickable." Default buttons use cursor: default (arrow),
+   which is incorrect behavior.
+
+   ACCESSIBILITY NOTE:
+   We keep the default :focus-visible behavior from the browser
+   here — we will style focus rings intentionally in buttons.css.
+   Never remove focus visibility entirely — keyboard users depend on it.
+───────────────────────────────────────────────────────────── */
+
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+/* ─────────────────────────────────────────────────────────────
+   INPUT FIELD RESET
+
+   -webkit-appearance: none removes the default browser styling
+   on inputs (especially visible on iOS Safari, which adds
+   rounded corners, gradients, and shadows to text inputs
+   by default). Without this, your clean flat inputs look
+   completely different on an iPhone.
+───────────────────────────────────────────────────────────── */
+
+input,
+textarea {
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 0;
+}
+/* ─────────────────────────────────────────────────────────────
+   TEXTAREA
+
+   By default, textareas can be resized both horizontally and
+   vertically by the user. Horizontal resizing breaks layouts —
+   the textarea pushes past its container width.
+
+   resize: vertical allows the user to make it taller but not
+   wider, which is the only resize behavior that makes sense
+   in a fixed-width layout.
+───────────────────────────────────────────────────────────── */
+
+textarea {
+  resize: vertical;
+}
+/* ─────────────────────────────────────────────────────────────
+   TABLES
+
+   Tables have default border spacing in many browsers.
+   border-collapse merges adjacent borders into one.
+   border-spacing: 0 removes any remaining spacing between cells.
+───────────────────────────────────────────────────────────── */
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+/* ─────────────────────────────────────────────────────────────
+   FOCUS STYLES
+
+   Never use outline: none or outline: 0 globally.
+   Focus outlines exist for keyboard navigation accessibility.
+   Screen reader users and keyboard-only users depend on them.
+
+   We use :focus-visible instead of :focus.
+   :focus-visible only shows the focus ring when the element
+   was focused via keyboard — not via mouse click. This is the
+   modern, correct approach: mouse users do not see the ring
+   (cleaner design), keyboard users always do (accessibility).
+───────────────────────────────────────────────────────────── */
+
+:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+/* ─────────────────────────────────────────────────────────────
+   REDUCED MOTION
+
+   Some users have vestibular disorders or motion sensitivities
+   that cause dizziness or nausea from animated UI elements.
+
+   The prefers-reduced-motion media query detects users who
+   have enabled "Reduce Motion" in their operating system.
+   We respect their preference by disabling animations.
+
+   This is not optional — it is a WCAG 2.1 AA requirement
+   (Success Criterion 2.3.3) and a sign of a professional,
+   accessible application.
+───────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+/* ─────────────────────────────────────────────────────────────
+   SELECTION STYLING
+
+   Customizes the text highlight color when a user selects text.
+   Purely aesthetic, but matches your brand color system.
+───────────────────────────────────────────────────────────── */
+
+::selection {
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary-active);
+}
+/* ─────────────────────────────────────────────────────────────
+   HORIZONTAL RULE
+
+   Removes default styling on <hr> elements and replaces it
+   with a clean, token-based border.
+───────────────────────────────────────────────────────────── */
+
+hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: var(--space-6) 0;
+}
+/* ─────────────────────────────────────────────────────────────
+   ABBREVIATIONS
+
+   Preserves the dotted underline for abbreviation elements
+   and shows the correct cursor (help cursor) to indicate
+   that hovering will show a tooltip.
+───────────────────────────────────────────────────────────── */
+
+abbr[title] {
+  text-decoration: underline dotted;
+  cursor: help;
+  text-decoration-skip-ink: none;
+}
+/* ─────────────────────────────────────────────────────────────
+   CODE AND PREFORMATTED TEXT
+───────────────────────────────────────────────────────────── */
+
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+pre {
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+/* ─────────────────────────────────────────────────────────────
+   STRONG AND BOLD
+───────────────────────────────────────────────────────────── */
+
+strong,
+b {
+  font-weight: var(--font-bold);
+}
+/* ─────────────────────────────────────────────────────────────
+   SUB AND SUPERSCRIPT
+
+   Prevents sub/superscript text from affecting line height.
+───────────────────────────────────────────────────────────── */
+
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub { bottom: -0.25em; }
+sup { top: -0.5em; }
+
+/* ─────────────────────────────────────────────────────────────
+   HIDDEN ATTRIBUTE
+
+   Ensures elements with the HTML "hidden" attribute are
+   actually hidden. Some browsers do not consistently hide
+   elements with this attribute without this rule.
+───────────────────────────────────────────────────────────── */
+
+[hidden] {
+  display: none !important;
+
+  h1 {
+    color: red;
+    font-size: 50px;
+}
+
+button {
+    background: blue;
+    color: white;
+    padding: 10px;
+}
+
+ul {
+    border: 2px solid green;
+}
+}
