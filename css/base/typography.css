@@ -1,0 +1,224 @@
+/* ═══════════════════════════════════════════════════════════════
+   SKILLFORGE — TYPOGRAPHY SYSTEM
+
+   Defines all text styles using design tokens from variables.css.
+
+   ARCHITECTURE:
+   1. Semantic HTML elements (h1-h6, p) are styled with defaults
+   2. Utility classes (.text-*, .font-*) override when needed
+
+   RULES:
+   - All font sizes use rem units (accessibility requirement)
+   - All values reference CSS variables from variables.css
+   - Never hardcode colors or sizes in this file
+
+   LAST UPDATED: Week 1, Day 5
+═══════════════════════════════════════════════════════════════ */
+
+
+/* ─────────────────────────────────────────────────────────────
+   HEADING ELEMENTS
+
+   Visual hierarchy from most important (h1) to least (h6).
+   All headings use tight line-height for visual cohesion.
+
+   Headings inherit color from body by default and can be
+   overridden with utility classes where needed.
+───────────────────────────────────────────────────────────── */
+
+/* Note: font-family is intentionally not repeated here — it's set once
+   on body in reset.css and inherits naturally into every heading. */
+
+h1 {
+  font-size: var(--text-5xl);
+  font-weight: var(--font-bold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-text-primary);
+}
+
+h2 {
+  font-size: var(--text-4xl);
+  font-weight: var(--font-bold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight-sm);
+  color: var(--color-text-primary);
+}
+
+h3 {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-semibold);
+  line-height: var(--leading-tight);
+  color: var(--color-text-primary);
+}
+
+h4 {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-semibold);
+  line-height: var(--leading-snug);
+  color: var(--color-text-primary);
+}
+
+h5 {
+  font-size: var(--text-xl);
+  font-weight: var(--font-medium);
+  line-height: var(--leading-snug);
+  color: var(--color-text-primary);
+}
+
+h6 {
+  font-size: var(--text-lg);
+  font-weight: var(--font-medium);
+  line-height: var(--leading-normal);
+  color: var(--color-text-primary);
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   BODY TEXT
+
+   Paragraphs and list items use a looser line-height for
+   comfortable reading.
+───────────────────────────────────────────────────────────── */
+
+/* Note: line-height for p is intentionally not redeclared here —
+   reset.css already sets it to the same value (--leading-relaxed).
+   max-width: 65ch is a widely-used readability guideline (character
+   count, not a design-scale value), kept as a literal for that reason. */
+
+p {
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+  max-width: 65ch;
+}
+
+li {
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-secondary);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   UTILITY CLASSES — Font Sizes
+───────────────────────────────────────────────────────────── */
+
+.text-xs {
+    font-size: var(--text-xs);
+}
+
+.text-sm {
+    font-size: var(--text-sm);
+}
+
+.text-base {
+    font-size: var(--text-base);
+}
+
+.text-lg {
+    font-size: var(--text-lg);
+}
+
+.text-xl {
+    font-size: var(--text-xl);
+}
+
+.text-2xl {
+    font-size: var(--text-2xl);
+}
+
+.text-3xl {
+    font-size: var(--text-3xl);
+}
+
+.text-4xl {
+    font-size: var(--text-4xl);
+}
+
+.text-5xl {
+    font-size: var(--text-5xl);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   UTILITY CLASSES — Font Weights
+───────────────────────────────────────────────────────────── */
+
+.font-normal {
+    font-weight: var(--font-normal);
+}
+
+.font-medium {
+    font-weight: var(--font-medium);
+}
+
+.font-semibold {
+    font-weight: var(--font-semibold);
+}
+
+.font-bold {
+    font-weight: var(--font-bold);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   UTILITY CLASSES — Text Colors
+───────────────────────────────────────────────────────────── */
+
+.text-primary {
+    color: var(--color-text-primary);
+}
+
+.text-secondary {
+    color: var(--color-text-secondary);
+}
+
+.text-muted {
+    color: var(--color-text-muted);
+}
+
+.text-accent {
+    color: var(--color-primary);
+}
+
+.text-inverse {
+    color: var(--color-text-inverse);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   UTILITY CLASSES — Text Alignment
+───────────────────────────────────────────────────────────── */
+
+.text-left {
+    text-align: left;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-justify {
+    text-align: justify;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   LINK STYLES
+───────────────────────────────────────────────────────────── */
+
+.link {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color var(--duration-fast) var(--ease-default);
+}
+
+.link:hover {
+    color: var(--color-primary-hover);
+}
+
+.link:focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 2px;
+    border-radius: 2px;
+}

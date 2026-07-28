@@ -10,8 +10,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- CSS — Load order matters -->
-  <link rel="stylesheet" href="css/base/variables.css">
-  <link rel="stylesheet" href="css/base/reset.css">
+ <link rel="stylesheet" href="css/base/variables.css">
+<link rel="stylesheet" href="css/base/reset.css">
+<link rel="stylesheet" href="css/base/typography.css">
 
   <title>SkillForge — Student Learning Platform</title>
 </head>
@@ -30,6 +31,85 @@
 
     <button type="button">Test Button</button>
     <input type="text" placeholder="Test input field">
+    <hr>
+
+<h2>Utility Class Test</h2>
+
+<div class="text-2xl font-bold">
+    Utility Class Test
+</div>
+
+<p class="text-sm">
+    This paragraph uses the text-sm utility class.
+</p>
+
+<hr>
+
+<h2>Text Color Utility Test</h2>
+
+<p class="text-primary">
+    This text uses .text-primary
+</p>
+
+<p class="text-secondary">
+    This text uses .text-secondary
+</p>
+
+<p class="text-muted">
+    This text uses .text-muted
+</p>
+
+<p class="text-accent">
+    This text uses .text-accent
+</p>
+
+<div style="background-color: var(--gray-900); padding: 2rem; margin-top: 1rem;">
+    <p class="text-inverse">
+        This text uses .text-inverse
+    </p>
+</div>
+
+<hr>
+
+<h2>Text Alignment Utility Test</h2>
+
+<h3 class="text-left">
+    This heading is left aligned
+</h3>
+
+<h3 class="text-center">
+    This heading is center aligned
+</h3>
+
+<h3 class="text-right">
+    This heading is right aligned
+</h3>
+
+<p class="text-justify" style="max-width: 600px;">
+    This paragraph demonstrates justified text. Notice how the browser adjusts the spacing between words so that both the left and right edges line up. On narrow screens this often creates uneven spacing, which is why justified text is rarely used for body content on modern websites.
+</p>
+
+<hr>
+
+<h2>Link Style Test</h2>
+
+<p>
+    Learn more by visiting our
+    <a href="#" class="link">About Page</a>.
+</p>
+
+<p>
+    We also have a
+    <a href="#" class="link">Course Catalog</a>
+    and a
+    <a href="#" class="link">Student Blog</a>.
+</p>
+
+<p>
+    This is an
+    <a href="#">unstyled link</a>
+    without the <code>.link</code> class.
+</p>
 </div>
 
 </body>
