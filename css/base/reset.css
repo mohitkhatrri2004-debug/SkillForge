@@ -463,19 +463,4 @@ sup { top: -0.5em; }
 
 [hidden] {
   display: none !important;
-
-  h1 {
-    color: red;
-    font-size: 50px;
-}
-
-button {
-    background: blue;
-    color: white;
-    padding: 10px;
-}
-
-ul {
-    border: 2px solid green;
-}
 }
