@@ -1,0 +1,85 @@
+/* ═══════════════════════════════════════════════════════════════
+   SKILLFORGE — MAIN CSS ENTRY POINT
+
+   This file is the single entry point for all CSS in the project.
+   It imports all other stylesheets in the correct architectural order.
+
+   USAGE:
+   Link only this file in your HTML:
+   <link rel="stylesheet" href="css/main.css">
+
+   ARCHITECTURE (ITCSS-inspired layers):
+   1. Settings   → variables.css (design tokens)
+   2. Generic    → reset.css (browser normalization)
+   3. Elements   → typography.css (base HTML element styles)
+   4. Components → components/*.css (reusable UI components)
+   5. Pages      → pages/*.css (page-specific styles)
+   6. Utilities  → utilities/*.css (helper classes, overrides)
+
+   RULES:
+   - Never add CSS rules directly in this file
+   - Only @import statements belong here
+   - Import order is critical — do not rearrange without reason
+   - Add new imports to the appropriate layer section
+
+   LAST UPDATED: Week 1, Day 5
+═══════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════════
+   LAYER 1 — SETTINGS
+   
+   Design tokens that define the visual language.
+   No CSS output — just variables.
+═══════════════════════════════════════════════════════════════ */
+
+@import url('base/variables.css');
+
+
+/* ═══════════════════════════════════════════════════════════════
+   LAYER 2 — GENERIC
+   
+   Browser resets and normalization.
+   Establishes a neutral, consistent baseline.
+═══════════════════════════════════════════════════════════════ */
+
+@import url('base/reset.css');
+
+
+/* ═══════════════════════════════════════════════════════════════
+   LAYER 3 — ELEMENTS
+   
+   Base styles for HTML elements (h1-h6, p, a, etc.).
+   No classes yet — just semantic HTML styling.
+═══════════════════════════════════════════════════════════════ */
+
+@import url('base/typography.css');
+
+
+/* ═══════════════════════════════════════════════════════════════
+   LAYER 4 — COMPONENTS
+   
+   Reusable UI components (buttons, cards, navbar, etc.).
+   Will be added as we build them in Week 2+.
+═══════════════════════════════════════════════════════════════ */
+
+/* Component imports will go here */
+
+
+/* ═══════════════════════════════════════════════════════════════
+   LAYER 5 — PAGES
+   
+   Page-specific styles that don't fit into reusable components.
+   Will be added as we build pages in Week 2+.
+═══════════════════════════════════════════════════════════════ */
+
+/* Page imports will go here */
+
+
+/* ═══════════════════════════════════════════════════════════════
+   LAYER 6 — UTILITIES
+   
+   Helper classes with highest specificity (dark mode, animations).
+   Will be added as needed in Week 7+.
+═══════════════════════════════════════════════════════════════ */
+
+/* Utility imports will go here */
