@@ -259,6 +259,11 @@
   --color-primary-active:  var(--blue-700);  /* Pressed/active state */
   --color-primary-subtle:  var(--blue-100);  /* Light backgrounds, selection highlight */
   --color-primary-text:    var(--blue-500);  /* Primary color used as text (links, accents) */
+  /* Additional semantic tokens required by navbar */
+--color-surface:         var(--white);
+--color-bg-tertiary:     var(--gray-100);
+--color-border-strong:   var(--gray-300);
+--color-text-on-primary: var(--white);
 }
 
 

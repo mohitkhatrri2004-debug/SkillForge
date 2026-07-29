@@ -1,0 +1,176 @@
+/* ═══════════════════════════════════════════════════════════════
+   SKILLFORGE — NAVBAR COMPONENT
+
+   The site-wide navigation header. Appears on every page.
+
+   STRUCTURE:
+   .navbar
+   └── .navbar__container
+       ├── .navbar__logo
+       │   └── .navbar__logo-text > .navbar__logo-accent
+       ├── .navbar__nav
+       │   └── .navbar__links > .navbar__item > .navbar__link
+       └── .navbar__actions
+           └── .navbar__btn (.navbar__btn--ghost | .navbar__btn--primary)
+
+   DEPENDENCIES:
+   - variables.css (design tokens)
+   - reset.css (box-sizing, margin reset)
+
+   LAST UPDATED: Week 1, Day 6
+═══════════════════════════════════════════════════════════════ */
+/* ─────────────────────────────────────────────────────────────
+   NAVBAR BLOCK
+
+   The outer <header> element. Full width, fixed to the top.
+   Background and border create visual separation from page.
+───────────────────────────────────────────────────────────── */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: var(--navbar-height);           /* 70px from variables.css */
+  background-color: var(--color-surface); /* White background */
+  border-bottom: 1px solid var(--color-border); /* Subtle separator */
+  z-index: var(--z-sticky);              /* Stays above page content */
+
+  /* Smooth shadow on scroll (subtle depth) */
+  box-shadow: var(--shadow-sm);
+}
+/* ─────────────────────────────────────────────────────────────
+   NAVBAR CONTAINER
+
+   Centers content and constrains maximum width.
+   Flexbox distributes logo, nav, and actions horizontally.
+───────────────────────────────────────────────────────────── */
+
+.navbar__container {
+  display: flex;                          /* Flexbox layout */
+  align-items: center;                    /* Vertical centering */
+  height: 100%;                          /* Fill navbar height */
+  max-width: var(--container-max);       /* 1200px max width */
+  margin-inline: auto;                   /* Center horizontally */
+  padding-inline: var(--space-6);        /* 24px left/right padding */
+}
+/* ─────────────────────────────────────────────────────────────
+   NAVBAR LOGO
+───────────────────────────────────────────────────────────── */
+
+.navbar__logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;               /* Already handled by reset */
+  flex-shrink: 0;                      /* Logo never shrinks */
+}
+
+.navbar__logo-text {
+  font-size: var(--text-xl);           /* 20px */
+  font-weight: var(--font-bold);
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;            /* Tight tracking for brand feel */
+  transition: opacity var(--duration-fast) var(--ease-default);
+}
+
+.navbar__logo:hover .navbar__logo-text {
+  opacity: 0.8;                        /* Subtle hover feedback */
+}
+
+.navbar__logo-accent {
+  color: var(--color-primary);         /* Blue "Forge" text */
+}
+/* ─────────────────────────────────────────────────────────────
+   NAVBAR NAVIGATION
+───────────────────────────────────────────────────────────── */
+
+.navbar__nav {
+  display: flex;
+  align-items: center;
+  margin-left: auto;                   /* Push nav to center */
+  margin-right: auto;                  /* Push actions to the right */
+}
+
+.navbar__links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);                 /* 4px between items */
+  list-style: none;                    /* Reinforcing reset (defensive) */
+}
+
+.navbar__link {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-2) var(--space-3);  /* 8px top/bottom, 12px left/right */
+  font-size: var(--text-sm);               /* 14px — compact nav links */
+  font-weight: var(--font-medium);
+  color: var(--color-text-secondary);      /* Medium gray — not too prominent */
+  border-radius: var(--radius-md);         /* Rounded hover background */
+  transition: color var(--duration-fast) var(--ease-default),
+              background-color var(--duration-fast) var(--ease-default);
+}
+
+.navbar__link:hover {
+  color: var(--color-text-primary);        /* Darker text on hover */
+  background-color: var(--color-bg-tertiary); /* Subtle background on hover */
+}
+
+.navbar__link--active {
+  color: var(--color-primary);             /* Brand blue for active page */
+  background-color: var(--color-primary-subtle); /* Light blue background */
+  font-weight: var(--font-semibold);
+}
+/* ─────────────────────────────────────────────────────────────
+   NAVBAR ACTION BUTTONS
+───────────────────────────────────────────────────────────── */
+
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);                 /* 12px between buttons */
+  flex-shrink: 0;                      /* Actions never shrink */
+}
+
+/* Base button styles — shared by both button variants */
+.navbar__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) var(--space-5);  /* 8px top/bottom, 20px left/right */
+  font-size: var(--text-sm);               /* 14px */
+  font-weight: var(--font-semibold);
+  border-radius: var(--radius-full);       /* Pill shape */
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-default),
+              color var(--duration-fast) var(--ease-default),
+              border-color var(--duration-fast) var(--ease-default),
+              box-shadow var(--duration-fast) var(--ease-default);
+  white-space: nowrap;                     /* Text never wraps inside button */
+}
+
+/* Ghost button — transparent with border */
+.navbar__btn--ghost {
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+}
+
+.navbar__btn--ghost:hover {
+  color: var(--color-text-primary);
+  border-color: var(--color-border-strong);
+  background-color: var(--color-bg-tertiary);
+}
+
+/* Primary button — filled brand color */
+.navbar__btn--primary {
+  background-color: var(--color-primary);
+  color: var(--color-text-on-primary);     /* White text */
+  border: 1px solid transparent;
+}
+
+.navbar__btn--primary:hover {
+  background-color: var(--color-primary-hover); /* Darker on hover */
+  box-shadow: var(--shadow-md);                  /* Lift effect */
+}

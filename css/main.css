@@ -57,13 +57,11 @@
 
 /* ═══════════════════════════════════════════════════════════════
    LAYER 4 — COMPONENTS
-   
+
    Reusable UI components (buttons, cards, navbar, etc.).
-   Will be added as we build them in Week 2+.
 ═══════════════════════════════════════════════════════════════ */
 
-/* Component imports will go here */
-
+@import url('components/navbar.css');
 
 /* ═══════════════════════════════════════════════════════════════
    LAYER 5 — PAGES
