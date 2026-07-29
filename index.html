@@ -16,99 +16,193 @@
 </head>
 <body>
 
-  <!-- Temporary typography test content -->
-<div style="max-width: 800px; margin: 3rem auto; padding: 0 1.5rem;">
-    <h1>Heading Level 1</h1>
-    <p>This is a paragraph of body text. We use it to test the default font loading and styling from our reset and variables files.</p>
+  <!-- ═══════════════════════════════════════════════════════
+       NAVBAR — Site-wide header navigation
+       Appears on every page of SkillForge.
+  ═══════════════════════════════════════════════════════ -->
+  <header class="navbar" role="banner">
+    <div class="navbar__container">
 
-    <h2>Heading Level 2</h2>
-    <p>Another paragraph. Notice how the Inter font loads — if it is working correctly, this should not be Arial or Times New Roman.</p>
+      <!-- Logo: Links to homepage -->
+      <a href="/" class="navbar__logo" aria-label="SkillForge - Return to homepage">
+        <span class="navbar__logo-text">
+          Skill<span class="navbar__logo-accent">Forge</span>
+        </span>
+      </a>
 
-    <h3>Heading Level 3</h3>
-    <p>We will remove this test content after verifying the typography system is working correctly.</p>
+      <!-- Primary Navigation Links -->
+      <nav class="navbar__nav" aria-label="Main navigation">
+        <ul class="navbar__links">
+          <li class="navbar__item">
+            <a href="/" class="navbar__link">Home</a>
+          </li>
+          <li class="navbar__item">
+            <a href="/pages/courses.html" class="navbar__link">Courses</a>
+          </li>
+          <li class="navbar__item">
+            <a href="/pages/skill-paths.html" class="navbar__link">Paths</a>
+          </li>
+          <li class="navbar__item">
+            <a href="/pages/leaderboard.html" class="navbar__link">Leaderboard</a>
+          </li>
+          <li class="navbar__item">
+            <a href="/pages/about.html" class="navbar__link">About</a>
+          </li>
+        </ul>
+      </nav>
 
-    <button type="button">Test Button</button>
-    <input type="text" placeholder="Test input field">
-    <hr>
+      <!-- Action Buttons: Login and Register -->
+      <div class="navbar__actions">
+        <a href="/pages/login.html" class="navbar__btn navbar__btn--ghost">
+          Log In
+        </a>
+        <a href="/pages/register.html" class="navbar__btn navbar__btn--primary">
+          Sign Up Free
+        </a>
+      </div>
 
-<h2>Utility Class Test</h2>
+    </div>
+  </header>
 
-<div class="text-2xl font-bold">
-    Utility Class Test
-</div>
+  <!-- Page content will be added here in Week 2 -->
+  <main id="main-content">
+  </main>
 
-<p class="text-sm">
-    This paragraph uses the text-sm utility class.
-</p>
+    <!-- ═══════════════════════════════════════════════════════
+       FOOTER — Site-wide footer
+       Appears on every page of SkillForge.
+  ═══════════════════════════════════════════════════════ -->
+  <footer class="footer" role="contentinfo">
 
-<hr>
+    <!-- Top Section: Three columns -->
+    <div class="footer__top">
+      <div class="footer__container">
 
-<h2>Text Color Utility Test</h2>
+        <!-- Column 1: Brand Information -->
+        <div class="footer__brand">
+          <a href="/" class="footer__logo" aria-label="SkillForge - Return to homepage">
+            Skill<span class="footer__logo-accent">Forge</span>
+          </a>
+          <p class="footer__tagline">
+            Learn skills that matter.
+          </p>
+          <p class="footer__description">
+            SkillForge is a student-focused learning platform
+            where you can discover courses, track progress,
+            and earn certificates.
+          </p>
+        </div>
 
-<p class="text-primary">
-    This text uses .text-primary
-</p>
+        <!-- Column 2: Explore Links -->
+        <section class="footer__section" aria-labelledby="footer-explore-heading">
+          <h3 class="footer__heading" id="footer-explore-heading">
+            Explore
+          </h3>
+          <nav aria-label="Footer explore navigation">
+            <ul class="footer__links">
+              <li>
+                <a href="/pages/courses.html" class="footer__link">
+                  Courses
+                </a>
+              </li>
+              <li>
+                <a href="/pages/skill-paths.html" class="footer__link">
+                  Skill Paths
+                </a>
+              </li>
+              <li>
+                <a href="/pages/leaderboard.html" class="footer__link">
+                  Leaderboard
+                </a>
+              </li>
+              <li>
+                <a href="/pages/about.html" class="footer__link">
+                  About Us
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </section>
 
-<p class="text-secondary">
-    This text uses .text-secondary
-</p>
+        <!-- Column 3: Connect / Social Links -->
+        <section class="footer__section" aria-labelledby="footer-connect-heading">
+          <h3 class="footer__heading" id="footer-connect-heading">
+            Connect
+          </h3>
+          <nav aria-label="Footer social navigation">
+            <ul class="footer__links">
+              <li>
+                <a
+                  href="https://twitter.com"
+                  class="footer__link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Follow SkillForge on Twitter (opens in new tab)"
+                >
+                  Twitter
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://linkedin.com"
+                  class="footer__link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Connect with SkillForge on LinkedIn (opens in new tab)"
+                >
+                  LinkedIn
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://github.com"
+                  class="footer__link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="View SkillForge on GitHub (opens in new tab)"
+                >
+                  GitHub
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://youtube.com"
+                  class="footer__link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Watch SkillForge on YouTube (opens in new tab)"
+                >
+                  YouTube
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </section>
 
-<p class="text-muted">
-    This text uses .text-muted
-</p>
+      </div>
+    </div>
 
-<p class="text-accent">
-    This text uses .text-accent
-</p>
+    <!-- Bottom Bar: Copyright and Legal Links -->
+    <div class="footer__bottom">
+      <div class="footer__container">
 
-<div style="background-color: var(--gray-900); padding: 2rem; margin-top: 1rem;">
-    <p class="text-inverse">
-        This text uses .text-inverse
-    </p>
-</div>
+        <small class="footer__copyright">
+          &copy; 2024 SkillForge. All rights reserved.
+        </small>
 
-<hr>
+        <nav class="footer__legal" aria-label="Legal navigation">
+          <a href="/pages/privacy.html" class="footer__legal-link">
+            Privacy Policy
+          </a>
+          <a href="/pages/terms.html" class="footer__legal-link">
+            Terms of Service
+          </a>
+        </nav>
 
-<h2>Text Alignment Utility Test</h2>
+      </div>
+    </div>
 
-<h3 class="text-left">
-    This heading is left aligned
-</h3>
-
-<h3 class="text-center">
-    This heading is center aligned
-</h3>
-
-<h3 class="text-right">
-    This heading is right aligned
-</h3>
-
-<p class="text-justify" style="max-width: 600px;">
-    This paragraph demonstrates justified text. Notice how the browser adjusts the spacing between words so that both the left and right edges line up. On narrow screens this often creates uneven spacing, which is why justified text is rarely used for body content on modern websites.
-</p>
-
-<hr>
-
-<h2>Link Style Test</h2>
-
-<p>
-    Learn more by visiting our
-    <a href="#" class="link">About Page</a>.
-</p>
-
-<p>
-    We also have a
-    <a href="#" class="link">Course Catalog</a>
-    and a
-    <a href="#" class="link">Student Blog</a>.
-</p>
-
-<p>
-    This is an
-    <a href="#">unstyled link</a>
-    without the <code>.link</code> class.
-</p>
-</div>
+  </footer>
 
 </body>
 </html>

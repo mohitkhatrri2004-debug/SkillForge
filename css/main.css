@@ -60,8 +60,10 @@
 
    Reusable UI components (buttons, cards, navbar, etc.).
 ═══════════════════════════════════════════════════════════════ */
-
 @import url('components/navbar.css');
+@import url('components/footer.css');
+
+
 
 /* ═══════════════════════════════════════════════════════════════
    LAYER 5 — PAGES

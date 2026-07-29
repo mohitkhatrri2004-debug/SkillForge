@@ -1,0 +1,223 @@
+/* ═══════════════════════════════════════════════════════════════
+   SKILLFORGE — FOOTER COMPONENT
+
+   The site-wide footer. Appears on every page.
+   Uses CSS Grid for the multi-column layout.
+
+   STRUCTURE:
+   .footer
+   ├── .footer__top
+   │   └── .footer__container (CSS Grid: 2fr 1fr 1fr)
+   │       ├── .footer__brand
+   │       │   ├── .footer__logo
+   │       │   ├── .footer__tagline
+   │       │   └── .footer__description
+   │       ├── .footer__section (Explore)
+   │       │   ├── .footer__heading
+   │       │   └── .footer__links > .footer__link
+   │       └── .footer__section (Connect)
+   │           ├── .footer__heading
+   │           └── .footer__links > .footer__link
+   └── .footer__bottom
+       └── .footer__container (Flexbox: space-between)
+           ├── .footer__copyright
+           └── .footer__legal > .footer__legal-link
+
+   LAYOUT:
+   - Desktop: 2fr 1fr 1fr grid (brand wider than link columns)
+   - Mobile: Single column stack (via media query)
+
+   DEPENDENCIES:
+   - variables.css (design tokens)
+   - reset.css (margin/padding reset)
+
+   LAST UPDATED: Week 1, Day 6
+═══════════════════════════════════════════════════════════════ */
+/* ─────────────────────────────────────────────────────────────
+   FOOTER BLOCK
+
+   The outer <footer> element.
+   Dark background creates clear visual separation from
+   the page content above.
+───────────────────────────────────────────────────────────── */
+
+.footer {
+  background-color: var(--gray-900);  /* Dark background */
+  color: var(--gray-400);             /* Muted text on dark bg */
+  margin-top: auto;                   /* Push footer to bottom if page is short */
+}
+/* ─────────────────────────────────────────────────────────────
+   FOOTER TOP SECTION
+
+   The main content area with three columns.
+───────────────────────────────────────────────────────────── */
+
+.footer__top {
+  padding-block: var(--space-16);   /* 64px top and bottom padding */
+  border-bottom: 1px solid var(--gray-800); /* Subtle divider above bottom bar */
+}
+/* ─────────────────────────────────────────────────────────────
+   FOOTER CONTAINER — CSS GRID LAYOUT
+
+   Centers content, constrains max-width, and creates the
+   three-column grid layout.
+
+   GRID STRUCTURE (Desktop):
+   Brand (2fr) | Explore (1fr) | Connect (1fr)
+
+   The brand column is wider because it contains more content
+   (tagline + description paragraph) compared to link lists.
+───────────────────────────────────────────────────────────── */
+
+.footer__container {
+  max-width: var(--container-max);      /* 1200px */
+  margin-inline: auto;                  /* Center horizontally */
+  padding-inline: var(--space-6);       /* 24px left/right */
+}
+
+.footer__top .footer__container {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;  /* Brand wider, links equal */
+  grid-template-areas:
+    "brand explore connect";
+  gap: var(--space-12);                 /* 48px between columns */
+}
+/* ─────────────────────────────────────────────────────────────
+   GRID AREA ASSIGNMENTS
+
+   Each direct child is assigned to its named grid area.
+───────────────────────────────────────────────────────────── */
+
+.footer__brand {
+  grid-area: brand;
+}
+
+.footer__section:nth-child(2) {
+  grid-area: explore;
+}
+
+.footer__section:nth-child(3) {
+  grid-area: connect;
+}
+/* ─────────────────────────────────────────────────────────────
+   BRAND COLUMN
+───────────────────────────────────────────────────────────── */
+
+.footer__logo {
+  display: inline-block;
+  font-size: var(--text-xl);           /* 20px */
+  font-weight: var(--font-bold);
+  color: var(--white);                 /* White logo on dark bg */
+  text-decoration: none;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-4);       /* 16px below logo */
+  transition: opacity var(--duration-fast) var(--ease-default);
+}
+
+.footer__logo:hover {
+  opacity: 0.8;
+}
+
+.footer__logo-accent {
+  color: var(--color-primary);         /* Blue "Forge" — same as navbar */
+}
+
+.footer__tagline {
+  font-size: var(--text-base);         /* 16px */
+  font-weight: var(--font-semibold);
+  color: var(--gray-200);              /* Near-white — prominent */
+  margin-bottom: var(--space-3);       /* 12px below tagline */
+  max-width: none;                     /* Override typography.css p max-width */
+}
+
+.footer__description {
+  font-size: var(--text-sm);           /* 14px */
+  color: var(--gray-400);              /* Muted — supporting text */
+  line-height: var(--leading-relaxed); /* Comfortable reading */
+  max-width: 280px;                    /* Keep description lines from being too wide */
+}
+/* ─────────────────────────────────────────────────────────────
+   FOOTER SECTION COLUMNS (Explore and Connect)
+───────────────────────────────────────────────────────────── */
+
+.footer__heading {
+  font-size: var(--text-sm);           /* 14px */
+  font-weight: var(--font-semibold);
+  color: var(--white);                 /* White headings stand out */
+  text-transform: uppercase;           /* ALL CAPS for label feel */
+  letter-spacing: 0.08em;             /* Wide tracking for uppercase */
+  margin-bottom: var(--space-5);       /* 20px below heading */
+}
+
+.footer__links {
+  display: flex;
+  flex-direction: column;              /* Stack links vertically */
+  gap: var(--space-3);                 /* 12px between links */
+  list-style: none;                    /* Defensive (reset handles this) */
+}
+
+.footer__link {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--text-sm);           /* 14px */
+  color: var(--gray-400);             /* Muted default */
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-default);
+}
+
+.footer__link:hover {
+  color: var(--white);                 /* Links brighten on hover */
+}
+
+.footer__link:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+/* ─────────────────────────────────────────────────────────────
+   FOOTER BOTTOM BAR
+
+   Uses Flexbox (not Grid) because it is a simple two-item
+   row: copyright on the left, legal links on the right.
+   This is a one-dimensional layout — Flexbox is correct here.
+───────────────────────────────────────────────────────────── */
+
+.footer__bottom {
+  padding-block: var(--space-6);       /* 24px top and bottom */
+}
+
+.footer__bottom .footer__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;      /* Copyright left, legal right */
+  flex-wrap: wrap;                     /* Wraps on very narrow screens */
+  gap: var(--space-4);                 /* Gap when wrapped on mobile */
+}
+
+.footer__copyright {
+  font-size: var(--text-sm);           /* 14px */
+  color: var(--gray-500);             /* Subtle — this is fine print */
+}
+
+.footer__legal {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);                 /* 24px between legal links */
+}
+
+.footer__legal-link {
+  font-size: var(--text-sm);
+  color: var(--gray-500);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-default);
+}
+
+.footer__legal-link:hover {
+  color: var(--gray-300);
+}
+
+.footer__legal-link:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
