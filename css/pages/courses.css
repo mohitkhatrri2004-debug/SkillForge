@@ -1,0 +1,428 @@
+/* ═══════════════════════════════════════════════════════════════
+   SKILLFORGE — COURSES PAGE STYLES
+
+   Styles specific to the courses catalog page.
+   Includes: page header, filters, course cards grid.
+
+   SECTIONS:
+   1. Page Header (.page-header)
+   2. Filters Bar (.filters)
+   3. Course Cards Grid (.courses-grid, .course-card)
+
+   DEPENDENCIES:
+   - variables.css (design tokens)
+   - reset.css (base styles)
+   - typography.css (text defaults)
+
+   LAST UPDATED: Week 2, Day 1
+═══════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════════
+   UTILITY CLASSES
+   
+   Reusable classes for common patterns.
+═══════════════════════════════════════════════════════════════ */
+
+/* Screen reader only — visually hidden but accessible to assistive tech */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PAGE HEADER
+   
+   Standard page header used across all internal pages.
+   Provides page title and subtitle in a centered layout.
+═══════════════════════════════════════════════════════════════ */
+
+.page-header {
+  padding-block: var(--space-20);         /* 80px top and bottom */
+  background-color: var(--color-bg);      /* Light gray background */
+  border-bottom: 1px solid var(--color-border);
+}
+
+.page-header__container {
+  width: 100%;
+  max-width: var(--container-max);        /* 1200px */
+  margin-inline: auto;
+  padding-inline: var(--space-6);         /* 24px */
+  text-align: center;
+}
+
+.page-header__title {
+  font-size: var(--text-5xl);             /* 48px */
+  font-weight: var(--font-bold);          /* 700 */
+  line-height: var(--leading-tight);      /* 1.25 */
+  letter-spacing: var(--tracking-tight);  /* -0.025em */
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.page-header__subtitle {
+  font-size: var(--text-lg);              /* 18px */
+  line-height: var(--leading-relaxed);    /* 1.625 */
+  color: var(--color-text-secondary);
+  margin-top: var(--space-4);             /* 16px */
+  max-width: 640px;
+  margin-inline: auto;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   COURSES CATALOG SECTION
+═══════════════════════════════════════════════════════════════ */
+
+.courses-catalog {
+  padding-block: var(--space-20);         /* 80px */
+  background-color: var(--white);
+}
+
+.courses-catalog__container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-6);
+}
+
+/* Results Count */
+.courses-catalog__results {
+  margin-bottom: var(--space-6);          /* 24px below count */
+}
+
+.courses-catalog__count {
+  font-size: var(--text-sm);              /* 14px */
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.courses-catalog__count strong {
+  color: var(--color-text-primary);
+  font-weight: var(--font-semibold);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FILTERS BAR
+   
+   Contains category filter buttons and search input.
+   Uses flexbox for responsive layout.
+═══════════════════════════════════════════════════════════════ */
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);                    /* 24px */
+  margin-bottom: var(--space-12);         /* 48px below filters */
+  padding: var(--space-6);
+  background-color: var(--color-bg);
+  border-radius: var(--radius-lg);        /* 12px */
+  border: 1px solid var(--color-border);
+}
+
+/* Category Filter Pills */
+.filters__categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);                    /* 12px */
+}
+
+.filters__category {
+  padding: var(--space-3) var(--space-5); /* 12px 20px */
+  font-size: var(--text-sm);              /* 14px */
+  font-weight: var(--font-medium);        /* 500 */
+  color: var(--color-text-secondary);
+  background-color: var(--white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);      /* Pill shape */
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-default);
+}
+
+.filters__category:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background-color: var(--color-primary-subtle);
+}
+
+.filters__category:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.filters__category--active {
+  background-color: var(--color-primary);
+  color: var(--white);
+  border-color: var(--color-primary);
+}
+
+.filters__category--active:hover {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  color: var(--white);
+}
+
+/* Search Input */
+.filters__search {
+  flex: 1;
+  min-width: 250px;
+}
+
+.filters__search-input {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);  /* 12px 16px */
+  font-size: var(--text-base);             /* 16px */
+  font-family: var(--font-sans);
+  color: var(--color-text-primary);
+  background-color: var(--white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);         /* 8px */
+  transition: border-color var(--duration-fast) var(--ease-default);
+}
+
+.filters__search-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.filters__search-input:hover {
+  border-color: var(--color-border-strong);
+}
+
+.filters__search-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   COURSES GRID
+   
+   Responsive grid layout for course cards.
+   Auto-fits columns based on available space.
+═══════════════════════════════════════════════════════════════ */
+
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-8);                    /* 32px */
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   COURSE CARD
+   
+   Individual course card component.
+   Contains: image, badge, category, title, description, meta, rating.
+═══════════════════════════════════════════════════════════════ */
+
+.course-card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);        /* 12px */
+  overflow: hidden;
+  transition: all var(--duration-normal) var(--ease-default);
+  
+  /* Soft shadow for elevation */
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 
+              0 1px 2px 0 rgba(0, 0, 0, 0.03);
+}
+
+.course-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-primary);
+  box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.08),
+              0 6px 12px -4px rgba(0, 0, 0, 0.04);
+}
+
+/* Course Image Placeholder */
+.course-card__image {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  background: linear-gradient(135deg, var(--color-primary-subtle) 0%, var(--blue-200) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Level Badge (Beginner/Intermediate/Advanced) */
+.course-card__badge {
+  position: absolute;
+  top: var(--space-3);                    /* 12px */
+  right: var(--space-3);
+  padding: var(--space-1) var(--space-3); /* 4px 12px */
+  font-size: var(--text-xs);              /* 12px */
+  font-weight: var(--font-semibold);      /* 600 */
+  color: var(--green-600);
+  background-color: var(--green-100);
+  border-radius: var(--radius-sm);        /* 4px */
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.course-card__badge--intermediate {
+  color: var(--yellow-500);
+  background-color: var(--yellow-100);
+}
+
+.course-card__badge--advanced {
+  color: var(--red-500);
+  background-color: var(--red-100);
+}
+
+/* Course Content Area */
+.course-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);                    /* 12px */
+  padding: var(--space-5);                /* 20px */
+  flex: 1;
+}
+
+/* Category Label */
+.course-card__category {
+  font-size: var(--text-xs);              /* 12px */
+  font-weight: var(--font-semibold);      /* 600 */
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Course Title */
+.course-card__title {
+  font-size: var(--text-xl);              /* 20px */
+  font-weight: var(--font-semibold);      /* 600 */
+  line-height: var(--leading-snug);       /* 1.375 */
+  margin: 0;
+}
+
+.course-card__link {
+  color: var(--color-text-primary);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-default);
+}
+
+.course-card__link:hover {
+  color: var(--color-primary);
+}
+
+.course-card__link:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Course Description */
+.course-card__description {
+  font-size: var(--text-sm);              /* 14px */
+  line-height: var(--leading-relaxed);    /* 1.625 */
+  color: var(--color-text-secondary);
+  margin: 0;
+  
+  /* Clamp to 2 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Meta Information (Instructor, Duration) */
+.course-card__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);                    /* 16px */
+  font-size: var(--text-xs);              /* 12px */
+  color: var(--color-text-muted);
+  padding-top: var(--space-2);            /* 8px */
+  border-top: 1px solid var(--color-border);
+}
+
+.course-card__instructor,
+.course-card__duration {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);                    /* 4px */
+}
+
+/* Footer (Rating) */
+.course-card__footer {
+  padding-top: var(--space-2);            /* 8px */
+  margin-top: auto;                       /* Push to bottom */
+}
+
+.course-card__rating {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);                    /* 8px */
+}
+
+.course-card__stars {
+  color: #f59e0b;                         /* Gold color for stars */
+  font-size: var(--text-sm);              /* 14px */
+  letter-spacing: 0.1em;
+}
+
+.course-card__rating-text {
+  font-size: var(--text-xs);              /* 12px */
+  color: var(--color-text-muted);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+═══════════════════════════════════════════════════════════════ */
+
+/* Mobile (up to 639px) */
+@media (max-width: 639px) {
+  
+  .page-header {
+    padding-block: var(--space-12);       /* 48px */
+  }
+
+  .page-header__title {
+    font-size: var(--text-3xl);           /* 30px */
+  }
+
+  .page-header__subtitle {
+    font-size: var(--text-base);          /* 16px */
+  }
+
+  .courses-catalog {
+    padding-block: var(--space-12);       /* 48px */
+  }
+
+  .courses-grid {
+    grid-template-columns: 1fr;           /* Single column */
+    gap: var(--space-6);                  /* 24px */
+  }
+
+  .filters {
+    padding: var(--space-4);              /* 16px */
+  }
+}
+
+/* Tablet (768px+) */
+@media (min-width: 768px) {
+  
+  .filters {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .filters__search {
+    max-width: 300px;
+  }
+}
+
+/* Desktop (1024px+) */
+@media (min-width: 1024px) {
+  
+  .courses-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns on large screens */
+  }
+}

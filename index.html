@@ -24,7 +24,7 @@
     <div class="navbar__container">
 
       <!-- Logo: Links to homepage -->
-      <a href="/" class="navbar__logo" aria-label="SkillForge - Return to homepage">
+      <a href="index.html" class="navbar__logo" aria-label="SkillForge - Return to homepage">
         <span class="navbar__logo-text">
           Skill<span class="navbar__logo-accent">Forge</span>
         </span>
@@ -34,29 +34,29 @@
       <nav class="navbar__nav" aria-label="Main navigation">
         <ul class="navbar__links">
           <li class="navbar__item">
-            <a href="/" class="navbar__link">Home</a>
+            <a href="index.html" class="navbar__link">Home</a>
           </li>
           <li class="navbar__item">
-            <a href="/pages/courses.html" class="navbar__link">Courses</a>
+            <a href="pages/courses.html" class="navbar__link">Courses</a>
           </li>
           <li class="navbar__item">
-            <a href="/pages/skill-paths.html" class="navbar__link">Paths</a>
+            <a href="pages/skill-paths.html" class="navbar__link">Paths</a>
           </li>
           <li class="navbar__item">
-            <a href="/pages/leaderboard.html" class="navbar__link">Leaderboard</a>
+            <a href="pages/leaderboard.html" class="navbar__link">Leaderboard</a>
           </li>
           <li class="navbar__item">
-            <a href="/pages/about.html" class="navbar__link">About</a>
+            <a href="pages/about.html" class="navbar__link">About</a>
           </li>
         </ul>
       </nav>
 
       <!-- Action Buttons: Login and Register -->
       <div class="navbar__actions">
-        <a href="/pages/login.html" class="navbar__btn navbar__btn--ghost">
+        <a href="pages/login.html" class="navbar__btn navbar__btn--ghost">
           Log In
         </a>
-        <a href="/pages/register.html" class="navbar__btn navbar__btn--primary">
+        <a href="pages/register.html" class="navbar__btn navbar__btn--primary">
           Sign Up Free
         </a>
       </div>
@@ -64,9 +64,165 @@
     </div>
   </header>
 
-  <!-- Page content will be added here in Week 2 -->
-  <main id="main-content">
+  <!-- Main page content -->
+    <main id="main-content">
+
+    <!-- ═══════════════════════════════════════════════════════
+         HERO SECTION
+         The primary landing section. First thing visitors see.
+         Contains: badge, headline, subtitle, CTAs, stats bar.
+    ═══════════════════════════════════════════════════════ -->
+    <section class="hero" aria-labelledby="hero-heading">
+
+      <div class="hero__container">
+        <div class="hero__content">
+
+          <!-- Badge: Context setter — who this is for -->
+          <div class="hero__badge" role="note">
+            <span class="hero__badge-icon" aria-hidden="true">🎓</span>
+            <span class="hero__badge-text">Built for Students</span>
+          </div>
+
+          <!-- Headline: Primary message -->
+          <h1 class="hero__headline" id="hero-heading">
+            Forge the Skills That
+            <span class="hero__headline-accent">Build Your Future</span>
+          </h1>
+
+          <!-- Subtitle: Supporting explanation -->
+          <p class="hero__subtitle">
+            Discover courses, track your progress, take quizzes,
+            and earn certificates — all in one place.
+          </p>
+
+          <!-- CTA Buttons: Primary and secondary actions -->
+          <div class="hero__actions">
+            <a href="pages/register.html" class="hero__btn hero__btn--primary">
+              Start Learning Free
+            </a>
+            <a href="pages/courses.html" class="hero__btn hero__btn--ghost">
+              Explore Courses
+            </a>
+          </div>
+
+          <!-- Stats Bar: Social proof numbers -->
+          <div class="hero__stats" role="list" aria-label="Platform statistics">
+
+            <div class="hero__stat" role="listitem">
+              <span class="hero__stat-number" aria-label="500 plus">500+</span>
+              <span class="hero__stat-label">Courses</span>
+            </div>
+
+            <div class="hero__stat" role="listitem">
+              <span class="hero__stat-number" aria-label="50 plus">50+</span>
+              <span class="hero__stat-label">Skill Paths</span>
+            </div>
+
+            <div class="hero__stat" role="listitem">
+              <span class="hero__stat-number" aria-label="1000 plus">1,000+</span>
+              <span class="hero__stat-label">Students</span>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════
+         FEATURES SECTION
+         Showcases the core benefits and value propositions
+         of the SkillForge platform. Helps visitors understand
+         what makes SkillForge valuable for their learning journey.
+    ═══════════════════════════════════════════════════════ -->
+    <section class="features" aria-labelledby="features-heading">
+      
+      <div class="features__container">
+
+        <!-- Section Header: Introduces the features -->
+        <header class="features__header">
+          <h2 class="features__heading" id="features-heading">
+            Everything You Need to
+            <span class="features__heading-accent">Succeed</span>
+          </h2>
+          <p class="features__subtitle">
+            SkillForge provides all the tools and resources
+            to help you learn effectively and achieve your goals.
+          </p>
+        </header>
+
+        <!-- Features Grid: 6 feature cards in a responsive grid -->
+        <ul class="features__grid">
+
+          <!-- Feature 1: Diverse Course Library -->
+          <li class="features__card">
+            <div class="features__icon" aria-hidden="true">📚</div>
+            <h3 class="features__title">Diverse Course Library</h3>
+            <p class="features__description">
+              Access 500+ courses across programming, design,
+              business, and more. Find exactly what you need to learn.
+            </p>
+          </li>
+
+          <!-- Feature 2: Interactive Quizzes -->
+          <li class="features__card">
+            <div class="features__icon" aria-hidden="true">✅</div>
+            <h3 class="features__title">Interactive Quizzes</h3>
+            <p class="features__description">
+              Test your knowledge with interactive quizzes after each lesson.
+              Get instant feedback and track your understanding.
+            </p>
+          </li>
+
+          <!-- Feature 3: Structured Skill Paths -->
+          <li class="features__card">
+            <div class="features__icon" aria-hidden="true">🗺️</div>
+            <h3 class="features__title">Structured Skill Paths</h3>
+            <p class="features__description">
+              Follow curated learning paths designed by experts.
+              Go from beginner to advanced with clear progression.
+            </p>
+          </li>
+
+          <!-- Feature 4: Progress Tracking -->
+          <li class="features__card">
+            <div class="features__icon" aria-hidden="true">📊</div>
+            <h3 class="features__title">Progress Tracking</h3>
+            <p class="features__description">
+              Visualize your learning journey with detailed analytics.
+              See how far you've come and what's next.
+            </p>
+          </li>
+
+          <!-- Feature 5: Earn Certificates -->
+          <li class="features__card">
+            <div class="features__icon" aria-hidden="true">🏆</div>
+            <h3 class="features__title">Earn Certificates</h3>
+            <p class="features__description">
+              Complete courses and earn certificates to showcase your skills.
+              Share them on LinkedIn or your portfolio.
+            </p>
+          </li>
+
+          <!-- Feature 6: Community Leaderboard -->
+          <li class="features__card">
+            <div class="features__icon" aria-hidden="true">🎯</div>
+            <h3 class="features__title">Community Leaderboard</h3>
+            <p class="features__description">
+              Stay motivated by competing with peers.
+              Climb the leaderboard as you complete courses and quizzes.
+            </p>
+          </li>
+
+        </ul>
+
+      </div>
+
+    </section>
+
   </main>
+
 
     <!-- ═══════════════════════════════════════════════════════
        FOOTER — Site-wide footer
@@ -80,7 +236,7 @@
 
         <!-- Column 1: Brand Information -->
         <div class="footer__brand">
-          <a href="/" class="footer__logo" aria-label="SkillForge - Return to homepage">
+          <a href="index.html" class="footer__logo" aria-label="SkillForge - Return to homepage">
             Skill<span class="footer__logo-accent">Forge</span>
           </a>
           <p class="footer__tagline">
@@ -101,22 +257,22 @@
           <nav aria-label="Footer explore navigation">
             <ul class="footer__links">
               <li>
-                <a href="/pages/courses.html" class="footer__link">
+                <a href="pages/courses.html" class="footer__link">
                   Courses
                 </a>
               </li>
               <li>
-                <a href="/pages/skill-paths.html" class="footer__link">
+                <a href="pages/skill-paths.html" class="footer__link">
                   Skill Paths
                 </a>
               </li>
               <li>
-                <a href="/pages/leaderboard.html" class="footer__link">
+                <a href="pages/leaderboard.html" class="footer__link">
                   Leaderboard
                 </a>
               </li>
               <li>
-                <a href="/pages/about.html" class="footer__link">
+                <a href="pages/about.html" class="footer__link">
                   About Us
                 </a>
               </li>
@@ -191,10 +347,10 @@
         </small>
 
         <nav class="footer__legal" aria-label="Legal navigation">
-          <a href="/pages/privacy.html" class="footer__legal-link">
+          <a href="pages/privacy.html" class="footer__legal-link">
             Privacy Policy
           </a>
-          <a href="/pages/terms.html" class="footer__legal-link">
+          <a href="pages/terms.html" class="footer__legal-link">
             Terms of Service
           </a>
         </nav>

@@ -1,0 +1,271 @@
+/* ═══════════════════════════════════════════════════════════════
+   SKILLFORGE — EMPTY STATE COMPONENT
+
+   Empty states provide helpful feedback when there's no content
+   to display. Instead of showing a blank page, we guide users
+   on what to do next.
+
+   USAGE:
+   - No search results
+   - No filtered courses
+   - Error states
+   - First-time user experience
+
+   REAL-WORLD EXAMPLES:
+   - Gmail: "No new mail"
+   - Spotify: "Your library is empty"
+   - Airbnb: "No results found"
+   - Dribbble: "No shots yet"
+
+   COMPONENTS:
+   1. .empty-state — Container
+   2. .empty-state__icon — Visual indicator
+   3. .empty-state__content — Text content
+   4. .empty-state__actions — Buttons/links
+
+   DEPENDENCIES:
+   - variables.css (design tokens)
+
+   LAST UPDATED: Week 2, Day 4
+═══════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════════
+   EMPTY STATE CONTAINER
+   
+   Centers content vertically and horizontally.
+   Provides comfortable spacing around message.
+═══════════════════════════════════════════════════════════════ */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-20);                /* 80px - generous spacing */
+  min-height: 400px;                       /* Minimum presence */
+  background-color: var(--white);
+  border-radius: var(--radius-lg);         /* 12px */
+  border: 1px solid var(--color-border);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   EMPTY STATE ICON
+   
+   Large emoji or icon that visually communicates the state.
+   Uses emojis for simplicity (no SVG dependencies).
+═══════════════════════════════════════════════════════════════ */
+
+.empty-state__icon {
+  font-size: 4rem;                         /* 64px - large, friendly */
+  line-height: 1;
+  margin-bottom: var(--space-6);           /* 24px */
+  opacity: 0.8;                            /* Subtle, not overpowering */
+}
+
+/* Icon color variants for different states */
+.empty-state__icon--search {
+  color: var(--gray-400);                  /* Neutral gray for search */
+}
+
+.empty-state__icon--filter {
+  color: var(--blue-500);                  /* Brand color for filters */
+}
+
+.empty-state__icon--error {
+  color: var(--red-500);                   /* Red for errors */
+}
+
+.empty-state__icon--success {
+  color: var(--green-500);                 /* Green for success */
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   EMPTY STATE CONTENT
+   
+   Text content explaining the situation and what to do.
+═══════════════════════════════════════════════════════════════ */
+
+.empty-state__content {
+  max-width: 480px;                        /* Comfortable reading width */
+  margin-bottom: var(--space-8);           /* 32px */
+}
+
+.empty-state__title {
+  font-size: var(--text-2xl);              /* 24px */
+  font-weight: var(--font-bold);           /* 700 */
+  line-height: var(--leading-tight);       /* 1.25 */
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-3) 0;            /* 12px below */
+}
+
+.empty-state__description {
+  font-size: var(--text-base);             /* 16px */
+  line-height: var(--leading-relaxed);     /* 1.625 */
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* Subtle list styling for suggestions */
+.empty-state__suggestions {
+  list-style: none;
+  margin: var(--space-4) 0 0 0;            /* 16px top */
+  padding: 0;
+  display: inline-block;                   /* Center the list */
+  text-align: left;                        /* Left-align list items */
+}
+
+.empty-state__suggestions li {
+  position: relative;
+  padding-left: var(--space-6);            /* 24px - room for bullet */
+  margin-bottom: var(--space-2);           /* 8px between items */
+  font-size: var(--text-sm);               /* 14px */
+  color: var(--color-text-secondary);
+}
+
+.empty-state__suggestions li::before {
+  content: "•";
+  position: absolute;
+  left: var(--space-3);                    /* 12px from left */
+  color: var(--color-primary);
+  font-weight: var(--font-bold);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   EMPTY STATE ACTIONS
+   
+   Buttons and links that help users take action.
+═══════════════════════════════════════════════════════════════ */
+
+.empty-state__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);                     /* 12px */
+  align-items: center;
+}
+
+/* Primary action button */
+.empty-state__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4) var(--space-8);  /* 16px 32px */
+  font-size: var(--text-base);             /* 16px */
+  font-weight: var(--font-semibold);       /* 600 */
+  color: var(--white);
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: var(--radius-md);         /* 8px */
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-default);
+}
+
+.empty-state__button:hover {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.empty-state__button:active {
+  transform: translateY(0);
+}
+
+/* Secondary action link */
+.empty-state__link {
+  font-size: var(--text-sm);               /* 14px */
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-default);
+}
+
+.empty-state__link:hover {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   EMPTY STATE VARIANTS
+   
+   Different styles for different contexts.
+═══════════════════════════════════════════════════════════════ */
+
+/* Compact variant for smaller spaces */
+.empty-state--compact {
+  padding: var(--space-12);                /* 48px - less padding */
+  min-height: 300px;
+}
+
+.empty-state--compact .empty-state__icon {
+  font-size: 3rem;                         /* 48px - smaller icon */
+  margin-bottom: var(--space-4);           /* 16px */
+}
+
+.empty-state--compact .empty-state__title {
+  font-size: var(--text-xl);               /* 20px */
+}
+
+/* Inline variant (no border, transparent background) */
+.empty-state--inline {
+  border: none;
+  background-color: transparent;
+  padding: var(--space-12) var(--space-6); /* 48px 24px */
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ACCESSIBILITY
+   
+   Ensure empty states are accessible to screen readers.
+═══════════════════════════════════════════════════════════════ */
+
+.empty-state[role="status"] {
+  /* Screen readers will announce this as a status update */
+}
+
+.empty-state[aria-live="polite"] {
+  /* Screen readers will announce when content changes */
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE DESIGN
+   
+   Adapt empty states for mobile devices.
+═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 639px) {
+  
+  .empty-state {
+    padding: var(--space-12) var(--space-6); /* 48px 24px */
+    min-height: 320px;
+  }
+
+  .empty-state__icon {
+    font-size: 3rem;                       /* 48px - smaller on mobile */
+  }
+
+  .empty-state__title {
+    font-size: var(--text-xl);             /* 20px */
+  }
+
+  .empty-state__description {
+    font-size: var(--text-sm);             /* 14px */
+  }
+
+  .empty-state__actions {
+    width: 100%;                           /* Full width on mobile */
+  }
+
+  .empty-state__button {
+    width: 100%;                           /* Full-width buttons */
+  }
+
+}
+
+/* Tablet adjustments */
+@media (min-width: 640px) and (max-width: 1023px) {
+  
+  .empty-state {
+    padding: var(--space-16) var(--space-8); /* 64px 32px */
+  }
+
+}

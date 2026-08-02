@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Meta Description for SEO -->
+  <meta name="description" content="Complete Web Development Bootcamp - Learn HTML, CSS, JavaScript, and modern frameworks. Build real-world projects with Dr. Angela Yu.">
+  
+  <!-- Theme Color for Mobile Browsers -->
+  <meta name="theme-color" content="#6c63ff">
+
+  <!-- Google Fonts — Inter with weights 400, 500, 600, 700 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS Entry Point -->
+  <link rel="stylesheet" href="../css/main.css">
+
+  <title>Complete Web Development Bootcamp — SkillForge</title>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════
+       NAVBAR — Site-wide header navigation
+  ═══════════════════════════════════════════════════════ -->
+  <header class="navbar" role="banner">
+    <div class="navbar__container">
+
+      <!-- Logo: Links to homepage -->
+      <a href="../index.html" class="navbar__logo" aria-label="SkillForge - Return to homepage">
+        <span class="navbar__logo-text">
+          Skill<span class="navbar__logo-accent">Forge</span>
+        </span>
+      </a>
+
+      <!-- Primary Navigation Links -->
+      <nav class="navbar__nav" aria-label="Main navigation">
+        <ul class="navbar__links">
+          <li class="navbar__item">
+            <a href="../index.html" class="navbar__link">Home</a>
+          </li>
+          <li class="navbar__item">
+            <a href="courses.html" class="navbar__link">Courses</a>
+          </li>
+          <li class="navbar__item">
+            <a href="skill-paths.html" class="navbar__link">Paths</a>
+          </li>
+          <li class="navbar__item">
+            <a href="leaderboard.html" class="navbar__link">Leaderboard</a>
+          </li>
+          <li class="navbar__item">
+            <a href="about.html" class="navbar__link">About</a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Action Buttons: Login and Register -->
+      <div class="navbar__actions">
+        <a href="login.html" class="navbar__btn navbar__btn--ghost">
+          Log In
+        </a>
+        <a href="register.html" class="navbar__btn navbar__btn--primary">
+          Sign Up Free
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════════════
+       MAIN CONTENT
+  ═══════════════════════════════════════════════════════ -->
+  <main id="main-content">
+
+    <!-- ═══════════════════════════════════════════════════════
+         COURSE HERO SECTION
+         Top section with course title, metadata, and CTA.
+    ═══════════════════════════════════════════════════════ -->
+    <section class="course-hero" aria-labelledby="course-title">
+      <div class="course-hero__container">
+
+        <!-- Breadcrumb Navigation -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <ol class="breadcrumb__list">
+            <li class="breadcrumb__item">
+              <a href="../index.html" class="breadcrumb__link">Home</a>
+            </li>
+            <li class="breadcrumb__item">
+              <a href="courses.html" class="breadcrumb__link">Courses</a>
+            </li>
+            <li class="breadcrumb__item">
+              <a href="courses.html?category=programming" class="breadcrumb__link">Programming</a>
+            </li>
+            <li class="breadcrumb__item" aria-current="page">
+              <span class="breadcrumb__current">Complete Web Development Bootcamp</span>
+            </li>
+          </ol>
+        </nav>
+
+        <!-- Course Header Content -->
+        <div class="course-hero__content">
+          
+          <!-- Category & Level Badges -->
+          <div class="course-hero__badges">
+            <span class="course-hero__category">Programming</span>
+            <span class="course-hero__level course-hero__level--beginner">Beginner</span>
+          </div>
+
+          <!-- Course Title -->
+          <h1 class="course-hero__title" id="course-title">
+            Complete Web Development Bootcamp
+          </h1>
+
+          <!-- Course Subtitle -->
+          <p class="course-hero__subtitle">
+            Learn HTML, CSS, JavaScript, Node, React, MongoDB, and more! 
+            Build real-world web applications from scratch.
+          </p>
+
+          <!-- Course Meta (Rating, Students, Duration, Updated) -->
+          <div class="course-hero__meta">
+            <div class="course-hero__rating">
+              <span class="course-hero__stars" aria-label="4.8 out of 5 stars">★★★★★</span>
+              <span class="course-hero__rating-text">4.8</span>
+              <span class="course-hero__rating-count">(12,345 ratings)</span>
+            </div>
+            <span class="course-hero__students">45,678 students enrolled</span>
+            <span class="course-hero__duration">52 hours total</span>
+            <span class="course-hero__updated">Updated December 2024</span>
+          </div>
+
+          <!-- Instructor -->
+          <div class="course-hero__instructor">
+            <span class="course-hero__instructor-label">Created by</span>
+            <a href="#instructor" class="course-hero__instructor-name">Dr. Angela Yu</a>
+          </div>
+
+          <!-- CTA Button -->
+          <div class="course-hero__actions">
+            <button class="course-hero__enroll-btn">
+              Enroll Now — Free
+            </button>
+            <button class="course-hero__wishlist-btn" aria-label="Add to wishlist">
+              ♥ Save for Later
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════
+         COURSE CONTENT SECTION
+         Two-column layout: main content + sidebar
+    ═══════════════════════════════════════════════════════ -->
+    <section class="course-content">
+      <div class="course-content__container">
+
+        <!-- Main Content Column -->
+        <div class="course-content__main">
+
+          <!-- What You'll Learn -->
+          <article class="course-section" id="what-youll-learn">
+            <h2 class="course-section__title">What You'll Learn</h2>
+            <ul class="learning-objectives">
+              <li class="learning-objectives__item">
+                Build 16+ real-world projects including blogs, e-commerce sites, and web apps
+              </li>
+              <li class="learning-objectives__item">
+                Master HTML5, CSS3, Flexbox, Grid, and responsive design
+              </li>
+              <li class="learning-objectives__item">
+                Learn JavaScript, ES6+, DOM manipulation, and async programming
+              </li>
+              <li class="learning-objectives__item">
+                Build backends with Node.js, Express, and MongoDB
+              </li>
+              <li class="learning-objectives__item">
+                Create modern frontends with React and React Hooks
+              </li>
+              <li class="learning-objectives__item">
+                Deploy web applications to production using Heroku and Netlify
+              </li>
+            </ul>
+          </article>
+
+          <!-- Course Overview -->
+          <article class="course-section" id="overview">
+            <h2 class="course-section__title">Course Overview</h2>
+            <div class="course-section__content">
+              <p>
+                Welcome to the Complete Web Development Bootcamp, the only course you need to learn to code and become a full-stack web developer. With over 50 hours of HD video tutorials, you'll learn the latest technologies to build ANY website you want.
+              </p>
+              <p>
+                This course is designed and taught by Dr. Angela Yu, a London App Brewery instructor with over 4 million students worldwide. We've crafted this course from the ground up to make learning web development as simple and effective as possible.
+              </p>
+              <p>
+                By the end of this comprehensive course, you will be fluently programming and ready to build professional-level websites and web applications. You'll even have a portfolio of 16+ projects to show to any potential employer.
+              </p>
+            </div>
+          </article>
+
+          <!-- Course Curriculum -->
+          <article class="course-section" id="curriculum">
+            <h2 class="course-section__title">Course Curriculum</h2>
+            <div class="curriculum">
+              
+              <!-- Module 1 -->
+              <details class="curriculum__module" open>
+                <summary class="curriculum__module-header">
+                  <h3 class="curriculum__module-title">
+                    <span class="curriculum__module-number">1.</span>
+                    Introduction to Web Development
+                  </h3>
+                  <span class="curriculum__module-meta">5 lessons · 2 hours</span>
+                </summary>
+                <ol class="curriculum__lessons">
+                  <li class="curriculum__lesson">
+                    <span class="curriculum__lesson-title">Welcome to the Course</span>
+                    <span class="curriculum__lesson-duration">5 min</span>
+                  </li>
+                  <li class="curriculum__lesson">
+                    <span class="curriculum__lesson-title">How the Web Works</span>
+                    <span class="curriculum__lesson-duration">15 min</span>
+                  </li>
+                  <li class="curriculum__lesson">
+                    <span class="curriculum__lesson-title">Setting Up Your Development Environment</span>
+                    <span class="curriculum__lesson-duration">20 min</span>
+                  </li>
+                  <li class="curriculum__lesson">
+                    <span class="curriculum__lesson-title">Introduction to HTML</span>
+                    <span class="curriculum__lesson-duration">30 min</span>
+                  </li>
+                  <li class="curriculum__lesson">
+                    <span class="curriculum__lesson-title">Your First Webpage</span>
+                    <span class="curriculum__lesson-duration">45 min</span>
+                  </li>
+                </ol>
+              </details>
+
+              <!-- Module 2 -->
+              <details class="curriculum__module">
+                <summary class="curriculum__module-header">
+                  <h3 class="curriculum__module-title">
+                    <span class="curriculum__module-number">2.</span>
+                    HTML & CSS Fundamentals
+                  </h3>
+                  <span class="curriculum__module-meta">8 lessons · 4 hours</span>
+                </summary>
+                <ol class="curriculum__lessons">
+                  <li class="curriculum__lesson">
+                    <span class="curriculum__lesson-title">HTML Structure and Semantics</span>
+                    <span class="curriculum__lesson-duration">25 min</span>
+                  </li>
+                  <li class="curriculum__lesson">
+                    <span class="curriculum__lesson-title">CSS Basics and Selectors</span>
+                    <span class="curriculum__lesson-duration">30 min</span>
+                  </li>
+                  <li class="curriculum__lesson">
+                    <span class="curriculum__lesson-title">The CSS Box Model</span>
+                    <span class="curriculum__lesson-duration">35 min</span>
+                  </li>
+                  <li class="curriculum__lesson">
+                    <span class="curriculum__lesson-title">Flexbox Layout</span>
+                    <span class="curriculum__lesson-duration">40 min</span>
+                  </li>
+                  <li class="curriculum__lesson">
+                    <span class="curriculum__lesson-title">CSS Grid Layout</span>
+                    <span class="curriculum__lesson-duration">40 min</span>
+                  </li>
+                  <li class="curriculum__lesson">
+                    <span class="curriculum__lesson-title">Responsive Web Design</span>
+                    <span class="curriculum__lesson-duration">45 min</span>
+                  </li>
+                  <li class="curriculum__lesson">
+                    <span class="curriculum__lesson-title">Project: Build a Portfolio Website</span>
+                    <span class="curriculum__lesson-duration">90 min</span>
+                  </li>
+                  <li class="curriculum__lesson">
+                    <span class="curriculum__lesson-title">CSS Best Practices</span>
+                    <span class="curriculum__lesson-duration">20 min</span>
+                  </li>
+                </ol>
+              </details>
+
+              <!-- Module 3 -->
+              <details class="curriculum__module">
+                <summary class="curriculum__module-header">
+                  <h3 class="curriculum__module-title">
+                    <span class="curriculum__module-number">3.</span>
+                    JavaScript Essentials
+                  </h3>
+                  <span class="curriculum__module-meta">12 lessons · 6 hours</span>
+                </summary>
+                <ol class="curriculum__lessons">
+                  <li class="curriculum__lesson">
+                    <span class="curriculum__lesson-title">JavaScript Basics</span>
+                    <span class="curriculum__lesson-duration">30 min</span>
+                  </li>
+                  <li class="curriculum__lesson">
+                    <span class="curriculum__lesson-title">Variables, Data Types, and Operators</span>
+                    <span class="curriculum__lesson-duration">35 min</span>
+                  </li>
+                  <li class="curriculum__lesson">
+                    <span class="curriculum__lesson-title">Control Flow and Loops</span>
+                    <span class="curriculum__lesson-duration">40 min</span>
+                  </li>
+                  <!-- More lessons... -->
+                </ol>
+              </details>
+
+            </div>
+          </article>
+
+          <!-- Student Reviews -->
+          <article class="course-section" id="reviews">
+            <h2 class="course-section__title">Student Reviews</h2>
+            <div class="reviews">
+              
+              <!-- Review 1 -->
+              <div class="review">
+                <div class="review__header">
+                  <div class="review__author">
+                    <div class="review__author-avatar">JD</div>
+                    <div class="review__author-info">
+                      <h3 class="review__author-name">John Davis</h3>
+                      <time class="review__date" datetime="2024-12-01">2 weeks ago</time>
+                    </div>
+                  </div>
+                  <div class="review__rating">
+                    <span class="review__stars" aria-label="5 out of 5 stars">★★★★★</span>
+                  </div>
+                </div>
+                <p class="review__text">
+                  This course is absolutely amazing! Angela's teaching style is clear and engaging. 
+                  I went from knowing nothing about web development to building my own projects in just 3 months. 
+                  The projects are practical and the support is excellent. Highly recommended!
+                </p>
+              </div>
+
+              <!-- Review 2 -->
+              <div class="review">
+                <div class="review__header">
+                  <div class="review__author">
+                    <div class="review__author-avatar">SM</div>
+                    <div class="review__author-info">
+                      <h3 class="review__author-name">Sarah Martinez</h3>
+                      <time class="review__date" datetime="2024-11-15">1 month ago</time>
+                    </div>
+                  </div>
+                  <div class="review__rating">
+                    <span class="review__stars" aria-label="5 out of 5 stars">★★★★★</span>
+                  </div>
+                </div>
+                <p class="review__text">
+                  Best investment I've made in my career! The course is comprehensive, 
+                  well-structured, and constantly updated. I landed my first web developer job 
+                  just 4 months after completing this course. Thank you, Angela!
+                </p>
+              </div>
+
+              <!-- Review 3 -->
+              <div class="review">
+                <div class="review__header">
+                  <div class="review__author">
+                    <div class="review__author-avatar">MK</div>
+                    <div class="review__author-info">
+                      <h3 class="review__author-name">Michael Kim</h3>
+                      <time class="review__date" datetime="2024-10-28">2 months ago</time>
+                    </div>
+                  </div>
+                  <div class="review__rating">
+                    <span class="review__stars" aria-label="4 out of 5 stars">★★★★★</span>
+                  </div>
+                </div>
+                <p class="review__text">
+                  Great course for beginners! The explanations are clear and the pace is perfect. 
+                  My only suggestion would be to add more advanced JavaScript topics, but overall 
+                  this is an excellent foundation for anyone starting in web development.
+                </p>
+              </div>
+
+            </div>
+          </article>
+
+        </div>
+
+        <!-- Sidebar Column -->
+        <aside class="course-content__sidebar">
+
+          <!-- Course Info Card -->
+          <div class="course-info-card">
+            <h2 class="course-info-card__title">This course includes:</h2>
+            <ul class="course-info-card__list">
+              <li class="course-info-card__item">
+                <span class="course-info-card__icon">🎥</span>
+                52 hours on-demand video
+              </li>
+              <li class="course-info-card__item">
+                <span class="course-info-card__icon">📝</span>
+                16 coding exercises
+              </li>
+              <li class="course-info-card__item">
+                <span class="course-info-card__icon">📄</span>
+                65 downloadable resources
+              </li>
+              <li class="course-info-card__item">
+                <span class="course-info-card__icon">♾️</span>
+                Full lifetime access
+              </li>
+              <li class="course-info-card__item">
+                <span class="course-info-card__icon">📱</span>
+                Access on mobile and desktop
+              </li>
+              <li class="course-info-card__item">
+                <span class="course-info-card__icon">🏆</span>
+                Certificate of completion
+              </li>
+            </ul>
+            <button class="course-info-card__cta">
+              Enroll Now — Free
+            </button>
+          </div>
+
+          <!-- Instructor Card -->
+          <div class="instructor-card" id="instructor">
+            <h2 class="instructor-card__title">Your Instructor</h2>
+            <div class="instructor-card__profile">
+              <div class="instructor-card__avatar">AY</div>
+              <div class="instructor-card__info">
+                <h3 class="instructor-card__name">Dr. Angela Yu</h3>
+                <p class="instructor-card__title-text">Lead Instructor</p>
+              </div>
+            </div>
+            <div class="instructor-card__stats">
+              <div class="instructor-card__stat">
+                <span class="instructor-card__stat-number">4.8</span>
+                <span class="instructor-card__stat-label">Instructor Rating</span>
+              </div>
+              <div class="instructor-card__stat">
+                <span class="instructor-card__stat-number">567K</span>
+                <span class="instructor-card__stat-label">Students</span>
+              </div>
+              <div class="instructor-card__stat">
+                <span class="instructor-card__stat-number">8</span>
+                <span class="instructor-card__stat-label">Courses</span>
+              </div>
+            </div>
+            <p class="instructor-card__bio">
+              Dr. Angela Yu is a developer with a passion for teaching. She is the lead instructor 
+              at the London App Brewery, where she has taught programming to over 500,000 students worldwide.
+            </p>
+          </div>
+
+        </aside>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════════
+       FOOTER — Site-wide footer
+  ═══════════════════════════════════════════════════════ -->
+  <footer class="footer" role="contentinfo">
+
+    <!-- Top Section: Three columns -->
+    <div class="footer__top">
+      <div class="footer__container">
+
+        <!-- Column 1: Brand Information -->
+        <div class="footer__brand">
+          <a href="../index.html" class="footer__logo" aria-label="SkillForge - Return to homepage">
+            Skill<span class="footer__logo-accent">Forge</span>
+          </a>
+          <p class="footer__tagline">
+            Learn skills that matter.
+          </p>
+          <p class="footer__description">
+            SkillForge is a student-focused learning platform
+            where you can discover courses, track progress,
+            and earn certificates.
+          </p>
+        </div>
+
+        <!-- Column 2: Explore Links -->
+        <section class="footer__section" aria-labelledby="footer-explore-heading">
+          <h3 class="footer__heading" id="footer-explore-heading">
+            Explore
+          </h3>
+          <nav aria-label="Footer explore navigation">
+            <ul class="footer__links">
+              <li>
+                <a href="courses.html" class="footer__link">
+                  Courses
+                </a>
+              </li>
+              <li>
+                <a href="skill-paths.html" class="footer__link">
+                  Skill Paths
+                </a>
+              </li>
+              <li>
+                <a href="leaderboard.html" class="footer__link">
+                  Leaderboard
+                </a>
+              </li>
+              <li>
+                <a href="about.html" class="footer__link">
+                  About Us
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </section>
+
+        <!-- Column 3: Connect / Social Links -->
+        <section class="footer__section" aria-labelledby="footer-connect-heading">
+          <h3 class="footer__heading" id="footer-connect-heading">
+            Connect
+          </h3>
+          <nav aria-label="Footer social navigation">
+            <ul class="footer__links">
+              <li>
+                <a
+                  href="https://twitter.com"
+                  class="footer__link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Follow SkillForge on Twitter (opens in new tab)"
+                >
+                  Twitter
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://linkedin.com"
+                  class="footer__link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Connect with SkillForge on LinkedIn (opens in new tab)"
+                >
+                  LinkedIn
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://github.com"
+                  class="footer__link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="View SkillForge on GitHub (opens in new tab)"
+                >
+                  GitHub
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://youtube.com"
+                  class="footer__link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Watch SkillForge on YouTube (opens in new tab)"
+                >
+                  YouTube
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- Bottom Bar: Copyright and Legal Links -->
+    <div class="footer__bottom">
+      <div class="footer__container">
+
+        <small class="footer__copyright">
+          &copy; 2024 SkillForge. All rights reserved.
+        </small>
+
+        <nav class="footer__legal" aria-label="Legal navigation">
+          <a href="privacy.html" class="footer__legal-link">
+            Privacy Policy
+          </a>
+          <a href="terms.html" class="footer__legal-link">
+            Terms of Service
+          </a>
+        </nav>
+
+      </div>
+    </div>
+
+  </footer>
+
+</body>
+</html>

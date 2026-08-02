@@ -1,0 +1,944 @@
+/* ═══════════════════════════════════════════════════════════════
+   SKILLFORGE — HOME PAGE STYLES
+
+   Styles specific to the homepage (index.html).
+   Includes: hero section, features, course showcase, etc.
+
+   SECTIONS:
+   1. Hero Section (.hero)
+      - Full viewport height landing section
+      - Gradient background
+      - Centered content layout
+
+   DEPENDENCIES:
+   - variables.css (design tokens)
+   - reset.css (base styles)
+   - typography.css (text defaults)
+
+   LAST UPDATED: Week 1, Day 7
+═══════════════════════════════════════════════════════════════ */
+/* ─────────────────────────────────────────────────────────────
+   HERO SECTION
+
+   The primary landing section. First content visitors see.
+───────────────────────────────────────────────────────────── */
+
+.hero {
+  position: relative;                      /* For absolute positioning of decorative elements */
+  min-height: calc(85vh - var(--navbar-height)); /* REFINED: Reduced from 100vh to 85vh (15% reduction) */
+  display: flex;
+  align-items: center;                     /* Vertical centering */
+  padding-block: var(--space-20) var(--space-20); /* REFINED: Reduced from 96px to 80px for better density */
+
+  /* IMPROVED: Soft gradient that fades naturally to white at bottom */
+  background: linear-gradient(
+    180deg,
+    var(--color-primary-subtle) 0%,      /* Light purple at top */
+    rgba(232, 231, 255, 0.6) 50%,        /* Fade to 60% opacity at middle */
+    rgba(232, 231, 255, 0.2) 80%,        /* Nearly transparent at 80% */
+    rgba(249, 250, 251, 1) 100%          /* Fade to white at bottom */
+  );
+
+  overflow: hidden;                        /* Hide overflowing decorative elements */
+}
+
+/* ─────────────────────────────────────────────────────────────
+   HERO DECORATIVE ELEMENTS
+
+   Pseudo-elements that add visual interest to the background.
+   These are purely decorative and do not affect content layout.
+
+   TECHNIQUE: Using ::before and ::after pseudo-elements
+   - They're positioned absolutely within the hero
+   - They sit behind the content (lower z-index)
+   - They're hidden on mobile to reduce visual noise
+───────────────────────────────────────────────────────────── */
+
+/* Large circle — top right */
+.hero::before {
+  content: "";                            /* Required for pseudo-elements */
+  position: absolute;                     /* Remove from normal flow */
+  top: -100px;                            /* Partially off-screen */
+  right: -100px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(
+    circle,
+    rgba(108, 99, 255, 0.08) 0%,          /* Blue tint, 8% opacity */
+    transparent 70%
+  );
+  border-radius: var(--radius-full);      /* Perfect circle */
+  pointer-events: none;                   /* Click-through (doesn't block interactions) */
+  z-index: 0;                             /* Behind content */
+}
+
+/* Medium circle — bottom left */
+.hero::after {
+  content: "";
+  position: absolute;
+  bottom: -80px;                          /* Partially off-screen */
+  left: -80px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(
+    circle,
+    rgba(108, 99, 255, 0.06) 0%,          /* Lighter than ::before */
+    transparent 70%
+  );
+  border-radius: var(--radius-full);
+  pointer-events: none;
+  z-index: 0;
+}
+/* ─────────────────────────────────────────────────────────────
+   HERO CONTAINER
+
+   Centers content horizontally and constrains max-width.
+   Same pattern as navbar and footer containers.
+───────────────────────────────────────────────────────────── */
+
+.hero__container {
+  position: relative;                     /* Create stacking context */
+  z-index: 1;                             /* Above decorative elements */
+  width: 100%;
+  max-width: var(--container-max);        /* 1200px */
+  margin-inline: auto;                    /* Horizontal centering */
+  padding-inline: var(--space-6);         /* 24px left/right */
+}
+/* ─────────────────────────────────────────────────────────────
+   HERO CONTENT BLOCK
+
+   Controls the width of the hero text content.
+   Narrower than the full container for optimal readability.
+   Centered within the container.
+
+   ANIMATION: Fades in on page load for polished entrance.
+───────────────────────────────────────────────────────────── */
+
+.hero__content {
+  max-width: 640px;                       /* Optimal reading width */
+  margin-inline: auto;                    /* Center within container */
+  text-align: center;                     /* Center all text */
+  
+  /* Fade-in animation on page load */
+  animation: heroFadeIn 0.8s ease-out;
+  animation-fill-mode: backwards;         /* Apply "from" state before animation starts */
+}
+
+/* ─────────────────────────────────────────────────────────────
+   HERO FADE-IN ANIMATION
+
+   Defines the entrance animation for hero content.
+   
+   TECHNIQUE: @keyframes animation
+   - Starts invisible and slightly below position (opacity: 0, translateY: 20px)
+   - Ends fully visible at normal position (opacity: 1, translateY: 0)
+   - Duration: 0.8 seconds (smooth but not sluggish)
+   - Timing: ease-out (starts fast, slows down at end)
+───────────────────────────────────────────────────────────── */
+
+@keyframes heroFadeIn {
+  from {
+    opacity: 0;                           /* Invisible */
+    transform: translateY(20px);          /* 20px below final position */
+  }
+  to {
+    opacity: 1;                           /* Fully visible */
+    transform: translateY(0);             /* Normal position */
+  }
+}
+/* ─────────────────────────────────────────────────────────────
+   VERTICAL RHYTHM — Spacing Between Hero Elements
+
+   Uses the direct child selector (>) to add consistent
+   spacing between each major element in the hero.
+   
+   REFINED: Reduced spacing for better information density.
+───────────────────────────────────────────────────────────── */
+
+.hero__content > * + * {
+  margin-top: var(--space-5);            /* REFINED: 20px (down from 24px) */
+}
+
+/* Larger spacing before CTA buttons — visual separation */
+.hero__actions {
+  margin-top: var(--space-8) !important; /* REFINED: 32px (down from 40px) */
+}
+
+/* Larger spacing before stats bar */
+.hero__stats {
+  margin-top: var(--space-10) !important; /* REFINED: 40px (down from 48px) */
+}
+/* ─────────────────────────────────────────────────────────────
+   HERO BADGE
+
+   Small pill-shaped tag at the top of the hero.
+   Provides context ("Built for Students").
+   Subtle, not distracting from the headline.
+───────────────────────────────────────────────────────────── */
+
+.hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);                    /* 8px between icon and text */
+  padding: var(--space-2) var(--space-4); /* 8px top/bottom, 16px left/right */
+  background-color: var(--color-primary-subtle); /* Light blue background */
+  border-radius: var(--radius-full);      /* Pill shape */
+  font-size: var(--text-sm);              /* 14px */
+  font-weight: var(--font-medium);        /* 500 */
+  color: var(--color-primary);            /* Blue text */
+}
+
+.hero__badge-icon {
+  font-size: var(--text-base);            /* 16px — slightly larger than text */
+  line-height: 1;
+}
+
+.hero__badge-text {
+  line-height: 1;
+}
+/* ─────────────────────────────────────────────────────────────
+   HERO HEADLINE
+
+   The most important text on the page.
+   Large, bold, attention-grabbing.
+   Uses a gradient accent on the second line.
+───────────────────────────────────────────────────────────── */
+
+.hero__headline {
+  font-size: var(--text-5xl);             /* 48px */
+  font-weight: var(--font-bold);          /* 700 */
+  line-height: var(--leading-tight);      /* 1.25 */
+  letter-spacing: var(--tracking-tight);  /* -0.025em for display text */
+  color: var(--color-text-primary);       /* Near-black */
+  margin: 0;                              /* Reset default margin */
+}
+
+/* Accent span — gradient text effect */
+.hero__headline-accent {
+  display: block;                         /* Forces line break */
+  background: linear-gradient(
+    135deg,
+    var(--blue-500) 0%,
+    var(--blue-700) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;                     /* Fallback for older browsers */
+}
+/* ─────────────────────────────────────────────────────────────
+   HERO SUBTITLE
+
+   Supporting text that explains the value proposition.
+   Larger than body text, but subdued color.
+───────────────────────────────────────────────────────────── */
+
+.hero__subtitle {
+  font-size: var(--text-lg);              /* 18px */
+  line-height: var(--leading-relaxed);    /* 1.625 — comfortable reading */
+  color: var(--color-text-secondary);     /* Dark gray, not black */
+  max-width: 560px;                       /* Narrower than headline for readability */
+  margin-inline: auto;                    /* Center within content block */
+}
+/* ─────────────────────────────────────────────────────────────
+   HERO CTA BUTTONS
+
+   Two call-to-action buttons side-by-side.
+   Primary: solid blue, high emphasis.
+   Ghost: outlined, secondary action.
+───────────────────────────────────────────────────────────── */
+
+.hero__actions {
+  display: flex;
+  gap: var(--space-4);                    /* 16px between buttons */
+  justify-content: center;                /* Horizontal centering */
+  flex-wrap: wrap;                        /* Wrap on small screens */
+}
+
+/* Base button styles — shared between primary and ghost */
+.hero__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4) var(--space-8); /* 16px top/bottom, 32px left/right */
+  font-size: var(--text-base);            /* 16px */
+  font-weight: var(--font-semibold);      /* 600 */
+  line-height: 1;
+  border-radius: var(--radius-md);        /* 8px */
+  text-decoration: none;                  /* Remove underline */
+  transition: all var(--duration-fast) var(--ease-default);
+  cursor: pointer;
+  border: 2px solid transparent;          /* Reserve space for border (prevents layout shift) */
+  
+  /* Smooth micro-interaction setup */
+  transform: translateY(0);               /* Starting position for transitions */
+  will-change: transform;                 /* Optimization hint for browser */
+}
+
+/* ─────────────────────────────────────────────────────────────
+   BUTTON FOCUS STATES — Accessibility
+
+   Clear focus indicators for keyboard navigation.
+   Uses :focus-visible to show only when navigating with keyboard.
+───────────────────────────────────────────────────────────── */
+
+.hero__btn:focus {
+  outline: none;                          /* Remove default browser outline */
+}
+
+.hero__btn:focus-visible {
+  outline: 3px solid var(--color-primary);     /* Clear blue outline */
+  outline-offset: 3px;                         /* Space between button and outline */
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2); /* Soft glow effect */
+}
+
+/* Primary Button — High emphasis */
+.hero__btn--primary {
+  background-color: var(--color-primary); /* Blue */
+  color: var(--color-text-on-primary);    /* White */
+  border-color: var(--color-primary);
+}
+
+.hero__btn--primary:hover {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  transform: translateY(-2px) scale(1.02); /* Lift AND slight grow */
+  box-shadow: var(--shadow-md);
+}
+
+.hero__btn--primary:active {
+  background-color: var(--color-primary-active);
+  border-color: var(--color-primary-active);
+  transform: translateY(0) scale(0.98);   /* Reset lift, slight shrink (pressed effect) */
+}
+
+/* Ghost Button — Secondary emphasis */
+.hero__btn--ghost {
+  background-color: transparent;
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.hero__btn--ghost:hover {
+  background-color: var(--color-primary-subtle); /* Light blue background */
+  border-color: var(--color-primary-hover);
+  color: var(--color-primary-hover);
+  transform: translateY(-2px) scale(1.02); /* Same lift and grow effect */
+}
+
+.hero__btn--ghost:active {
+  background-color: var(--blue-200);
+  border-color: var(--color-primary-active);
+  color: var(--color-primary-active);
+  transform: translateY(0) scale(0.98);   /* Same pressed effect */
+}
+/* ─────────────────────────────────────────────────────────────
+   HERO STATS BAR
+
+   Social proof numbers displayed in a horizontal row.
+   Shows: number of courses, skill paths, students.
+───────────────────────────────────────────────────────────── */
+
+.hero__stats {
+  display: flex;
+  gap: var(--space-12);                   /* 48px between stats */
+  justify-content: center;
+  flex-wrap: wrap;                        /* Wrap on small screens */
+}
+
+.hero__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);                    /* REFINED: 12px (increased from 8px) for better separation */
+  
+  /* Fade-in animation (starts invisible) */
+  animation: statFadeIn 0.6s ease-out;
+  animation-fill-mode: both;              /* Apply both start and end states */
+  opacity: 0;                             /* Start invisible (overridden by animation) */
+}
+
+/* Staggered animation delays — each stat appears slightly after the previous */
+.hero__stat:nth-child(1) {
+  animation-delay: 0.3s;                  /* First stat: 300ms delay */
+}
+
+.hero__stat:nth-child(2) {
+  animation-delay: 0.5s;                  /* Second stat: 500ms delay */
+}
+
+.hero__stat:nth-child(3) {
+  animation-delay: 0.7s;                  /* Third stat: 700ms delay */
+}
+
+/* ─────────────────────────────────────────────────────────────
+   STATS FADE-IN ANIMATION
+
+   Similar to hero fade-in but faster and shorter distance.
+───────────────────────────────────────────────────────────── */
+
+@keyframes statFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);          /* Shorter distance than hero */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero__stat-number {
+  font-size: var(--text-4xl);             /* REFINED: 36px (increased from 30px - 20% larger) */
+  font-weight: var(--font-bold);          /* 700 */
+  line-height: 1;
+  color: var(--color-primary);            /* Blue */
+}
+
+.hero__stat-label {
+  font-size: var(--text-sm);              /* 14px */
+  font-weight: var(--font-medium);        /* 500 */
+  color: var(--color-text-muted);         /* Gray */
+  text-transform: uppercase;
+  letter-spacing: 0.05em;                 /* Slight spacing for uppercase text */
+}
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS — HERO SECTION
+
+   Mobile-first approach: base styles above are for mobile.
+   We progressively enhance for larger screens using min-width.
+
+   BREAKPOINT STRATEGY:
+   - 640px (sm):  Small tablets, large phones in landscape
+   - 768px (md):  Tablets
+   - 1024px (lg): Laptops, desktops
+
+   GOAL: Maintain readability and visual hierarchy at all sizes.
+═══════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────
+   MOBILE (BASE) — Up to 639px
+
+   Already defined above. Key adjustments:
+   - Smaller font sizes
+   - Tighter spacing
+   - Stacked buttons
+───────────────────────────────────────────────────────────── */
+
+/* Mobile-specific overrides */
+@media (max-width: 639px) {
+  
+  .hero {
+    min-height: auto;                     /* Don't force full viewport on mobile */
+    padding-block: var(--space-12) var(--space-12); /* REFINED: 48px (reduced from 64px) */
+  }
+
+  .hero__container {
+    padding-inline: var(--space-4);       /* 16px — tighter on mobile */
+  }
+
+  .hero__badge {
+    font-size: var(--text-xs);            /* 12px — smaller on mobile */
+    padding: var(--space-1) var(--space-3); /* 4px 12px */
+  }
+
+  .hero__headline {
+    font-size: var(--text-3xl);           /* 30px — down from 48px */
+    letter-spacing: var(--tracking-tight-sm); /* Slightly less tight */
+  }
+
+  .hero__subtitle {
+    font-size: var(--text-base);          /* 16px — down from 18px */
+  }
+
+  /* Stack buttons vertically on mobile */
+  .hero__actions {
+    flex-direction: column;
+    width: 100%;                          /* Full width */
+  }
+
+  .hero__btn {
+    width: 100%;                          /* Full-width buttons */
+    padding: var(--space-3) var(--space-6); /* Slightly smaller padding */
+  }
+
+  /* Tighter stat spacing */
+  .hero__stats {
+    gap: var(--space-8);                  /* 32px — down from 48px */
+  }
+
+  .hero__stat-number {
+    font-size: var(--text-3xl);           /* REFINED: 30px (proportionally reduced) */
+  }
+
+  /* Reduce vertical spacing between elements */
+  .hero__content > * + * {
+    margin-top: var(--space-4);           /* 16px — reduced for mobile */
+  }
+
+  .hero__actions {
+    margin-top: var(--space-6) !important; /* REFINED: 24px */
+  }
+
+  .hero__stats {
+    margin-top: var(--space-8) !important; /* REFINED: 32px */
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SMALL TABLETS / LARGE PHONES (640px+)
+
+   Transition zone: slightly larger text, but still compact layout.
+───────────────────────────────────────────────────────────── */
+
+@media (min-width: 640px) {
+  
+  .hero__headline {
+    font-size: var(--text-4xl);           /* 36px */
+  }
+
+  .hero__subtitle {
+    font-size: var(--text-lg);            /* 18px */
+  }
+
+  /* Buttons back to horizontal layout */
+  .hero__actions {
+    flex-direction: row;
+  }
+
+  .hero__btn {
+    width: auto;                          /* Auto width */
+    padding: var(--space-4) var(--space-8); /* Full padding restored */
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   TABLETS (768px+)
+
+   Approaching desktop experience. Full font sizes, comfortable spacing.
+───────────────────────────────────────────────────────────── */
+
+@media (min-width: 768px) {
+  
+  .hero {
+    padding-block: var(--space-16) var(--space-16); /* REFINED: 64px (reduced from 80px) */
+  }
+
+  .hero__badge {
+    font-size: var(--text-sm);            /* 14px — full size */
+    padding: var(--space-2) var(--space-4); /* Full padding */
+  }
+
+  .hero__headline {
+    font-size: var(--text-5xl);           /* 48px — full size */
+    letter-spacing: var(--tracking-tight); /* Full tightness */
+  }
+
+  .hero__stat-number {
+    font-size: var(--text-4xl);           /* REFINED: 36px (increased) */
+  }
+
+  .hero__stats {
+    gap: var(--space-12);                 /* 48px — full spacing */
+  }
+
+  /* Full vertical spacing restored */
+  .hero__content > * + * {
+    margin-top: var(--space-5);           /* REFINED: 20px */
+  }
+
+  .hero__actions {
+    margin-top: var(--space-8) !important; /* REFINED: 32px */
+  }
+
+  .hero__stats {
+    margin-top: var(--space-10) !important; /* REFINED: 40px */
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   DESKTOPS (1024px+)
+
+   Largest screens: full vertical spacing, maximum comfort.
+───────────────────────────────────────────────────────────── */
+
+@media (min-width: 1024px) {
+  
+  .hero {
+    min-height: calc(85vh - var(--navbar-height)); /* REFINED: 85vh (reduced from 100vh) */
+    padding-block: var(--space-20) var(--space-20); /* REFINED: 80px (reduced from 96px) */
+  }
+
+  .hero__container {
+    padding-inline: var(--space-6);       /* 24px — full padding */
+  }
+
+  /* Enhanced button hover effects on desktop (better mouse precision) */
+  .hero__btn--primary:hover {
+    transform: translateY(-3px);          /* Slightly more lift */
+    box-shadow: var(--shadow-lg);         /* Stronger shadow */
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ACCESSIBILITY — REDUCED MOTION
+
+   Respects user's "prefers-reduced-motion" system setting.
+   Users with motion sensitivity can disable animations.
+   This is a WCAG requirement (Level AAA).
+
+   When enabled: removes all animations and transforms.
+═══════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  
+  /* Disable all animations */
+  .hero__content,
+  .hero__stat {
+    animation: none;                      /* No fade-in animation */
+    opacity: 1;                           /* Immediately visible */
+    transform: none;                      /* No movement */
+  }
+
+  /* Disable transform effects on buttons */
+  .hero__btn:hover,
+  .hero__btn:active {
+    transform: none;                      /* No lift or scale */
+  }
+
+  /* Keep other hover effects (colors, borders, shadows) */
+  /* These don't cause motion sickness */
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FEATURES SECTION
+
+   Showcases core platform benefits in a card grid layout.
+   Uses CSS Grid for responsive column layout.
+
+   STRUCTURE:
+   - Section wrapper (background and spacing)
+   - Container (max-width constraint)
+   - Header (section heading and subtitle)
+   - Grid (responsive card layout)
+   - Cards (individual feature blocks)
+
+   DEPENDENCIES:
+   - variables.css (design tokens)
+
+   LAST UPDATED: Week 1, Day 7, Milestone 7
+═══════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────
+   FEATURES SECTION WRAPPER
+
+   The outer container for the entire features section.
+   Sets background color and vertical spacing.
+───────────────────────────────────────────────────────────── */
+
+.features {
+  position: relative;
+  padding-block: var(--space-20) var(--space-24); /* IMPROVED: 80px top (increased), 96px bottom for smoother transition */
+  background-color: var(--white);         /* Clean white background */
+}
+
+/* ─────────────────────────────────────────────────────────────
+   FEATURES CONTAINER
+
+   Centers content and constrains max-width.
+   Same pattern as hero__container and navbar__container.
+───────────────────────────────────────────────────────────── */
+
+.features__container {
+  width: 100%;
+  max-width: var(--container-max);        /* 1200px */
+  margin-inline: auto;                    /* Horizontal centering */
+  padding-inline: var(--space-6);         /* 24px left/right */
+}
+
+/* ─────────────────────────────────────────────────────────────
+   FEATURES HEADER
+
+   Contains the section heading and subtitle.
+   Centered text, narrower than container for readability.
+───────────────────────────────────────────────────────────── */
+
+.features__header {
+  text-align: center;
+  max-width: 640px;                       /* Constrain width for readability */
+  margin-inline: auto;                    /* Center within container */
+  margin-bottom: var(--space-16);         /* 64px space before grid */
+}
+
+/* ─────────────────────────────────────────────────────────────
+   FEATURES HEADING
+
+   Main heading for the features section.
+   Uses h2 (proper heading hierarchy after hero h1).
+───────────────────────────────────────────────────────────── */
+
+.features__heading {
+  font-size: var(--text-4xl);             /* 36px */
+  font-weight: var(--font-bold);          /* 700 */
+  line-height: var(--leading-tight);      /* 1.25 */
+  letter-spacing: var(--tracking-tight-sm); /* -0.02em */
+  color: var(--color-text-primary);       /* Near-black */
+  margin: 0;                              /* Reset default margin */
+}
+
+/* Accent span — blue highlight on "Succeed" */
+.features__heading-accent {
+  color: var(--color-primary);            /* Blue */
+}
+
+/* ─────────────────────────────────────────────────────────────
+   FEATURES SUBTITLE
+
+   Supporting text below the heading.
+   Explains the section's purpose.
+───────────────────────────────────────────────────────────── */
+
+.features__subtitle {
+  font-size: var(--text-lg);              /* 18px */
+  line-height: var(--leading-relaxed);    /* 1.625 */
+  color: var(--color-text-secondary);     /* Dark gray */
+  margin-top: var(--space-4);             /* 16px below heading */
+  margin-bottom: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   FEATURES GRID
+
+   Responsive CSS Grid layout for feature cards.
+   
+   TECHNIQUE: CSS Grid with repeat() and minmax()
+   - Desktop: 3 columns
+   - Tablet: 2 columns (auto-wraps)
+   - Mobile: 1 column (auto-wraps)
+   
+   Grid automatically handles wrapping based on screen width.
+───────────────────────────────────────────────────────────── */
+
+.features__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-8);                    /* 32px between cards */
+  list-style: none;                       /* Remove default bullets */
+  margin: 0;                              /* Reset default list margin */
+  padding: 0;                             /* Reset default list padding */
+}
+
+/* ─────────────────────────────────────────────────────────────
+   GRID EXPLANATION
+
+   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))
+   
+   Let's break this down piece by piece:
+   
+   1. repeat() — Repeats a pattern
+      Instead of writing "1fr 1fr 1fr", we say "repeat 1fr"
+   
+   2. auto-fit — "Fit as many columns as possible"
+      Browser calculates how many 280px columns fit in the space
+      Example: 1200px wide = 4 columns (but we only have 6 cards, so 3 columns)
+   
+   3. minmax(280px, 1fr) — Column size range
+      - Minimum: 280px (cards never smaller than this)
+      - Maximum: 1fr (equal fraction of remaining space)
+      
+   BEHAVIOR:
+   - Wide screen (1200px): 3 columns fit, cards expand equally
+   - Medium screen (768px): 2 columns fit, cards expand equally
+   - Narrow screen (400px): 1 column fits, cards expand to full width
+   
+   NO MEDIA QUERIES NEEDED! Grid handles responsive behavior automatically.
+───────────────────────────────────────────────────────────── */
+
+/* ─────────────────────────────────────────────────────────────
+   FEATURE CARD
+
+   Individual feature cards within the grid.
+   Each card contains: icon, title, description.
+   
+   VISUAL DESIGN:
+   - Clean white background (matches section)
+   - Subtle border for definition
+   - Generous padding for breathing room
+   - Centered content for visual balance
+───────────────────────────────────────────────────────────── */
+
+.features__card {
+  display: flex;
+  flex-direction: column;                 /* Stack icon, title, description vertically */
+  align-items: center;                    /* Center horizontally */
+  text-align: center;                     /* Center text */
+  padding: var(--space-8);                /* 32px all around */
+  background-color: var(--white);
+  border: 1px solid var(--color-border);  /* Subtle gray border */
+  border-radius: var(--radius-lg);        /* 12px rounded corners */
+  transition: all var(--duration-normal) var(--ease-default); /* REFINED: 250ms for smooth transitions */
+  
+  /* REFINED: Soft shadow for premium elevated feel */
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 
+              0 1px 2px 0 rgba(0, 0, 0, 0.03);
+  
+  /* Prepare for hover effect */
+  transform: translateY(0);               /* Starting position */
+}
+
+/* ─────────────────────────────────────────────────────────────
+   CARD HOVER STATE
+
+   Subtle lift effect on hover.
+   Provides visual feedback that cards are interactive.
+   More subtle than buttons (cards are informational, not CTAs).
+   
+   REFINED: Professional SaaS-style hover with smooth animation.
+───────────────────────────────────────────────────────────── */
+
+.features__card:hover {
+  transform: translateY(-6px);            /* REFINED: Lift 6px (increased from 4px) */
+  border-color: var(--color-primary);     /* Blue border on hover */
+  box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.08), /* REFINED: Enhanced shadow for premium feel */
+              0 6px 12px -4px rgba(0, 0, 0, 0.04);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   FEATURE ICON
+
+   Large emoji icon at the top of each card.
+   Provides visual identification and adds personality.
+───────────────────────────────────────────────────────────── */
+
+.features__icon {
+  font-size: 3rem;                        /* 48px — large and prominent */
+  line-height: 1;
+  margin-bottom: var(--space-4);          /* 16px below icon */
+}
+
+/* ─────────────────────────────────────────────────────────────
+   FEATURE TITLE
+
+   Card heading (h3 in HTML).
+   Clear hierarchy: larger than description, smaller than section heading.
+───────────────────────────────────────────────────────────── */
+
+.features__title {
+  font-size: var(--text-xl);              /* 20px */
+  font-weight: var(--font-semibold);      /* 600 */
+  line-height: var(--leading-snug);       /* 1.375 */
+  color: var(--color-text-primary);       /* Near-black */
+  margin: 0 0 var(--space-3) 0;           /* 12px below title */
+}
+
+/* ─────────────────────────────────────────────────────────────
+   FEATURE DESCRIPTION
+
+   Supporting text that explains the feature benefit.
+   Smaller, lighter, comfortable line-height for readability.
+───────────────────────────────────────────────────────────── */
+
+.features__description {
+  font-size: var(--text-base);            /* 16px */
+  line-height: var(--leading-relaxed);    /* 1.625 — comfortable reading */
+  color: var(--color-text-secondary);     /* Dark gray, not black */
+  margin: 0;                              /* Reset default margin */
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS — FEATURES SECTION
+
+   Fine-tune spacing and sizing at different screen widths.
+   Grid columns adjust automatically (thanks to auto-fit),
+   but we adjust padding, font sizes, and spacing.
+═══════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────
+   MOBILE (up to 639px)
+
+   Tighter spacing, smaller fonts, reduced padding.
+───────────────────────────────────────────────────────────── */
+
+@media (max-width: 639px) {
+  
+  .features {
+    padding-block: var(--space-10) var(--space-12); /* REFINED: 40px top, 48px bottom */
+  }
+
+  .features__container {
+    padding-inline: var(--space-4);       /* 16px — tighter on mobile */
+  }
+
+  .features__header {
+    margin-bottom: var(--space-10);       /* REFINED: 40px (reduced for mobile) */
+  }
+
+  .features__heading {
+    font-size: var(--text-3xl);           /* 30px — down from 36px */
+  }
+
+  .features__subtitle {
+    font-size: var(--text-base);          /* 16px — down from 18px */
+  }
+
+  .features__grid {
+    gap: var(--space-6);                  /* 24px — tighter gap on mobile */
+  }
+
+  .features__card {
+    padding: var(--space-6);              /* 24px — down from 32px */
+  }
+
+  .features__icon {
+    font-size: 2.5rem;                    /* 40px — down from 48px */
+  }
+
+  .features__title {
+    font-size: var(--text-lg);            /* 18px — down from 20px */
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   TABLETS (768px+)
+
+   Restore full spacing and font sizes.
+───────────────────────────────────────────────────────────── */
+
+@media (min-width: 768px) {
+  
+  .features {
+    padding-block: var(--space-16) var(--space-20); /* REFINED: 64px top, 80px bottom */
+  }
+
+  .features__container {
+    padding-inline: var(--space-6);       /* 24px — full padding */
+  }
+
+  .features__header {
+    margin-bottom: var(--space-12);       /* REFINED: 48px (optimized) */
+  }
+
+  .features__heading {
+    font-size: var(--text-4xl);           /* 36px — full size */
+  }
+
+  .features__subtitle {
+    font-size: var(--text-lg);            /* 18px — full size */
+  }
+
+  .features__grid {
+    gap: var(--space-8);                  /* 32px — full gap */
+  }
+
+  .features__card {
+    padding: var(--space-8);              /* 32px — full padding */
+  }
+
+  .features__icon {
+    font-size: 3rem;                      /* 48px — full size */
+  }
+
+  .features__title {
+    font-size: var(--text-xl);            /* 20px — full size */
+  }
+}

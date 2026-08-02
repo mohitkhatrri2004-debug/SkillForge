@@ -62,18 +62,20 @@
 ═══════════════════════════════════════════════════════════════ */
 @import url('components/navbar.css');
 @import url('components/footer.css');
+@import url('components/skeleton.css');
+@import url('components/empty-state.css');
 
 
 
 /* ═══════════════════════════════════════════════════════════════
    LAYER 5 — PAGES
-   
-   Page-specific styles that don't fit into reusable components.
-   Will be added as we build pages in Week 2+.
+
+   Page-specific styles that are not reused across pages.
 ═══════════════════════════════════════════════════════════════ */
 
-/* Page imports will go here */
-
+@import url('pages/home.css');
+@import url('pages/courses.css');
+@import url('pages/course-detail.css');
 
 /* ═══════════════════════════════════════════════════════════════
    LAYER 6 — UTILITIES

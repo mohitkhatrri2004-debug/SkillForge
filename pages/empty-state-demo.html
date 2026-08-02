@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/main.css">
+  <title>Empty State Demo — SkillForge</title>
+</head>
+<body>
+
+  <header class="navbar" role="banner">
+    <div class="navbar__container">
+      <a href="../index.html" class="navbar__logo">
+        <span class="navbar__logo-text">Skill<span class="navbar__logo-accent">Forge</span></span>
+      </a>
+      <nav class="navbar__nav">
+        <ul class="navbar__links">
+          <li class="navbar__item"><a href="../index.html" class="navbar__link">Home</a></li>
+          <li class="navbar__item"><a href="courses.html" class="navbar__link">Courses</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content" style="padding: 80px 24px;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      
+      <h1 style="font-size: 2.25rem; font-weight: 700; margin-bottom: 16px;">
+        Empty State Component Demo
+      </h1>
+      <p style="font-size: 1.125rem; color: var(--gray-700); margin-bottom: 48px;">
+        Empty states provide helpful feedback when there's no content to display. 
+        These will be used in Week 3 when implementing search and filter functionality.
+      </p>
+
+      <!-- Example 1: No Search Results -->
+      <section style="margin-bottom: 64px;">
+        <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 24px;">
+          1. No Search Results
+        </h2>
+        
+        <div class="empty-state" role="status" aria-live="polite">
+          <div class="empty-state__icon empty-state__icon--search">🔍</div>
+          <div class="empty-state__content">
+            <h3 class="empty-state__title">No courses found</h3>
+            <p class="empty-state__description">
+              We couldn't find any courses matching "<strong>JavaScript Advanced Techniques</strong>". 
+              Try adjusting your search or browse all courses.
+            </p>
+          </div>
+          <div class="empty-state__actions">
+            <button class="empty-state__button">
+              Clear Search
+            </button>
+            <a href="courses.html" class="empty-state__link">
+              Browse all courses
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Example 2: No Filter Results -->
+      <section style="margin-bottom: 64px;">
+        <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 24px;">
+          2. No Filter Results (with suggestions)
+        </h2>
+        
+        <div class="empty-state" role="status" aria-live="polite">
+          <div class="empty-state__icon empty-state__icon--filter">🎯</div>
+          <div class="empty-state__content">
+            <h3 class="empty-state__title">No courses in this category</h3>
+            <p class="empty-state__description">
+              We don't have any courses in the "<strong>Blockchain</strong>" category yet. 
+              Try another category or explore all courses.
+            </p>
+            <ul class="empty-state__suggestions">
+              <li>Try the "Programming" category</li>
+              <li>Browse "Design" courses</li>
+              <li>Check out "Business" topics</li>
+            </ul>
+          </div>
+          <div class="empty-state__actions">
+            <button class="empty-state__button">
+              Clear Filters
+            </button>
+            <a href="courses.html" class="empty-state__link">
+              View all courses
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Example 3: Error State -->
+      <section style="margin-bottom: 64px;">
+        <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 24px;">
+          3. Error State
+        </h2>
+        
+        <div class="empty-state" role="alert">
+          <div class="empty-state__icon empty-state__icon--error">⚠️</div>
+          <div class="empty-state__content">
+            <h3 class="empty-state__title">Oops! Something went wrong</h3>
+            <p class="empty-state__description">
+              We're having trouble loading courses right now. 
+              Please try again in a moment.
+            </p>
+          </div>
+          <div class="empty-state__actions">
+            <button class="empty-state__button">
+              Retry
+            </button>
+            <a href="../index.html" class="empty-state__link">
+              Return to homepage
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Example 4: Compact Variant -->
+      <section style="margin-bottom: 64px;">
+        <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 24px;">
+          4. Compact Variant (for smaller spaces)
+        </h2>
+        
+        <div class="empty-state empty-state--compact" role="status">
+          <div class="empty-state__icon">📚</div>
+          <div class="empty-state__content">
+            <h3 class="empty-state__title">No saved courses yet</h3>
+            <p class="empty-state__description">
+              Start saving courses to build your personal learning path.
+            </p>
+          </div>
+          <div class="empty-state__actions">
+            <button class="empty-state__button">
+              Explore Courses
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Example 5: Inline Variant -->
+      <section style="margin-bottom: 64px;">
+        <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 24px;">
+          5. Inline Variant (transparent background)
+        </h2>
+        
+        <div style="background: var(--gray-50); padding: 24px; border-radius: 12px;">
+          <div class="empty-state empty-state--inline" role="status">
+            <div class="empty-state__icon">🎓</div>
+            <div class="empty-state__content">
+              <h3 class="empty-state__title">No certificates yet</h3>
+              <p class="empty-state__description">
+                Complete courses to earn certificates.
+              </p>
+            </div>
+            <div class="empty-state__actions">
+              <a href="courses.html" class="empty-state__link">
+                Start learning
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Documentation -->
+      <div style="background: var(--blue-100); padding: 24px; border-radius: 8px; border-left: 4px solid var(--blue-500); margin-bottom: 48px;">
+        <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 12px;">
+          💡 When to Use Each Empty State
+        </h3>
+        <ul style="list-style: disc; margin-left: 24px; line-height: 1.625;">
+          <li><strong>No Search Results:</strong> User searched but nothing matched their query</li>
+          <li><strong>No Filter Results:</strong> User applied filters but no content matches</li>
+          <li><strong>Error State:</strong> Something went wrong (API error, network issue, etc.)</li>
+          <li><strong>Compact Variant:</strong> For smaller UI areas like sidebars or cards</li>
+          <li><strong>Inline Variant:</strong> For sections within a page (no border/background)</li>
+        </ul>
+      </div>
+
+      <div style="background: var(--green-100); padding: 24px; border-radius: 8px; border-left: 4px solid var(--green-600);">
+        <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 12px;">
+          ✅ Best Practices Implemented
+        </h3>
+        <ul style="list-style: disc; margin-left: 24px; line-height: 1.625;">
+          <li><strong>Clear Messaging:</strong> Explains what happened and why</li>
+          <li><strong>Actionable CTAs:</strong> Tells users what to do next</li>
+          <li><strong>Helpful Alternatives:</strong> Provides secondary options</li>
+          <li><strong>Friendly Tone:</strong> Not blaming the user, being helpful</li>
+          <li><strong>Visual Clarity:</strong> Icon + text + button hierarchy</li>
+          <li><strong>Accessibility:</strong> Proper ARIA roles (status, alert, live regions)</li>
+          <li><strong>Responsive:</strong> Full-width buttons on mobile, centered on desktop</li>
+        </ul>
+      </div>
+
+    </div>
+  </main>
+
+</body>
+</html>
