@@ -18,6 +18,9 @@
   <!-- CSS Entry Point -->
   <link rel="stylesheet" href="../css/main.css">
 
+  <!-- JavaScript: defer means it runs AFTER the full HTML is loaded -->
+  <script src="../js/courses.js" defer></script>
+
   <title>Explore Courses — SkillForge</title>
 </head>
 <body>
@@ -116,22 +119,22 @@
           
           <!-- Category Filters -->
           <div class="filters__categories" role="group" aria-label="Filter by category">
-            <button class="filters__category filters__category--active" aria-pressed="true">
+            <button class="filters__category filters__category--active" aria-pressed="true" data-filter="all">
               All Courses
             </button>
-            <button class="filters__category" aria-pressed="false">
+            <button class="filters__category" aria-pressed="false" data-filter="programming">
               Programming
             </button>
-            <button class="filters__category" aria-pressed="false">
+            <button class="filters__category" aria-pressed="false" data-filter="design">
               Design
             </button>
-            <button class="filters__category" aria-pressed="false">
+            <button class="filters__category" aria-pressed="false" data-filter="business">
               Business
             </button>
-            <button class="filters__category" aria-pressed="false">
+            <button class="filters__category" aria-pressed="false" data-filter="marketing">
               Marketing
             </button>
-            <button class="filters__category" aria-pressed="false">
+            <button class="filters__category" aria-pressed="false" data-filter="data-science">
               Data Science
             </button>
           </div>
@@ -321,14 +324,14 @@
           ═══════════════════════════════════════════════════════ -->
 
           <!-- Course Card 1 -->
-          <article class="course-card">
+          <article class="course-card" data-category="programming">
             <div class="course-card__image">
               <span class="course-card__badge">Beginner</span>
             </div>
             <div class="course-card__content">
               <div class="course-card__category">Programming</div>
               <h3 class="course-card__title">
-                <a href="course-web-development.html" class="course-card__link">
+                <a href="course-detail.html?id=complete-web-development" class="course-card__link">
                   Complete Web Development Bootcamp
                 </a>
               </h3>
@@ -349,14 +352,14 @@
           </article>
 
           <!-- Course Card 2 -->
-          <article class="course-card">
+          <article class="course-card" data-category="design">
             <div class="course-card__image">
               <span class="course-card__badge course-card__badge--intermediate">Intermediate</span>
             </div>
             <div class="course-card__content">
               <div class="course-card__category">Design</div>
               <h3 class="course-card__title">
-                <a href="course-ui-ux-design.html" class="course-card__link">
+                <a href="course-detail.html?id=ui-ux-design-fundamentals" class="course-card__link">
                   UI/UX Design Fundamentals
                 </a>
               </h3>
@@ -377,14 +380,14 @@
           </article>
 
           <!-- Course Card 3 -->
-          <article class="course-card">
+          <article class="course-card" data-category="data-science">
             <div class="course-card__image">
               <span class="course-card__badge course-card__badge--advanced">Advanced</span>
             </div>
             <div class="course-card__content">
               <div class="course-card__category">Data Science</div>
               <h3 class="course-card__title">
-                <a href="course-machine-learning.html" class="course-card__link">
+                <a href="course-detail.html?id=machine-learning-az" class="course-card__link">
                   Machine Learning A-Z™
                 </a>
               </h3>
@@ -405,14 +408,14 @@
           </article>
 
           <!-- Course Card 4 -->
-          <article class="course-card">
+          <article class="course-card" data-category="business">
             <div class="course-card__image">
               <span class="course-card__badge">Beginner</span>
             </div>
             <div class="course-card__content">
               <div class="course-card__category">Business</div>
               <h3 class="course-card__title">
-                <a href="course-web-development.html" class="course-card__link">
+                <a href="course-detail.html?id=digital-marketing-masterclass" class="course-card__link">
                   Digital Marketing Masterclass
                 </a>
               </h3>
@@ -433,14 +436,14 @@
           </article>
 
           <!-- Course Card 5 -->
-          <article class="course-card">
+          <article class="course-card" data-category="programming">
             <div class="course-card__image">
               <span class="course-card__badge course-card__badge--intermediate">Intermediate</span>
             </div>
             <div class="course-card__content">
               <div class="course-card__category">Programming</div>
               <h3 class="course-card__title">
-                <a href="course-web-development.html" class="course-card__link">
+                <a href="course-detail.html?id=react-complete-guide" class="course-card__link">
                   React - The Complete Guide
                 </a>
               </h3>
@@ -461,14 +464,14 @@
           </article>
 
           <!-- Course Card 6 -->
-          <article class="course-card">
+          <article class="course-card" data-category="design">
             <div class="course-card__image">
               <span class="course-card__badge">Beginner</span>
             </div>
             <div class="course-card__content">
               <div class="course-card__category">Design</div>
               <h3 class="course-card__title">
-                <a href="course-web-development.html" class="course-card__link">
+                <a href="course-detail.html?id=graphic-design-bootcamp" class="course-card__link">
                   Graphic Design Bootcamp
                 </a>
               </h3>
@@ -489,14 +492,14 @@
           </article>
 
           <!-- Course Card 7 -->
-          <article class="course-card">
+          <article class="course-card" data-category="data-science">
             <div class="course-card__image">
               <span class="course-card__badge course-card__badge--advanced">Advanced</span>
             </div>
             <div class="course-card__content">
               <div class="course-card__category">Data Science</div>
               <h3 class="course-card__title">
-                <a href="course-web-development.html" class="course-card__link">
+                <a href="course-detail.html?id=deep-learning-specialization" class="course-card__link">
                   Deep Learning Specialization
                 </a>
               </h3>
@@ -517,14 +520,14 @@
           </article>
 
           <!-- Course Card 8 -->
-          <article class="course-card">
+          <article class="course-card" data-category="marketing">
             <div class="course-card__image">
               <span class="course-card__badge">Beginner</span>
             </div>
             <div class="course-card__content">
               <div class="course-card__category">Marketing</div>
               <h3 class="course-card__title">
-                <a href="course-web-development.html" class="course-card__link">
+                <a href="course-detail.html?id=social-media-marketing" class="course-card__link">
                   Social Media Marketing 2024
                 </a>
               </h3>
@@ -545,14 +548,14 @@
           </article>
 
           <!-- Course Card 9 -->
-          <article class="course-card">
+          <article class="course-card" data-category="programming">
             <div class="course-card__image">
               <span class="course-card__badge course-card__badge--intermediate">Intermediate</span>
             </div>
             <div class="course-card__content">
               <div class="course-card__category">Programming</div>
               <h3 class="course-card__title">
-                <a href="course-web-development.html" class="course-card__link">
+                <a href="course-detail.html?id=python-for-data-science" class="course-card__link">
                   Python for Data Science
                 </a>
               </h3>
@@ -573,14 +576,14 @@
           </article>
 
           <!-- Course Card 10 -->
-          <article class="course-card">
+          <article class="course-card" data-category="business">
             <div class="course-card__image">
               <span class="course-card__badge">Beginner</span>
             </div>
             <div class="course-card__content">
               <div class="course-card__category">Business</div>
               <h3 class="course-card__title">
-                <a href="course-web-development.html" class="course-card__link">
+                <a href="course-detail.html?id=mba-essentials" class="course-card__link">
                   MBA Essentials for Everyone
                 </a>
               </h3>
@@ -601,14 +604,14 @@
           </article>
 
           <!-- Course Card 11 -->
-          <article class="course-card">
+          <article class="course-card" data-category="design">
             <div class="course-card__image">
               <span class="course-card__badge course-card__badge--advanced">Advanced</span>
             </div>
             <div class="course-card__content">
               <div class="course-card__category">Design</div>
               <h3 class="course-card__title">
-                <a href="course-web-development.html" class="course-card__link">
+                <a href="course-detail.html?id=advanced-ux-research" class="course-card__link">
                   Advanced UX Research Methods
                 </a>
               </h3>
@@ -629,14 +632,14 @@
           </article>
 
           <!-- Course Card 12 -->
-          <article class="course-card">
+          <article class="course-card" data-category="programming">
             <div class="course-card__image">
               <span class="course-card__badge course-card__badge--intermediate">Intermediate</span>
             </div>
             <div class="course-card__content">
               <div class="course-card__category">Programming</div>
               <h3 class="course-card__title">
-                <a href="course-web-development.html" class="course-card__link">
+                <a href="course-detail.html?id=fullstack-javascript" class="course-card__link">
                   Full-Stack JavaScript Developer
                 </a>
               </h3>

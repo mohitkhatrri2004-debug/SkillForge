@@ -1,0 +1,815 @@
+[
+  {
+    "id": "complete-web-development",
+    "title": "Complete Web Development Bootcamp",
+    "category": "programming",
+    "categoryLabel": "Programming",
+    "level": "beginner",
+    "levelLabel": "Beginner",
+    "instructor": "Dr. Angela Yu",
+    "instructorTitle": "Senior Developer & Bootcamp Instructor",
+    "instructorBio": "Dr. Angela Yu is a developer and lead instructor with over 10 years of experience teaching web development. Her courses have helped over 1 million students launch their careers.",
+    "instructorRating": "4.8",
+    "instructorStudents": "1.2M",
+    "instructorCourses": "8",
+    "duration": "52 hours",
+    "rating": 4.8,
+    "ratingCount": "12,345",
+    "students": "312,456",
+    "updatedDate": "January 2025",
+    "description": "Learn HTML, CSS, JavaScript, and modern frameworks. Build real-world projects.",
+    "longDescription": "This course is designed for complete beginners and takes you from zero to a professional web developer. You will learn HTML5, CSS3, Flexbox, Grid, JavaScript ES6+, Node.js, React, MongoDB, and deployment. Every section includes hands-on projects so you can build a portfolio while you learn.",
+    "objectives": [
+      "Build fully functional websites and web apps from scratch",
+      "Master HTML5, CSS3, and modern layout techniques",
+      "Write clean, professional JavaScript with ES6+ syntax",
+      "Build backend servers using Node.js and Express",
+      "Work with databases using MongoDB and SQL",
+      "Deploy projects to the web using Netlify and Heroku"
+    ],
+    "curriculum": [
+      {
+        "title": "HTML Foundations",
+        "duration": "3 hours",
+        "lessons": [
+          { "title": "Introduction to HTML", "duration": "15 min" },
+          { "title": "HTML Document Structure", "duration": "20 min" },
+          { "title": "Semantic HTML Elements", "duration": "25 min" },
+          { "title": "Forms and Inputs", "duration": "30 min" }
+        ]
+      },
+      {
+        "title": "CSS Fundamentals",
+        "duration": "5 hours",
+        "lessons": [
+          { "title": "CSS Selectors and Specificity", "duration": "25 min" },
+          { "title": "The Box Model", "duration": "20 min" },
+          { "title": "Flexbox Layout", "duration": "40 min" },
+          { "title": "CSS Grid", "duration": "40 min" }
+        ]
+      }
+    ],
+    "reviews": [
+      {
+        "name": "James Carter",
+        "initials": "JC",
+        "date": "2025-01-15",
+        "dateLabel": "2 weeks ago",
+        "rating": 5,
+        "text": "Absolutely the best web development course available. Angela explains everything clearly and the projects are genuinely fun to build. I landed my first dev job within 4 months of finishing."
+      },
+      {
+        "name": "Priya Sharma",
+        "initials": "PS",
+        "date": "2024-12-20",
+        "dateLabel": "1 month ago",
+        "rating": 5,
+        "text": "I came in knowing nothing about coding. This course took me from complete beginner to confident developer. The progression is perfect and nothing feels rushed."
+      }
+    ]
+  },
+  {
+    "id": "ui-ux-design-fundamentals",
+    "title": "UI/UX Design Fundamentals",
+    "category": "design",
+    "categoryLabel": "Design",
+    "level": "intermediate",
+    "levelLabel": "Intermediate",
+    "instructor": "Sarah Johnson",
+    "instructorTitle": "Senior UX Designer & Design Lead",
+    "instructorBio": "Sarah Johnson is a UX designer with 12 years of experience at top tech companies. She has designed products used by millions and now teaches the exact design process she uses professionally.",
+    "instructorRating": "4.9",
+    "instructorStudents": "320K",
+    "instructorCourses": "5",
+    "duration": "28 hours",
+    "rating": 4.9,
+    "ratingCount": "8,432",
+    "students": "98,765",
+    "updatedDate": "February 2025",
+    "description": "Master the principles of user interface and experience design. Learn Figma and design thinking.",
+    "longDescription": "This course teaches you the complete UX design process from user research to high-fidelity prototypes. You will learn design thinking methodology, wireframing, Figma, typography, colour theory, and usability testing. By the end you will have a portfolio-ready case study.",
+    "objectives": [
+      "Understand the full UX design process end to end",
+      "Conduct user research, interviews, and usability tests",
+      "Create wireframes and interactive prototypes in Figma",
+      "Apply typography, colour, and spacing principles",
+      "Design accessible and inclusive user interfaces",
+      "Build a complete UX case study for your portfolio"
+    ],
+    "curriculum": [
+      {
+        "title": "Design Thinking & Research",
+        "duration": "4 hours",
+        "lessons": [
+          { "title": "What is UX Design?", "duration": "15 min" },
+          { "title": "The Design Thinking Process", "duration": "30 min" },
+          { "title": "User Research Methods", "duration": "40 min" },
+          { "title": "Creating User Personas", "duration": "30 min" }
+        ]
+      },
+      {
+        "title": "Wireframing and Prototyping",
+        "duration": "5 hours",
+        "lessons": [
+          { "title": "Introduction to Figma", "duration": "20 min" },
+          { "title": "Low-Fidelity Wireframes", "duration": "35 min" },
+          { "title": "High-Fidelity Mockups", "duration": "50 min" },
+          { "title": "Interactive Prototyping", "duration": "45 min" }
+        ]
+      }
+    ],
+    "reviews": [
+      {
+        "name": "Aisha Patel",
+        "initials": "AP",
+        "date": "2025-01-28",
+        "dateLabel": "1 week ago",
+        "rating": 5,
+        "text": "Sarah is an exceptional teacher. Her explanations of UX principles are clear, practical, and immediately applicable. My Figma skills improved dramatically in just two weeks."
+      },
+      {
+        "name": "Tom Richards",
+        "initials": "TR",
+        "date": "2025-01-05",
+        "dateLabel": "3 weeks ago",
+        "rating": 5,
+        "text": "This is the most practical design course I have taken. Real projects, real feedback frameworks, and real Figma workflows. Worth every minute."
+      }
+    ]
+  },
+  {
+    "id": "machine-learning-az",
+    "title": "Machine Learning A-Z™",
+    "category": "data-science",
+    "categoryLabel": "Data Science",
+    "level": "advanced",
+    "levelLabel": "Advanced",
+    "instructor": "Kirill Eremenko",
+    "instructorTitle": "Data Scientist & ML Expert",
+    "instructorBio": "Kirill Eremenko is a data scientist with a background in physics and finance. He has taught over 1.2 million students worldwide and specialises in making complex ML concepts intuitive and accessible.",
+    "instructorRating": "4.7",
+    "instructorStudents": "1.2M",
+    "instructorCourses": "12",
+    "duration": "44 hours",
+    "rating": 4.7,
+    "ratingCount": "45,678",
+    "students": "187,234",
+    "updatedDate": "January 2025",
+    "description": "Learn to create ML algorithms from scratch. Master Python, R, and TensorFlow.",
+    "longDescription": "This course covers machine learning from the ground up using both Python and R. You will learn regression, classification, clustering, association rule learning, reinforcement learning, natural language processing, and deep learning. Every algorithm is explained intuitively before being coded from scratch.",
+    "objectives": [
+      "Build and evaluate regression and classification models",
+      "Apply clustering and association rule learning algorithms",
+      "Implement neural networks and deep learning with TensorFlow",
+      "Use both Python and R for data science workflows",
+      "Handle real-world datasets with feature engineering techniques",
+      "Deploy trained machine learning models to production"
+    ],
+    "curriculum": [
+      {
+        "title": "Introduction to Machine Learning",
+        "duration": "2 hours",
+        "lessons": [
+          { "title": "What is Machine Learning?", "duration": "15 min" },
+          { "title": "Types of ML: Supervised vs Unsupervised", "duration": "20 min" },
+          { "title": "Setting Up Python and R", "duration": "25 min" },
+          { "title": "Data Preprocessing", "duration": "35 min" }
+        ]
+      },
+      {
+        "title": "Regression Models",
+        "duration": "5 hours",
+        "lessons": [
+          { "title": "Simple Linear Regression", "duration": "30 min" },
+          { "title": "Multiple Linear Regression", "duration": "35 min" },
+          { "title": "Polynomial Regression", "duration": "40 min" }
+        ]
+      }
+    ],
+    "reviews": [
+      {
+        "name": "Maria Chen",
+        "initials": "MC",
+        "date": "2025-01-10",
+        "dateLabel": "2 weeks ago",
+        "rating": 5,
+        "text": "Outstanding course. Kirill explains complex ML concepts in an intuitive way before diving into code. The Python examples are production quality. I got a data scientist role 3 months after finishing."
+      },
+      {
+        "name": "David Kim",
+        "initials": "DK",
+        "date": "2024-12-28",
+        "dateLabel": "1 month ago",
+        "rating": 5,
+        "text": "Best ML course available. Both Python and R implementations help you understand the concepts deeply rather than just copying code. Highly recommended for anyone serious about data science."
+      }
+    ]
+  },
+  {
+    "id": "digital-marketing-masterclass",
+    "title": "Digital Marketing Masterclass",
+    "category": "business",
+    "categoryLabel": "Business",
+    "level": "beginner",
+    "levelLabel": "Beginner",
+    "instructor": "Phil Ebiner",
+    "instructorTitle": "Digital Marketing Strategist",
+    "instructorBio": "Phil Ebiner has been teaching digital marketing for over 8 years. He has helped thousands of small businesses and entrepreneurs grow their online presence using proven, data-driven strategies.",
+    "instructorRating": "4.6",
+    "instructorStudents": "450K",
+    "instructorCourses": "15",
+    "duration": "36 hours",
+    "rating": 4.6,
+    "ratingCount": "23,456",
+    "students": "145,678",
+    "updatedDate": "March 2025",
+    "description": "Learn SEO, social media, email marketing, and analytics. Grow your business online.",
+    "longDescription": "This comprehensive course covers every major digital marketing channel. You will learn SEO fundamentals, Google Ads, Facebook and Instagram advertising, email marketing automation, content marketing, and Google Analytics. Each module includes real campaign examples and actionable exercises.",
+    "objectives": [
+      "Build an end-to-end digital marketing strategy",
+      "Rank websites higher in Google using proven SEO techniques",
+      "Run profitable paid advertising campaigns on Google and Meta",
+      "Build and automate email marketing sequences",
+      "Create and distribute content that drives organic traffic",
+      "Measure campaign performance using Google Analytics"
+    ],
+    "curriculum": [
+      {
+        "title": "Marketing Foundations",
+        "duration": "3 hours",
+        "lessons": [
+          { "title": "Digital Marketing Overview", "duration": "20 min" },
+          { "title": "Understanding Your Target Audience", "duration": "30 min" },
+          { "title": "Setting Marketing Goals and KPIs", "duration": "25 min" }
+        ]
+      },
+      {
+        "title": "Search Engine Optimisation",
+        "duration": "5 hours",
+        "lessons": [
+          { "title": "How Search Engines Work", "duration": "20 min" },
+          { "title": "Keyword Research", "duration": "40 min" },
+          { "title": "On-Page SEO Techniques", "duration": "45 min" },
+          { "title": "Link Building Strategies", "duration": "35 min" }
+        ]
+      }
+    ],
+    "reviews": [
+      {
+        "name": "Sophie Turner",
+        "initials": "ST",
+        "date": "2025-02-01",
+        "dateLabel": "1 week ago",
+        "rating": 5,
+        "text": "I used to think marketing was just guesswork. This course completely changed my perspective. Phil's structured approach to campaigns made everything measurable and repeatable. Our website traffic doubled."
+      },
+      {
+        "name": "Carlos Mendez",
+        "initials": "CM",
+        "date": "2025-01-10",
+        "dateLabel": "3 weeks ago",
+        "rating": 4,
+        "text": "Very thorough course covering all the major channels. The SEO and Google Ads sections are especially detailed. Would have liked more on TikTok but overall excellent value."
+      }
+    ]
+  },
+  {
+    "id": "react-complete-guide",
+    "title": "React - The Complete Guide",
+    "category": "programming",
+    "categoryLabel": "Programming",
+    "level": "intermediate",
+    "levelLabel": "Intermediate",
+    "instructor": "Maximilian Schwarzmüller",
+    "instructorTitle": "Senior Web Developer & Instructor",
+    "instructorBio": "Maximilian Schwarzmüller is a professional web developer and instructor who has taught over 2 million students. He specialises in JavaScript frameworks and modern frontend development practices.",
+    "instructorRating": "4.9",
+    "instructorStudents": "2.1M",
+    "instructorCourses": "20",
+    "duration": "48 hours",
+    "rating": 4.9,
+    "ratingCount": "67,890",
+    "students": "210,456",
+    "updatedDate": "March 2025",
+    "description": "Master React.js with hooks, Redux, Next.js, and TypeScript. Build modern web apps.",
+    "longDescription": "This is the most comprehensive React course available. You will learn React from scratch through to advanced patterns including hooks, context, Redux Toolkit, React Router, Next.js, and TypeScript. Every concept is taught through real projects including a complete e-commerce application.",
+    "objectives": [
+      "Build complex React applications with confidence",
+      "Master React hooks including useState, useEffect, useContext",
+      "Manage global state with Redux Toolkit",
+      "Build server-side rendered apps with Next.js",
+      "Write type-safe React components with TypeScript",
+      "Test React components using React Testing Library"
+    ],
+    "curriculum": [
+      {
+        "title": "React Fundamentals",
+        "duration": "5 hours",
+        "lessons": [
+          { "title": "What is React and Why Use It?", "duration": "15 min" },
+          { "title": "JSX and Component Basics", "duration": "30 min" },
+          { "title": "Props and State", "duration": "40 min" },
+          { "title": "Handling Events", "duration": "25 min" }
+        ]
+      },
+      {
+        "title": "React Hooks in Depth",
+        "duration": "6 hours",
+        "lessons": [
+          { "title": "useState and useEffect", "duration": "45 min" },
+          { "title": "useContext and useReducer", "duration": "50 min" },
+          { "title": "Custom Hooks", "duration": "40 min" }
+        ]
+      }
+    ],
+    "reviews": [
+      {
+        "name": "Nathan Brooks",
+        "initials": "NB",
+        "date": "2025-02-05",
+        "dateLabel": "5 days ago",
+        "rating": 5,
+        "text": "Max is simply the best React teacher. His explanations are methodical and the projects are genuinely challenging. I went from knowing basic JavaScript to building production React apps in three months."
+      },
+      {
+        "name": "Lin Wei",
+        "initials": "LW",
+        "date": "2025-01-20",
+        "dateLabel": "2 weeks ago",
+        "rating": 5,
+        "text": "The hooks section alone is worth the entire course. Best structured learning path for React I have found anywhere. Updated regularly and always reflects current best practices."
+      }
+    ]
+  },
+  {
+    "id": "graphic-design-bootcamp",
+    "title": "Graphic Design Bootcamp",
+    "category": "design",
+    "categoryLabel": "Design",
+    "level": "beginner",
+    "levelLabel": "Beginner",
+    "instructor": "Lindsay Marsh",
+    "instructorTitle": "Graphic Designer & Creative Director",
+    "instructorBio": "Lindsay Marsh is a professional graphic designer and art director with 15 years of experience working with global brands. She teaches practical design skills that translate directly to client work.",
+    "instructorRating": "4.7",
+    "instructorStudents": "280K",
+    "instructorCourses": "7",
+    "duration": "24 hours",
+    "rating": 4.7,
+    "ratingCount": "15,234",
+    "students": "87,432",
+    "updatedDate": "December 2024",
+    "description": "Learn Adobe Photoshop, Illustrator, and InDesign. Create stunning visual designs.",
+    "longDescription": "This bootcamp teaches you professional graphic design using the industry-standard Adobe Creative Suite. You will master Photoshop for photo editing and compositing, Illustrator for vector graphics and logos, and InDesign for print and digital layouts. Real-world client briefs are used throughout.",
+    "objectives": [
+      "Edit and retouch photos professionally in Adobe Photoshop",
+      "Create logos and vector artwork in Adobe Illustrator",
+      "Design print and digital publications in Adobe InDesign",
+      "Understand colour theory, typography, and layout principles",
+      "Build a professional design portfolio from scratch",
+      "Deliver client-ready design files in correct formats"
+    ],
+    "curriculum": [
+      {
+        "title": "Design Principles",
+        "duration": "2 hours",
+        "lessons": [
+          { "title": "Colour Theory for Designers", "duration": "30 min" },
+          { "title": "Typography Fundamentals", "duration": "35 min" },
+          { "title": "Layout and Composition", "duration": "30 min" }
+        ]
+      },
+      {
+        "title": "Adobe Photoshop",
+        "duration": "6 hours",
+        "lessons": [
+          { "title": "Photoshop Interface and Tools", "duration": "25 min" },
+          { "title": "Layers and Masks", "duration": "40 min" },
+          { "title": "Photo Retouching Techniques", "duration": "50 min" }
+        ]
+      }
+    ],
+    "reviews": [
+      {
+        "name": "Emma Davis",
+        "initials": "ED",
+        "date": "2025-01-18",
+        "dateLabel": "2 weeks ago",
+        "rating": 5,
+        "text": "Lindsay makes design approachable for beginners without dumbing anything down. I started with zero design experience and now take on freelance projects. The portfolio section was particularly valuable."
+      },
+      {
+        "name": "Raj Patel",
+        "initials": "RP",
+        "date": "2025-01-02",
+        "dateLabel": "1 month ago",
+        "rating": 4,
+        "text": "Very comprehensive for all three Adobe tools. Photoshop and Illustrator sections are excellent. Would appreciate more advanced InDesign content but overall a great starting point."
+      }
+    ]
+  },
+  {
+    "id": "deep-learning-specialization",
+    "title": "Deep Learning Specialization",
+    "category": "data-science",
+    "categoryLabel": "Data Science",
+    "level": "advanced",
+    "levelLabel": "Advanced",
+    "instructor": "Andrew Ng",
+    "instructorTitle": "AI Pioneer & Stanford Professor",
+    "instructorBio": "Andrew Ng is one of the world's leading AI researchers, co-founder of Coursera, and former head of AI at Google and Baidu. His courses have introduced millions of students to machine learning and deep learning.",
+    "instructorRating": "5.0",
+    "instructorStudents": "5M",
+    "instructorCourses": "6",
+    "duration": "60 hours",
+    "rating": 5.0,
+    "ratingCount": "89,012",
+    "students": "423,000",
+    "updatedDate": "February 2025",
+    "description": "Master neural networks, CNNs, RNNs, and transformers. Build AI applications from scratch.",
+    "longDescription": "This specialization covers the foundations of deep learning with rigorous mathematical intuition and practical TensorFlow implementations. Topics include neural network architecture, convolutional networks for vision, sequence models for NLP, and transformer architectures. Each course concludes with a capstone project.",
+    "objectives": [
+      "Build and train deep neural networks from scratch",
+      "Apply convolutional networks to image recognition tasks",
+      "Implement recurrent networks and LSTMs for sequence data",
+      "Understand and apply transformer architectures",
+      "Tune hyperparameters and optimise model performance",
+      "Deploy deep learning models in real applications"
+    ],
+    "curriculum": [
+      {
+        "title": "Neural Network Foundations",
+        "duration": "8 hours",
+        "lessons": [
+          { "title": "What is a Neural Network?", "duration": "20 min" },
+          { "title": "Forward and Backward Propagation", "duration": "55 min" },
+          { "title": "Activation Functions", "duration": "30 min" },
+          { "title": "Gradient Descent Optimisation", "duration": "45 min" }
+        ]
+      },
+      {
+        "title": "Convolutional Neural Networks",
+        "duration": "10 hours",
+        "lessons": [
+          { "title": "Convolution Operations", "duration": "40 min" },
+          { "title": "CNN Architectures", "duration": "50 min" },
+          { "title": "Object Detection", "duration": "60 min" }
+        ]
+      }
+    ],
+    "reviews": [
+      {
+        "name": "Yuki Tanaka",
+        "initials": "YT",
+        "date": "2025-01-30",
+        "dateLabel": "1 week ago",
+        "rating": 5,
+        "text": "Andrew Ng has a rare gift for making complex mathematics feel intuitive. This is the definitive deep learning course. I have read textbooks on the subject but nothing built my understanding as well as this."
+      },
+      {
+        "name": "Omar Hassan",
+        "initials": "OH",
+        "date": "2025-01-12",
+        "dateLabel": "3 weeks ago",
+        "rating": 5,
+        "text": "Every AI engineer should take this course. The theory is rigorous and the implementations are practical. Andrew explains the why behind every architectural decision, not just the how."
+      }
+    ]
+  },
+  {
+    "id": "social-media-marketing",
+    "title": "Social Media Marketing 2024",
+    "category": "marketing",
+    "categoryLabel": "Marketing",
+    "level": "beginner",
+    "levelLabel": "Beginner",
+    "instructor": "Ben Simmons",
+    "instructorTitle": "Social Media Strategist & Growth Expert",
+    "instructorBio": "Ben Simmons has managed social media for brands with audiences of over 10 million followers. He specialises in organic growth strategies and paid social advertising across all major platforms.",
+    "instructorRating": "4.5",
+    "instructorStudents": "190K",
+    "instructorCourses": "9",
+    "duration": "18 hours",
+    "rating": 4.5,
+    "ratingCount": "12,678",
+    "students": "76,543",
+    "updatedDate": "January 2025",
+    "description": "Master Instagram, Facebook, TikTok, and LinkedIn. Grow your brand and audience.",
+    "longDescription": "This course covers the organic and paid strategies for every major social media platform. You will learn content strategy, community management, influencer marketing, paid social advertising, and how to analyse your results. Platform-specific modules are updated every quarter to reflect algorithm changes.",
+    "objectives": [
+      "Build a consistent brand presence across all major platforms",
+      "Create content strategies that drive engagement and growth",
+      "Run profitable paid campaigns on Instagram and Facebook",
+      "Grow a LinkedIn presence for B2B lead generation",
+      "Leverage TikTok trends and short-form video content",
+      "Measure ROI using platform analytics and third-party tools"
+    ],
+    "curriculum": [
+      {
+        "title": "Social Media Strategy",
+        "duration": "2 hours",
+        "lessons": [
+          { "title": "Choosing the Right Platforms", "duration": "20 min" },
+          { "title": "Defining Your Brand Voice", "duration": "25 min" },
+          { "title": "Building a Content Calendar", "duration": "30 min" }
+        ]
+      },
+      {
+        "title": "Instagram and Facebook",
+        "duration": "4 hours",
+        "lessons": [
+          { "title": "Instagram Organic Growth", "duration": "35 min" },
+          { "title": "Facebook Ads Manager Basics", "duration": "45 min" },
+          { "title": "Retargeting Campaigns", "duration": "40 min" }
+        ]
+      }
+    ],
+    "reviews": [
+      {
+        "name": "Jessica Park",
+        "initials": "JP",
+        "date": "2025-01-25",
+        "dateLabel": "1 week ago",
+        "rating": 5,
+        "text": "Ben's course is completely up to date, which is rare for social media education. His Instagram growth strategies got our account from 2K to 18K followers in two months."
+      },
+      {
+        "name": "Alex Thompson",
+        "initials": "AT",
+        "date": "2025-01-08",
+        "dateLabel": "3 weeks ago",
+        "rating": 4,
+        "text": "Great coverage of Instagram and Facebook. The TikTok section could be deeper but everything else is excellent. Very practical with real-world campaign examples throughout."
+      }
+    ]
+  },
+  {
+    "id": "python-for-data-science",
+    "title": "Python for Data Science",
+    "category": "programming",
+    "categoryLabel": "Programming",
+    "level": "intermediate",
+    "levelLabel": "Intermediate",
+    "instructor": "Jose Portilla",
+    "instructorTitle": "Data Scientist & Python Expert",
+    "instructorBio": "Jose Portilla is a data scientist and Python trainer with a background in mathematics and statistics. He has trained thousands of professionals at companies including Google, Tesla, and Citibank.",
+    "instructorRating": "4.8",
+    "instructorStudents": "680K",
+    "instructorCourses": "11",
+    "duration": "32 hours",
+    "rating": 4.8,
+    "ratingCount": "54,321",
+    "students": "198,456",
+    "updatedDate": "February 2025",
+    "description": "Learn NumPy, Pandas, Matplotlib, and scikit-learn. Analyze data and build ML models.",
+    "longDescription": "This course teaches Python specifically for data analysis and machine learning. You will master NumPy for numerical computing, Pandas for data manipulation, Matplotlib and Seaborn for visualisation, and scikit-learn for machine learning. Every topic is reinforced with real datasets and end-to-end projects.",
+    "objectives": [
+      "Write clean, efficient Python code for data analysis",
+      "Manipulate and clean datasets using Pandas DataFrames",
+      "Perform numerical computing with NumPy arrays",
+      "Visualise data insights using Matplotlib and Seaborn",
+      "Build and evaluate machine learning models with scikit-learn",
+      "Work with real-world datasets from Kaggle and public APIs"
+    ],
+    "curriculum": [
+      {
+        "title": "Python Fundamentals for Data Science",
+        "duration": "4 hours",
+        "lessons": [
+          { "title": "Python Data Types and Structures", "duration": "30 min" },
+          { "title": "Functions and List Comprehensions", "duration": "35 min" },
+          { "title": "NumPy Arrays and Operations", "duration": "45 min" }
+        ]
+      },
+      {
+        "title": "Data Analysis with Pandas",
+        "duration": "6 hours",
+        "lessons": [
+          { "title": "DataFrames and Series", "duration": "40 min" },
+          { "title": "Data Cleaning and Missing Values", "duration": "45 min" },
+          { "title": "Grouping and Aggregation", "duration": "35 min" }
+        ]
+      }
+    ],
+    "reviews": [
+      {
+        "name": "Fatima Al-Rashid",
+        "initials": "FA",
+        "date": "2025-02-03",
+        "dateLabel": "4 days ago",
+        "rating": 5,
+        "text": "Jose's teaching style is perfect for someone who knows Python basics but wants to apply it to data science. The Pandas sections are incredibly thorough and the real dataset projects solidify everything."
+      },
+      {
+        "name": "Lucas Oliveira",
+        "initials": "LO",
+        "date": "2025-01-15",
+        "dateLabel": "2 weeks ago",
+        "rating": 5,
+        "text": "This course bridges the gap between Python programming and data science beautifully. The scikit-learn module is particularly strong. I felt confident entering Kaggle competitions after completing it."
+      }
+    ]
+  },
+  {
+    "id": "mba-essentials",
+    "title": "MBA Essentials for Everyone",
+    "category": "business",
+    "categoryLabel": "Business",
+    "level": "beginner",
+    "levelLabel": "Beginner",
+    "instructor": "Chris Haroun",
+    "instructorTitle": "Business School Professor & Venture Capitalist",
+    "instructorBio": "Chris Haroun is an award-winning professor, venture capitalist, and former Goldman Sachs employee. He has an MBA from Columbia University and has taught business to over 1 million students worldwide.",
+    "instructorRating": "4.6",
+    "instructorStudents": "1.1M",
+    "instructorCourses": "18",
+    "duration": "40 hours",
+    "rating": 4.6,
+    "ratingCount": "34,567",
+    "students": "156,789",
+    "updatedDate": "November 2024",
+    "description": "Learn business strategy, finance, and management. Essential MBA concepts simplified.",
+    "longDescription": "This course distils the most valuable lessons from a full MBA programme into 40 accessible hours. Topics include corporate strategy, financial modelling, accounting, leadership, operations, and entrepreneurship. Real case studies from Apple, Amazon, Tesla, and Google are used throughout.",
+    "objectives": [
+      "Develop and evaluate business strategies using proven frameworks",
+      "Read and interpret financial statements confidently",
+      "Build basic financial models in Excel or Google Sheets",
+      "Apply leadership and management principles in the workplace",
+      "Understand operations, supply chain, and project management",
+      "Evaluate startup ideas using venture capital frameworks"
+    ],
+    "curriculum": [
+      {
+        "title": "Business Strategy",
+        "duration": "5 hours",
+        "lessons": [
+          { "title": "Porter's Five Forces", "duration": "35 min" },
+          { "title": "SWOT and Competitive Analysis", "duration": "30 min" },
+          { "title": "Business Model Canvas", "duration": "40 min" }
+        ]
+      },
+      {
+        "title": "Finance Fundamentals",
+        "duration": "6 hours",
+        "lessons": [
+          { "title": "Reading an Income Statement", "duration": "40 min" },
+          { "title": "Balance Sheets and Cash Flow", "duration": "45 min" },
+          { "title": "Valuation Basics", "duration": "50 min" }
+        ]
+      }
+    ],
+    "reviews": [
+      {
+        "name": "Michael O'Brien",
+        "initials": "MO",
+        "date": "2025-01-22",
+        "dateLabel": "10 days ago",
+        "rating": 5,
+        "text": "This course genuinely delivers MBA-level content without the MBA price tag. Chris makes complex financial concepts accessible without oversimplifying. The case study approach keeps every lesson grounded in reality."
+      },
+      {
+        "name": "Ananya Singh",
+        "initials": "AS",
+        "date": "2025-01-05",
+        "dateLabel": "1 month ago",
+        "rating": 4,
+        "text": "Excellent breadth of content. The strategy and finance modules are outstanding. Some operations sections could go deeper but for an overview of MBA concepts this is the best course available."
+      }
+    ]
+  },
+  {
+    "id": "advanced-ux-research",
+    "title": "Advanced UX Research Methods",
+    "category": "design",
+    "categoryLabel": "Design",
+    "level": "advanced",
+    "levelLabel": "Advanced",
+    "instructor": "Emma Williams",
+    "instructorTitle": "Lead UX Researcher",
+    "instructorBio": "Emma Williams is a lead UX researcher with experience at Microsoft and Spotify. She specialises in mixed-method research, usability testing, and translating user insights into measurable product improvements.",
+    "instructorRating": "4.9",
+    "instructorStudents": "95K",
+    "instructorCourses": "4",
+    "duration": "22 hours",
+    "rating": 4.9,
+    "ratingCount": "9,876",
+    "students": "42,123",
+    "updatedDate": "January 2025",
+    "description": "Master user research techniques, A/B testing, and usability studies. Data-driven design.",
+    "longDescription": "This advanced course is for designers and product managers who want to make research-backed decisions. You will learn ethnographic research, diary studies, tree testing, A/B testing, statistical significance, and how to present findings to stakeholders. Suitable for teams following design sprints or continuous discovery.",
+    "objectives": [
+      "Plan and execute comprehensive user research programmes",
+      "Conduct moderated and unmoderated usability studies",
+      "Design statistically valid A/B and multivariate tests",
+      "Analyse qualitative data using affinity mapping and thematic analysis",
+      "Communicate research findings to engineering and product teams",
+      "Integrate research into agile and continuous discovery workflows"
+    ],
+    "curriculum": [
+      {
+        "title": "Research Planning",
+        "duration": "3 hours",
+        "lessons": [
+          { "title": "Choosing the Right Research Method", "duration": "30 min" },
+          { "title": "Writing a Research Brief", "duration": "25 min" },
+          { "title": "Recruiting Participants", "duration": "30 min" }
+        ]
+      },
+      {
+        "title": "Usability Testing",
+        "duration": "4 hours",
+        "lessons": [
+          { "title": "Moderated Testing Techniques", "duration": "40 min" },
+          { "title": "Remote Unmoderated Testing", "duration": "35 min" },
+          { "title": "Analysing and Reporting Results", "duration": "45 min" }
+        ]
+      }
+    ],
+    "reviews": [
+      {
+        "name": "Hannah Lee",
+        "initials": "HL",
+        "date": "2025-01-28",
+        "dateLabel": "1 week ago",
+        "rating": 5,
+        "text": "Finally a research course that goes beyond the basics. Emma covers statistical significance in A/B testing in a way that is actually understandable for designers. Changed how our entire team approaches research."
+      },
+      {
+        "name": "Daniel Kowalski",
+        "initials": "DK",
+        "date": "2025-01-10",
+        "dateLabel": "3 weeks ago",
+        "rating": 5,
+        "text": "The most rigorous UX research course I have found. Emma's real-world examples from enterprise products make the content immediately applicable. Essential for anyone moving into senior design or product roles."
+      }
+    ]
+  },
+  {
+    "id": "fullstack-javascript",
+    "title": "Full-Stack JavaScript Developer",
+    "category": "programming",
+    "categoryLabel": "Programming",
+    "level": "intermediate",
+    "levelLabel": "Intermediate",
+    "instructor": "Brad Traversy",
+    "instructorTitle": "Full-Stack Developer & Educator",
+    "instructorBio": "Brad Traversy is one of the most respected web development educators online. He has been teaching practical, project-based programming for over a decade and his courses are known for being direct, clear, and genuinely useful.",
+    "instructorRating": "4.8",
+    "instructorStudents": "900K",
+    "instructorCourses": "25",
+    "duration": "56 hours",
+    "rating": 4.8,
+    "ratingCount": "41,234",
+    "students": "178,902",
+    "updatedDate": "March 2025",
+    "description": "Build complete web apps with Node.js, Express, MongoDB, and React. End-to-end development.",
+    "longDescription": "This course teaches you to build production-ready full-stack applications using the JavaScript ecosystem. You will work with Node.js and Express on the backend, MongoDB with Mongoose for the database, and React on the frontend. The course concludes with a complete full-stack project with authentication and deployment.",
+    "objectives": [
+      "Build RESTful APIs with Node.js and Express",
+      "Design and query MongoDB databases using Mongoose",
+      "Implement JWT authentication and authorisation",
+      "Build reactive frontend interfaces with React",
+      "Connect frontend and backend with fetch and Axios",
+      "Deploy full-stack applications to cloud platforms"
+    ],
+    "curriculum": [
+      {
+        "title": "Node.js and Express",
+        "duration": "7 hours",
+        "lessons": [
+          { "title": "Node.js Fundamentals", "duration": "30 min" },
+          { "title": "Building REST APIs with Express", "duration": "50 min" },
+          { "title": "Middleware and Error Handling", "duration": "35 min" },
+          { "title": "Authentication with JWT", "duration": "55 min" }
+        ]
+      },
+      {
+        "title": "MongoDB and Mongoose",
+        "duration": "5 hours",
+        "lessons": [
+          { "title": "MongoDB Basics and Atlas Setup", "duration": "25 min" },
+          { "title": "Mongoose Schemas and Models", "duration": "40 min" },
+          { "title": "CRUD Operations", "duration": "45 min" }
+        ]
+      }
+    ],
+    "reviews": [
+      {
+        "name": "Ivan Petrov",
+        "initials": "IP",
+        "date": "2025-02-06",
+        "dateLabel": "3 days ago",
+        "rating": 5,
+        "text": "Brad is the best project-based teacher I have encountered. No fluff, no filler — just building real things and learning why each piece works. I rebuilt my portfolio after finishing this and got three job interviews."
+      },
+      {
+        "name": "Grace Okonkwo",
+        "initials": "GO",
+        "date": "2025-01-20",
+        "dateLabel": "2 weeks ago",
+        "rating": 5,
+        "text": "This course filled every gap in my full-stack knowledge. The authentication section is particularly strong and the final project is genuinely deployable. Brad's code is clean and the explanations are precise."
+      }
+    ]
+  }
+]

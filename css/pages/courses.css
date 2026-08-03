@@ -426,3 +426,22 @@
     grid-template-columns: repeat(3, 1fr); /* 3 columns on large screens */
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   JAVASCRIPT-CONTROLLED STATES
+   
+   These classes are added/removed by courses.js.
+   They should NOT be used manually in HTML.
+═══════════════════════════════════════════════════════════════ */
+
+/* Hidden course card — added by JS when a filter is active */
+.course-card--hidden {
+  display: none;
+}
+
+/* Active filter button — added by JS on click */
+.filters__category--active {
+  background-color: var(--color-primary);
+  color: var(--white);
+  border-color: var(--color-primary);
+}

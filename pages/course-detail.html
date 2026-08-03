@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!--
+    data-field="meta-description" is set dynamically by course-detail.js
+    so each course gets a unique, accurate meta description for SEO.
+  -->
+  <meta name="description" content="Loading course..." data-field="meta-description">
+  <meta name="theme-color" content="#6c63ff">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS Entry Point -->
+  <link rel="stylesheet" href="../css/main.css">
+
+  <!--
+    defer: script runs after full HTML is parsed.
+    This guarantees all data-field elements exist when JS runs.
+  -->
+  <script src="../js/course-detail.js" defer></script>
+
+  <!--
+    Page title is set dynamically.
+    "Loading..." is the fallback shown before JS runs.
+  -->
+  <title data-field="page-title">Loading... — SkillForge</title>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════
+       NAVBAR — Identical across all pages
+  ═══════════════════════════════════════════════════════ -->
+  <header class="navbar" role="banner">
+    <div class="navbar__container">
+      <a href="../index.html" class="navbar__logo" aria-label="SkillForge - Return to homepage">
+        <span class="navbar__logo-text">
+          Skill<span class="navbar__logo-accent">Forge</span>
+        </span>
+      </a>
+      <nav class="navbar__nav" aria-label="Main navigation">
+        <ul class="navbar__links">
+          <li class="navbar__item">
+            <a href="../index.html" class="navbar__link">Home</a>
+          </li>
+          <li class="navbar__item">
+            <a href="courses.html" class="navbar__link">Courses</a>
+          </li>
+          <li class="navbar__item">
+            <a href="skill-paths.html" class="navbar__link">Paths</a>
+          </li>
+          <li class="navbar__item">
+            <a href="leaderboard.html" class="navbar__link">Leaderboard</a>
+          </li>
+          <li class="navbar__item">
+            <a href="about.html" class="navbar__link">About</a>
+          </li>
+        </ul>
+      </nav>
+      <div class="navbar__actions">
+        <a href="login.html" class="navbar__btn navbar__btn--ghost">Log In</a>
+        <a href="register.html" class="navbar__btn navbar__btn--primary">Sign Up Free</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════════════
+       MAIN CONTENT
+  ═══════════════════════════════════════════════════════ -->
+  <main id="main-content">
+
+    <!-- ═══════════════════════════════════════════════════════
+         COURSE HERO SECTION
+         All data-field attributes are targets for course-detail.js.
+         Their text content is replaced once the JSON is loaded.
+    ═══════════════════════════════════════════════════════ -->
+    <section class="course-hero" aria-labelledby="course-title">
+      <div class="course-hero__container">
+
+        <!-- Breadcrumb Navigation
+             The category link and course title are set dynamically. -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <ol class="breadcrumb__list">
+            <li class="breadcrumb__item">
+              <a href="../index.html" class="breadcrumb__link">Home</a>
+            </li>
+            <li class="breadcrumb__item">
+              <a href="courses.html" class="breadcrumb__link">Courses</a>
+            </li>
+            <li class="breadcrumb__item">
+              <!--
+                href is also set dynamically: courses.html?category=programming
+                so the breadcrumb links to the correct filtered catalog view.
+              -->
+              <a href="courses.html" class="breadcrumb__link"
+                 data-field="breadcrumb-category">Loading...</a>
+            </li>
+            <li class="breadcrumb__item" aria-current="page">
+              <span class="breadcrumb__current"
+                    data-field="breadcrumb-title">Loading...</span>
+            </li>
+          </ol>
+        </nav>
+
+        <!-- Course Header Content -->
+        <div class="course-hero__content">
+
+          <!-- Category & Level Badges
+               The level modifier class (--beginner/--intermediate/--advanced)
+               is also set dynamically based on course.level. -->
+          <div class="course-hero__badges">
+            <span class="course-hero__category"
+                  data-field="category-label">Loading...</span>
+            <span class="course-hero__level"
+                  data-field="level-badge">Loading...</span>
+          </div>
+
+          <!-- Course Title -->
+          <h1 class="course-hero__title" id="course-title"
+              data-field="title">Loading...</h1>
+
+          <!-- Course Subtitle -->
+          <p class="course-hero__subtitle"
+             data-field="description">Loading...</p>
+
+          <!-- Course Meta -->
+          <div class="course-hero__meta">
+            <div class="course-hero__rating">
+              <span class="course-hero__stars"
+                    data-field="stars">★★★★★</span>
+              <span class="course-hero__rating-text"
+                    data-field="rating">—</span>
+              <span class="course-hero__rating-count"
+                    data-field="rating-count">—</span>
+            </div>
+            <span class="course-hero__students"
+                  data-field="students">—</span>
+            <span class="course-hero__duration"
+                  data-field="duration">—</span>
+            <span class="course-hero__updated"
+                  data-field="updated-date">—</span>
+          </div>
+
+          <!-- Instructor -->
+          <div class="course-hero__instructor">
+            <span class="course-hero__instructor-label">Created by</span>
+            <a href="#instructor" class="course-hero__instructor-name"
+               data-field="instructor-name">Loading...</a>
+          </div>
+
+          <!-- CTA Buttons — static, same for every course -->
+          <div class="course-hero__actions">
+            <button class="course-hero__enroll-btn">Enroll Now — Free</button>
+            <button class="course-hero__wishlist-btn" aria-label="Add to wishlist">
+              ♥ Save for Later
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════
+         COURSE CONTENT — Two-column layout
+    ═══════════════════════════════════════════════════════ -->
+    <section class="course-content">
+      <div class="course-content__container">
+
+        <!-- ─── MAIN CONTENT COLUMN ─────────────────────────── -->
+        <div class="course-content__main">
+
+          <!-- What You'll Learn
+               The <ul> is populated dynamically by JS. -->
+          <article class="course-section" id="what-youll-learn">
+            <h2 class="course-section__title">What You'll Learn</h2>
+            <ul class="learning-objectives"
+                data-field="objectives">
+              <!-- JS inserts <li> elements here -->
+            </ul>
+          </article>
+
+          <!-- Course Overview -->
+          <article class="course-section" id="overview">
+            <h2 class="course-section__title">Course Overview</h2>
+            <div class="course-section__content"
+                 data-field="long-description">
+              <!-- JS inserts <p> elements here -->
+            </div>
+          </article>
+
+          <!-- Course Curriculum
+               The .curriculum <div> is populated dynamically.
+               JS builds <details> elements for each module. -->
+          <article class="course-section" id="curriculum">
+            <h2 class="course-section__title">Course Curriculum</h2>
+            <div class="curriculum"
+                 data-field="curriculum">
+              <!-- JS inserts <details> module blocks here -->
+            </div>
+          </article>
+
+          <!-- Student Reviews
+               The .reviews <div> is populated dynamically. -->
+          <article class="course-section" id="reviews">
+            <h2 class="course-section__title">Student Reviews</h2>
+            <div class="reviews"
+                 data-field="reviews">
+              <!-- JS inserts .review blocks here -->
+            </div>
+          </article>
+
+        </div>
+
+        <!-- ─── SIDEBAR COLUMN ───────────────────────────────── -->
+        <aside class="course-content__sidebar">
+
+          <!-- Course Info Card — duration is set dynamically -->
+          <div class="course-info-card">
+            <h2 class="course-info-card__title">This course includes:</h2>
+            <ul class="course-info-card__list">
+              <li class="course-info-card__item">
+                <span class="course-info-card__icon">🎥</span>
+                <span data-field="sidebar-duration">— hours</span> on-demand video
+              </li>
+              <li class="course-info-card__item">
+                <span class="course-info-card__icon">📝</span>
+                Hands-on projects
+              </li>
+              <li class="course-info-card__item">
+                <span class="course-info-card__icon">📄</span>
+                Downloadable resources
+              </li>
+              <li class="course-info-card__item">
+                <span class="course-info-card__icon">♾️</span>
+                Full lifetime access
+              </li>
+              <li class="course-info-card__item">
+                <span class="course-info-card__icon">📱</span>
+                Access on mobile and desktop
+              </li>
+              <li class="course-info-card__item">
+                <span class="course-info-card__icon">🏆</span>
+                Certificate of completion
+              </li>
+            </ul>
+            <button class="course-info-card__cta">Enroll Now — Free</button>
+          </div>
+
+          <!-- Instructor Card — all values are set dynamically -->
+          <div class="instructor-card" id="instructor">
+            <h2 class="instructor-card__title">Your Instructor</h2>
+            <div class="instructor-card__profile">
+              <!--
+                Avatar shows instructor initials.
+                JS computes initials from instructor name.
+              -->
+              <div class="instructor-card__avatar"
+                   data-field="instructor-initials">—</div>
+              <div class="instructor-card__info">
+                <h3 class="instructor-card__name"
+                    data-field="instructor-name-card">Loading...</h3>
+                <p class="instructor-card__title-text"
+                   data-field="instructor-title">Loading...</p>
+              </div>
+            </div>
+            <div class="instructor-card__stats">
+              <div class="instructor-card__stat">
+                <span class="instructor-card__stat-number"
+                      data-field="instructor-rating">—</span>
+                <span class="instructor-card__stat-label">Instructor Rating</span>
+              </div>
+              <div class="instructor-card__stat">
+                <span class="instructor-card__stat-number"
+                      data-field="instructor-students">—</span>
+                <span class="instructor-card__stat-label">Students</span>
+              </div>
+              <div class="instructor-card__stat">
+                <span class="instructor-card__stat-number"
+                      data-field="instructor-courses">—</span>
+                <span class="instructor-card__stat-label">Courses</span>
+              </div>
+            </div>
+            <p class="instructor-card__bio"
+               data-field="instructor-bio">Loading...</p>
+          </div>
+
+        </aside>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════════
+       FOOTER — Identical across all pages
+  ═══════════════════════════════════════════════════════ -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer__top">
+      <div class="footer__container">
+        <div class="footer__brand">
+          <a href="../index.html" class="footer__logo" aria-label="SkillForge - Return to homepage">
+            Skill<span class="footer__logo-accent">Forge</span>
+          </a>
+          <p class="footer__tagline">Learn skills that matter.</p>
+          <p class="footer__description">
+            SkillForge is a student-focused learning platform where you can
+            discover courses, track progress, and earn certificates.
+          </p>
+        </div>
+        <section class="footer__section" aria-labelledby="footer-explore-heading">
+          <h3 class="footer__heading" id="footer-explore-heading">Explore</h3>
+          <nav aria-label="Footer explore navigation">
+            <ul class="footer__links">
+              <li><a href="courses.html" class="footer__link">Courses</a></li>
+              <li><a href="skill-paths.html" class="footer__link">Skill Paths</a></li>
+              <li><a href="leaderboard.html" class="footer__link">Leaderboard</a></li>
+              <li><a href="about.html" class="footer__link">About Us</a></li>
+            </ul>
+          </nav>
+        </section>
+        <section class="footer__section" aria-labelledby="footer-connect-heading">
+          <h3 class="footer__heading" id="footer-connect-heading">Connect</h3>
+          <nav aria-label="Footer social navigation">
+            <ul class="footer__links">
+              <li>
+                <a href="https://twitter.com" class="footer__link"
+                   target="_blank" rel="noopener noreferrer"
+                   aria-label="Follow SkillForge on Twitter (opens in new tab)">Twitter</a>
+              </li>
+              <li>
+                <a href="https://linkedin.com" class="footer__link"
+                   target="_blank" rel="noopener noreferrer"
+                   aria-label="Connect with SkillForge on LinkedIn (opens in new tab)">LinkedIn</a>
+              </li>
+              <li>
+                <a href="https://github.com" class="footer__link"
+                   target="_blank" rel="noopener noreferrer"
+                   aria-label="View SkillForge on GitHub (opens in new tab)">GitHub</a>
+              </li>
+              <li>
+                <a href="https://youtube.com" class="footer__link"
+                   target="_blank" rel="noopener noreferrer"
+                   aria-label="Watch SkillForge on YouTube (opens in new tab)">YouTube</a>
+              </li>
+            </ul>
+          </nav>
+        </section>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <div class="footer__container">
+        <small class="footer__copyright">&copy; 2024 SkillForge. All rights reserved.</small>
+        <nav class="footer__legal" aria-label="Legal navigation">
+          <a href="privacy.html" class="footer__legal-link">Privacy Policy</a>
+          <a href="terms.html" class="footer__legal-link">Terms of Service</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

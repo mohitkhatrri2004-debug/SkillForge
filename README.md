@@ -1,134 +1,268 @@
-# 🎓 SkillForge – Student Learning Platform
+# SkillForge — Student Learning Platform
 
-SkillForge is a modern web-based learning platform designed to help students learn, practice, and track their progress in an organized and engaging way.
-
-This project is being developed as a full-stack software engineering project following professional development practices, including Git, GitHub, clean architecture, and scalable code organization.
+A production-quality frontend learning platform built with HTML5, CSS3, and JavaScript. Developed incrementally following professional frontend engineering practices including component architecture, BEM, design tokens, accessibility, and responsive design.
 
 ---
 
-## 🚀 Project Vision
+## Live Demo
 
-The goal of SkillForge is to provide students with a platform where they can:
+Open `index.html` via [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) in VS Code.
 
-- 📚 Learn from structured courses
-- 📝 Practice quizzes and coding challenges
-- 📊 Track learning progress
-- 🏆 Earn achievements and badges
-- 👤 Manage personal profiles
-- 🌙 Enjoy a responsive and user-friendly interface
+> Note: JavaScript features (course filtering, search, dynamic pages) require Live Server due to the `fetch()` API. Opening files directly via `file://` will not work for these features.
 
 ---
 
-## 🛠️ Technologies
+## Project Status
 
-### Frontend
-- HTML5
-- CSS3
-- JavaScript (ES6)
-
-### Version Control
-- Git
-- GitHub
-
-### Future Technologies
-- React.js
-- Node.js
-- Express.js
-- MongoDB
+| Week | Focus | Status |
+|------|-------|--------|
+| Week 1 | Foundation, Homepage, Design System | ✅ Complete |
+| Week 2 | Courses Module, Course Detail Pages, UI States | ✅ Complete |
+| Week 3 | JavaScript Interactivity, Dynamic Content | 🔄 In Progress |
+| Week 4+ | Advanced Features, Backend Integration | Planned |
 
 ---
 
-## 📁 Project Structure
+## What's Built
+
+### Week 1 — Foundation & Homepage
+
+- CSS architecture based on ITCSS principles
+- Design token system (colors, typography, spacing, shadows, radii)
+- CSS reset and base typography
+- Responsive navbar with active state management
+- Hero section with gradient background, statistics, and entrance animations
+- Features section with 6-card grid and hover effects
+- Footer with multi-column layout and social links
+- Mobile-first responsive layout across all breakpoints
+
+### Week 2 — Courses Module
+
+**Courses Catalog Page**
+- 12 course cards across 5 categories (Programming, Design, Data Science, Business, Marketing)
+- Category filter bar with active state
+- Search input field
+- Results counter component
+- Responsive 1 → 2 → 3 column grid
+
+**Course Detail Pages**
+- Breadcrumb navigation
+- Course hero with level badges (Beginner / Intermediate / Advanced)
+- Learning objectives grid
+- Expandable curriculum accordion using native `<details>` / `<summary>`
+- Student reviews section
+- Sticky sidebar with course info card and instructor card
+- Three complete static detail pages (Web Development, UI/UX Design, Machine Learning)
+
+**Loading & Empty States**
+- Skeleton loader component with GPU-accelerated shimmer animation
+- `prefers-reduced-motion` support
+- Empty state component with 5 variants (no results, no filter, error, compact, inline)
+- Full accessibility compliance (ARIA roles, live regions)
+- Demo pages for both components
+
+### Week 3 — JavaScript Interactivity (In Progress)
+
+**Day 1 — Course Filtering & Live Search**
+- Category filter buttons with active state toggling
+- `data-filter` attributes on buttons, `data-category` on cards
+- Live search across course title, category, and instructor name
+- Combined filter + search logic (search works within active category)
+- Dynamic results counter updates
+- Empty state rendered by JavaScript when no results match
+- "Browse All Courses" reset button
+
+**Day 2 — URL Parameters & Dynamic Course Pages**
+- `data/courses.json` with all 12 courses (full data including curriculum, reviews, instructor bio)
+- `pages/course-detail.html` — single template page for all courses
+- `js/course-detail.js` — reads `?id=` URL parameter, fetches JSON, fills template
+- All 12 course cards link to `course-detail.html?id=course-slug`
+- Dynamic breadcrumb, level badge (with correct CSS modifier), instructor initials
+- Error state for invalid or missing course IDs
+- `async/await` with `try/catch` error handling
+
+---
+
+## File Structure
 
 ```
 SkillForge/
-│
-├── index.html
-├── README.md
-├── .gitignore
-│
-├── assets/
-│   ├── images/
-│   ├── icons/
-│   └── fonts/
-│
-├── css/
-│   ├── base/
-│   ├── components/
-│   ├── pages/
-│   └── utilities/
-│
-├── js/
-│   ├── components/
-│   ├── pages/
-│   ├── services/
-│   ├── utils/
-│   └── storage.js
+├── index.html                        Homepage
 │
 ├── pages/
-│   ├── login.html
-│   ├── dashboard.html
-│   ├── profile.html
-│   └── courses.html
+│   ├── courses.html                  Course catalog (12 cards, filter, search)
+│   ├── course-detail.html            Dynamic course detail template
+│   ├── course-web-development.html   Static detail page (legacy)
+│   ├── course-ui-ux-design.html      Static detail page (legacy)
+│   ├── course-machine-learning.html  Static detail page (legacy)
+│   ├── skeleton-demo.html            Skeleton loader demo
+│   └── empty-state-demo.html         Empty state demo
 │
-└── data/
+├── css/
+│   ├── main.css                      CSS entry point (imports all layers)
+│   ├── base/
+│   │   ├── variables.css             Design tokens
+│   │   ├── reset.css                 Browser normalisation
+│   │   └── typography.css            Base text styles
+│   ├── components/
+│   │   ├── navbar.css
+│   │   ├── footer.css
+│   │   ├── skeleton.css              Loading state component
+│   │   └── empty-state.css           Empty state component
+│   └── pages/
+│       ├── home.css
+│       ├── courses.css               Catalog styles + JS-controlled states
+│       └── course-detail.css         Detail page styles
+│
+├── js/
+│   ├── courses.js                    Filter, search, empty state logic
+│   └── course-detail.js              URL params, fetch, DOM rendering
+│
+├── data/
+│   └── courses.json                  All 12 courses with full structured data
+│
+├── assets/                           Images and media (planned)
+├── .gitignore
+└── README.md
 ```
 
 ---
 
-## 🎯 Current Status
+## Architecture
 
-✅ Project initialized
+### CSS — ITCSS-inspired Layers
 
-✅ Professional folder structure created
+```
+Layer 1  variables.css    Design tokens — single source of truth for all values
+Layer 2  reset.css        Browser normalisation
+Layer 3  typography.css   Base HTML element styles
+Layer 4  components/      Reusable UI components
+Layer 5  pages/           Page-specific styles
+```
 
-✅ Git repository configured
+### Design Token System
 
-✅ Connected with GitHub
+All visual values are defined as CSS custom properties in `variables.css`:
 
-🔄 Development in progress...
+- **Colors:** Brand blues, neutral grays, status colors (green, yellow, red)
+- **Typography:** Font scale (xs → 5xl), weights, line heights, letter spacing
+- **Spacing:** 4px base unit scale (space-1 through space-24)
+- **Shadows:** Four-level elevation system (sm, md, lg, xl)
+- **Radii:** Consistent border radius scale
+- **Animation:** Timing durations and easing functions
+- **Z-index:** Named scale (base, raised, dropdown, sticky, overlay, modal, toast)
+
+### BEM Naming Convention
+
+```css
+.course-card               Block
+.course-card__title        Element
+.course-card__badge--advanced  Modifier
+```
+
+### JavaScript Architecture
+
+- DOM selections performed once at the top of each file
+- State tracked in module-level variables (`activeFilter`, `activeSearch`)
+- Pure helper functions with single responsibilities
+- `async/await` for all asynchronous operations
+- `try/catch` on all `fetch()` calls
+- Guard clauses (`if (!el) return`) prevent null reference errors
+- `js-*` prefixed classes used as JS-only identifiers (never styled)
 
 ---
 
-## 📅 Development Roadmap
+## Accessibility
 
-- [x] Project Initialization
-- [x] Folder Architecture
-- [x] Git & GitHub Setup
-- [ ] Homepage Design
-- [ ] Authentication
-- [ ] Dashboard
-- [ ] Course Management
-- [ ] Progress Tracking
-- [ ] Backend Integration
-- [ ] Database Integration
-- [ ] Deployment
+WCAG 2.1 Level AA compliant throughout:
+
+- Semantic HTML5 landmarks (`<header>`, `<nav>`, `<main>`, `<section>`, `<article>`, `<footer>`)
+- Correct heading hierarchy on every page (h1 → h2 → h3)
+- `aria-label` and `aria-labelledby` on all navigations and sections
+- `aria-current="page"` on active navigation links
+- `aria-pressed` on filter toggle buttons
+- `aria-live="polite"` on dynamically updated regions
+- `role="status"` for non-urgent updates, `role="alert"` for errors
+- `aria-hidden="true"` on decorative skeleton loaders
+- Visible focus indicators via `:focus-visible`
+- `prefers-reduced-motion` support on all animations
+- Keyboard navigation tested on all interactive elements
+- Touch targets minimum 44×44px on mobile
 
 ---
 
-## 📌 Author
+## Responsive Design
+
+Mobile-first approach with three primary breakpoints:
+
+| Breakpoint | Width | Layout |
+|-----------|-------|--------|
+| Mobile | < 640px | Single column, stacked navigation |
+| Tablet | 640px – 1023px | Two-column grids |
+| Desktop | 1024px+ | Three-column grids, sticky sidebar |
+
+---
+
+## Performance
+
+- GPU-accelerated animations using `transform` and `opacity`
+- `will-change: transform` on animated skeleton elements
+- CSS-only skeleton shimmer (no JavaScript)
+- `defer` on all script tags (no render blocking)
+- Google Fonts loaded with `preconnect`
+- Single CSS entry point via `@import` cascade
+
+---
+
+## Getting Started
+
+**Prerequisites:** VS Code with the [Live Server extension](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) installed.
+
+```bash
+# Clone the repository
+git clone https://github.com/YOUR_USERNAME/SkillForge.git
+
+# Open in VS Code
+code SkillForge
+
+# Right-click index.html in the Explorer panel
+# Select "Open with Live Server"
+```
+
+Navigate to `http://127.0.0.1:5500` in your browser.
+
+---
+
+## Roadmap
+
+### Week 3 (In Progress)
+- [x] Category filtering with JavaScript
+- [x] Live search
+- [x] Dynamic empty states
+- [x] URL parameters and JSON data
+- [x] Dynamic course detail pages
+- [ ] Dynamic card rendering from JSON
+- [ ] localStorage for saved courses
+
+### Week 4+
+- [ ] User authentication UI
+- [ ] Dashboard and progress tracking
+- [ ] Certificate generation
+- [ ] Dark mode
+- [ ] Backend API integration (Node.js + Express)
+- [ ] Database (MongoDB)
+- [ ] Cloud deployment
+
+---
+
+## Author
 
 **Mohit Khatri**
-
 B.Tech CSE (IoT)
-
-Passionate about Software Development, Full Stack Development, and Problem Solving.
-
----
-
-## ⭐ Future Improvements
-
-- AI-powered learning assistant
-- Personalized recommendations
-- Dark Mode
-- Notifications
-- Mobile Responsive Design
-- Admin Dashboard
-- Certificates
-- Cloud Deployment
+Passionate about frontend development, clean architecture, and building real-world projects.
 
 ---
 
-## 📄 License
+## License
 
 This project is created for educational and learning purposes.
