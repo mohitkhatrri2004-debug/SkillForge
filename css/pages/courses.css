@@ -445,3 +445,53 @@
   color: var(--white);
   border-color: var(--color-primary);
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   SAVE BUTTON — Course card wishlist toggle
+   
+   Added to .course-card__footer alongside the rating.
+   JS toggles .course-card__save-btn--saved to switch states.
+═══════════════════════════════════════════════════════════════ */
+
+.course-card__save-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  margin-left: auto;                      /* Push to right side of footer */
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  font-size: var(--text-base);            /* 16px — heart emoji size */
+  line-height: 1;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-default);
+  flex-shrink: 0;
+}
+
+.course-card__save-btn:hover {
+  border-color: var(--red-500);
+  color: var(--red-500);
+  transform: scale(1.1);
+}
+
+/* Saved state — filled heart, red background */
+.course-card__save-btn--saved {
+  background-color: var(--red-100);
+  border-color: var(--red-500);
+  color: var(--red-500);
+}
+
+.course-card__save-btn--saved:hover {
+  background-color: var(--red-500);
+  color: var(--white);
+}
+
+/* Focus state for keyboard accessibility */
+.course-card__save-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}

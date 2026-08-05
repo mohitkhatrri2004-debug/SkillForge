@@ -4,8 +4,9 @@
    Handles all interactive behaviour on the courses catalog page:
    - Category filter buttons
    - Results counter updates
-   - Search functionality (Week 3 Day 3)
+   - Live search
    - Empty state display
+   - localStorage persistence (filter + search)
 
    ARCHITECTURE:
    - No global variables (everything is scoped)
@@ -17,7 +18,7 @@
    - pages/courses.html (DOM structure)
    - css/components/empty-state.css (empty state styles)
 
-   LAST UPDATED: Week 3, Day 1
+   LAST UPDATED: Week 3, Day 4
 ═══════════════════════════════════════════════════════════════ */
 
 
@@ -55,23 +56,37 @@ const searchInput = document.querySelector('#course-search');
 
 
 /* ═══════════════════════════════════════════════════════════════
-   SECTION 2: STATE
+   SECTION 2: STORAGE KEYS & STATE
 
-   "State" means the current condition of the UI.
-   We track which filter is active so we can reference it later.
+   localStorage keys are prefixed with 'sf_' (SkillForge) to
+   avoid accidental clashes with browser extensions or other
+   scripts running on the same origin.
 
-   WHY: When a user clicks a filter, we need to know which
-   category is currently selected. Storing it in a variable
-   lets us check it from any function.
+   WHY CONSTANTS FOR KEYS:
+   Using a constant means the key string is written once.
+   If you ever rename a key, you change one line — not every
+   place it's used. A typo in the string would silently fail
+   (reads would return null). Constants catch typos at a glance.
 ═══════════════════════════════════════════════════════════════ */
 
-// The currently active filter category
-// 'all' means no filter applied — show everything
-let activeFilter = 'all';
+// localStorage key for the active category filter
+const STORAGE_KEY_FILTER = 'sf_active_filter';
 
-// The current search term typed by the user
-// Empty string means no search is active
-let activeSearch = '';
+// localStorage key for the active search term
+const STORAGE_KEY_SEARCH = 'sf_active_search';
+
+// localStorage key for the array of saved course IDs
+const STORAGE_KEY_SAVED  = 'sf_saved_courses';
+
+// The currently active filter category.
+// On first load, check localStorage for a saved value.
+// Fall back to 'all' if nothing is stored yet.
+let activeFilter = localStorage.getItem(STORAGE_KEY_FILTER) || 'all';
+
+// The current search term typed by the user.
+// On first load, check localStorage for a saved value.
+// Fall back to empty string if nothing is stored yet.
+let activeSearch = localStorage.getItem(STORAGE_KEY_SEARCH) || '';
 
 
 /* ═══════════════════════════════════════════════════════════════
@@ -334,6 +349,188 @@ function setActiveFilter(clickedButton) {
 }
 
 
+/**
+ * getSavedCourses
+ *
+ * Reads the saved courses array from localStorage.
+ * Always returns a real array — never null or undefined.
+ *
+ * WHY JSON.parse + fallback:
+ * localStorage stores strings only. JSON.parse converts the
+ * stored string back to an array. The '[]' fallback handles
+ * the first-time case where nothing has been saved yet —
+ * localStorage.getItem returns null, so null || '[]' gives '[]',
+ * which JSON.parse converts to an empty array.
+ *
+ * @returns {string[]} Array of saved course ID strings
+ */
+function getSavedCourses() {
+  return JSON.parse(localStorage.getItem(STORAGE_KEY_SAVED) || '[]');
+}
+
+
+/**
+ * toggleSavedCourse
+ *
+ * Adds or removes a course ID from the saved courses array,
+ * persists the change to localStorage, and updates the button
+ * visual state on the corresponding card.
+ *
+ * @param {string} courseId - The course ID (e.g. 'react-complete-guide')
+ */
+function toggleSavedCourse(courseId) {
+  const saved = getSavedCourses();
+
+  let updatedSaved;
+
+  if (saved.includes(courseId)) {
+    // Course is already saved — remove it (unsave)
+    // Array.filter returns a new array without the matching item.
+    // We never mutate the original — this keeps the logic predictable.
+    updatedSaved = saved.filter(id => id !== courseId);
+  } else {
+    // Course is not saved — add it
+    // Spread into a new array to avoid mutating the original.
+    updatedSaved = [...saved, courseId];
+  }
+
+  // Persist the updated array. JSON.stringify converts the array
+  // to a string that localStorage can store.
+  localStorage.setItem(STORAGE_KEY_SAVED, JSON.stringify(updatedSaved));
+
+  // Update this card's button visual state immediately
+  updateSaveButton(courseId, updatedSaved.includes(courseId));
+}
+
+
+/**
+ * updateSaveButton
+ *
+ * Applies or removes the saved CSS modifier on a single save button
+ * and updates its aria-label to reflect the current state.
+ *
+ * WHY aria-label UPDATE:
+ * Screen readers announce the button by its label. "Save React Guide"
+ * and "Unsave React Guide" communicate the action about to happen,
+ * not the current state — this is the standard accessible pattern
+ * (same as "Follow / Unfollow" on Twitter, "Like / Unlike" on YouTube).
+ *
+ * @param {string}  courseId - The course ID to find the button for
+ * @param {boolean} isSaved  - Whether the course is now saved
+ */
+function updateSaveButton(courseId, isSaved) {
+  // Select the specific button by its data-course-id attribute
+  const btn = coursesGrid.querySelector(
+    `[data-course-id="${courseId}"]`
+  );
+
+  if (!btn) return; // card may be hidden by filter — safe to skip
+
+  if (isSaved) {
+    btn.classList.add('course-card__save-btn--saved');
+    btn.setAttribute('aria-label',
+      btn.getAttribute('aria-label').replace('Save ', 'Unsave ')
+    );
+    btn.textContent = '♥';              // filled heart when saved
+  } else {
+    btn.classList.remove('course-card__save-btn--saved');
+    btn.setAttribute('aria-label',
+      btn.getAttribute('aria-label').replace('Unsave ', 'Save ')
+    );
+    btn.textContent = '♡';              // outline heart when not saved
+  }
+}
+
+
+/**
+ * updateAllSaveButtons
+ *
+ * Reads the saved courses array and applies the correct visual
+ * state to every save button currently in the DOM.
+ *
+ * Called once inside loadCourses() after cards are rendered,
+ * so saved courses from a previous session are reflected
+ * immediately on page load.
+ */
+function updateAllSaveButtons() {
+  const saved = getSavedCourses();
+
+  // Loop through every save button and set its state
+  coursesGrid.querySelectorAll('.course-card__save-btn').forEach(btn => {
+    const courseId = btn.dataset.courseId;
+    const isSaved  = saved.includes(courseId);
+    updateSaveButton(courseId, isSaved);
+  });
+}
+
+
+/**
+ * saveUIState
+ *
+ * Writes the current activeFilter and activeSearch values to
+ * localStorage so they survive page reloads.
+ *
+ * Called every time the filter or search changes.
+ *
+ * WHY TWO SEPARATE KEYS (not one object):
+ * Storing them separately means we can read/update one without
+ * touching the other. It also makes the DevTools Application
+ * panel easier to read during debugging.
+ */
+function saveUIState() {
+  localStorage.setItem(STORAGE_KEY_FILTER, activeFilter);
+  localStorage.setItem(STORAGE_KEY_SEARCH, activeSearch);
+}
+
+
+/**
+ * restoreUIState
+ *
+ * Reads the saved filter and search values from localStorage
+ * and applies them to the UI — both visually and functionally.
+ *
+ * Called inside loadCourses() AFTER cards are in the DOM,
+ * because filterCourses() needs real course cards to loop over.
+ *
+ * WHAT IT DOES:
+ * 1. If a filter was saved, highlight the correct button
+ * 2. If a search term was saved, fill the search input
+ * 3. Run filterCourses() with both values to show the right cards
+ *
+ * WHY NOT CALL THIS EARLIER:
+ * If called before cards are rendered, courseCards is empty,
+ * filterCourses() would show an incorrect empty state.
+ */
+function restoreUIState() {
+  // Only restore if something was actually saved
+  const hasFilter = activeFilter !== 'all';
+  const hasSearch = activeSearch !== '';
+
+  // Nothing to restore — page is in default state
+  if (!hasFilter && !hasSearch) return;
+
+  // Restore the search input value visually
+  if (searchInput && hasSearch) {
+    searchInput.value = activeSearch;
+  }
+
+  // Restore the active filter button highlight.
+  // Find the button whose data-filter matches the saved value.
+  if (hasFilter) {
+    const savedButton = document.querySelector(
+      `[data-filter="${activeFilter}"]`
+    );
+    if (savedButton) {
+      setActiveFilter(savedButton);
+    }
+  }
+
+  // Apply the filter and search together so the correct cards show.
+  // This is the same call the event listeners make — consistent.
+  filterCourses(activeFilter, activeSearch);
+}
+
+
 /* ═══════════════════════════════════════════════════════════════
    SECTION 4: DATA LOADING & RENDERING
 ═══════════════════════════════════════════════════════════════ */
@@ -431,6 +628,12 @@ function buildCardHTML(course) {
               ${course.rating} (${course.ratingCount})
             </span>
           </div>
+          <button class="course-card__save-btn"
+                  data-course-id="${course.id}"
+                  aria-label="Save ${course.title}"
+                  type="button">
+            ♡
+          </button>
         </div>
       </div>
     </article>`;
@@ -490,6 +693,16 @@ async function loadCourses() {
     // Re-enable controls now that courseCards has real elements.
     // Filter and search are now safe to use.
     setLoadingState(false);
+
+    // Restore any previously saved filter/search from localStorage.
+    // Must happen AFTER setLoadingState(false) so the controls are
+    // enabled when restoreUIState() visually activates them.
+    restoreUIState();
+
+    // Apply the correct saved/unsaved visual state to every save button.
+    // Must happen AFTER restoreUIState() so filtered cards are already
+    // visible before we try to find their buttons.
+    updateAllSaveButtons();
 
   } catch (error) {
     // fetch() threw — most likely the page was opened via file://
@@ -559,6 +772,9 @@ filterButtons.forEach(button => {
 
     // Apply filter (search is now empty, so only category applies)
     filterCourses(activeFilter, activeSearch);
+
+    // Persist the new state so it survives a page reload
+    saveUIState();
   });
 
 });
@@ -575,6 +791,41 @@ if (searchInput) {
     // Re-run the combined filter+search with the current category
     // This means search always works WITHIN the active category
     filterCourses(activeFilter, activeSearch);
+
+    // Persist the new state so it survives a page reload
+    saveUIState();
+
+  });
+}
+
+
+// ── Save button event delegation ────────────────────────────────
+// One listener on the grid handles ALL save button clicks.
+//
+// WHY ON coursesGrid (not document):
+// Scoping the listener to the grid means it only fires for
+// clicks that originated inside the grid — not the whole page.
+// Tighter scope = cleaner, less likely to intercept unrelated clicks.
+//
+// HOW event.target.closest() works:
+// event.target is the exact element clicked (could be the emoji
+// inside the button, not the button itself). closest() walks UP
+// the DOM from that element and returns the first ancestor that
+// matches the selector — or null if none found.
+if (coursesGrid) {
+  coursesGrid.addEventListener('click', (event) => {
+
+    // Walk up from the clicked element to find a save button.
+    // If the click wasn't on a save button, btn is null — we ignore it.
+    const btn = event.target.closest('.course-card__save-btn');
+    if (!btn) return;
+
+    // Read the course ID from the button's data attribute
+    const courseId = btn.dataset.courseId;
+    if (!courseId) return;
+
+    // Toggle saved state and update localStorage + button appearance
+    toggleSavedCourse(courseId);
 
   });
 }

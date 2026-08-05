@@ -18,7 +18,7 @@ Open `index.html` via [Live Server](https://marketplace.visualstudio.com/items?i
 |------|-------|--------|
 | Week 1 | Foundation, Homepage, Design System | ✅ Complete |
 | Week 2 | Courses Module, Course Detail Pages, UI States | ✅ Complete |
-| Week 3 | JavaScript Interactivity, Dynamic Content | 🔄 Day 3 of 5 Complete |
+| Week 3 | JavaScript Interactivity, Dynamic Content | 🔄 Day 4 of 5 Complete |
 | Week 4+ | Advanced Features, Backend Integration | Planned |
 
 ---
@@ -91,6 +91,19 @@ Open `index.html` via [Live Server](https://marketplace.visualstudio.com/items?i
 - `courseCards` NodeList re-queried after render so filter and search work on dynamic elements
 - Error state shown if `fetch()` fails (e.g. opened without Live Server)
 - All existing filter, search, and empty state behaviour preserved without changes
+
+**Day 4 — localStorage Persistence & Wishlist**
+- `saveUIState()` — persists active filter and search term to `localStorage` on every change
+- `restoreUIState()` — reads saved filter/search from `localStorage` on page load and re-applies them
+- Active filter button and search input both restore correctly after page reload
+- `getSavedCourses()` — reads saved course ID array from `localStorage` (JSON.parse + fallback)
+- `toggleSavedCourse(courseId)` — adds or removes a course ID from the saved array, persists to `localStorage`
+- Save button (♡/♥) added to every course card footer via `buildCardHTML()`
+- `updateSaveButton()` — updates one button's visual state and accessible `aria-label`
+- `updateAllSaveButtons()` — restores saved visual state across all cards on page load
+- Event delegation on the grid — one listener handles all save button clicks
+- `sf_` prefixed `localStorage` keys prevent clashes with browser extensions
+- `JSON.stringify` / `JSON.parse` used correctly to persist arrays
 
 ---
 
@@ -180,6 +193,9 @@ All visual values are defined as CSS custom properties in `variables.css`:
 - `try/catch` on all `fetch()` calls
 - Guard clauses (`if (!el) return`) prevent null reference errors
 - `js-*` prefixed classes used as JS-only identifiers (never styled)
+- `sf_` prefixed `localStorage` keys prevent clashes with other scripts
+- Event delegation for dynamically rendered elements (one listener per container)
+- `JSON.stringify` / `JSON.parse` for persisting arrays to `localStorage`
 
 ---
 
@@ -254,7 +270,10 @@ Navigate to `http://127.0.0.1:5500` in your browser.
 - [x] Dynamic course detail pages
 - [x] Dynamic card rendering from JSON
 - [x] Loading state management (disabled controls during fetch)
-- [ ] localStorage for saved courses
+- [x] localStorage — persist active filter across reloads
+- [x] localStorage — persist search term across reloads
+- [x] localStorage — course wishlist (save/unsave with ♡/♥)
+- [ ] Page transitions and polish
 
 ### Week 4+
 - [ ] User authentication UI
