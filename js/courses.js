@@ -43,7 +43,9 @@ const filterButtons = document.querySelectorAll('.filters__category');
 const coursesGrid = document.querySelector('.courses-grid');
 
 // All individual course card elements
-const courseCards = document.querySelectorAll('.course-card');
+// let (not const) because loadCourses() reassigns this after
+// rendering — const cannot be reassigned.
+let courseCards = document.querySelectorAll('.course-card');
 
 // The results count paragraph (shows "Showing X courses")
 const resultsCount = document.querySelector('.courses-catalog__count');
@@ -333,7 +335,195 @@ function setActiveFilter(clickedButton) {
 
 
 /* ═══════════════════════════════════════════════════════════════
-   SECTION 4: EVENT LISTENERS
+   SECTION 4: DATA LOADING & RENDERING
+═══════════════════════════════════════════════════════════════ */
+
+/**
+ * setLoadingState
+ *
+ * Enables or disables the filter buttons and search input.
+ * Called with true at the start of loadCourses() and false
+ * when loading completes (or fails).
+ *
+ * WHY THIS EXISTS:
+ * There is a window between page load and JSON arrival where
+ * courseCards is empty. If the user clicks a filter or types
+ * in the search box during that window, they get zero results
+ * and an incorrect empty state.
+ *
+ * Disabling the controls prevents invalid interactions.
+ * Enabling them after data loads guarantees correct behaviour.
+ *
+ * WHY disabled/aria-disabled:
+ * - disabled on <button> prevents clicks and removes it from
+ *   tab order — correct for filter buttons.
+ * - aria-disabled on <input> communicates the state to screen
+ *   readers. Combined with pointer-events:none via CSS class,
+ *   it prevents interaction while remaining accessible.
+ *
+ * @param {boolean} isLoading - true to disable, false to enable
+ */
+function setLoadingState(isLoading) {
+  // Disable/enable each filter button
+  filterButtons.forEach(button => {
+    button.disabled = isLoading;
+  });
+
+  // Disable/enable the search input
+  if (searchInput) {
+    searchInput.disabled = isLoading;
+
+    // aria-disabled communicates the state to screen readers
+    // even though <input disabled> already handles most of this.
+    // Belt-and-braces accessibility.
+    searchInput.setAttribute('aria-disabled', String(isLoading));
+  }
+}
+
+/**
+ * buildCardHTML
+ *
+ * Pure function: takes one course object from courses.json and
+ * returns the HTML string for one course card.
+ *
+ * WHY A SEPARATE FUNCTION:
+ * Keeping the template in its own function means loadCourses()
+ * stays clean and readable. It also makes the card template easy
+ * to find, read, and change in one place.
+ *
+ * WHY A PURE FUNCTION:
+ * It reads only from the `course` argument — no side effects,
+ * no DOM reads, no state access. Given the same input it always
+ * returns the same output. Easy to reason about and test.
+ *
+ * @param  {Object} course - One course object from courses.json
+ * @returns {string}       - HTML string for one course card
+ */
+function buildCardHTML(course) {
+  // Map level slug to the correct BEM modifier class
+  // This gives the badge its colour (green / yellow / red)
+  const badgeModifier = course.level !== 'beginner'
+    ? ` course-card__badge--${course.level}`
+    : '';
+
+  return `
+    <article class="course-card" data-category="${course.category}">
+      <div class="course-card__image">
+        <span class="course-card__badge${badgeModifier}">${course.levelLabel}</span>
+      </div>
+      <div class="course-card__content">
+        <div class="course-card__category">${course.categoryLabel}</div>
+        <h3 class="course-card__title">
+          <a href="course-detail.html?id=${course.id}" class="course-card__link">
+            ${course.title}
+          </a>
+        </h3>
+        <p class="course-card__description">${course.description}</p>
+        <div class="course-card__meta">
+          <span class="course-card__instructor">${course.instructor}</span>
+          <span class="course-card__duration">${course.duration}</span>
+        </div>
+        <div class="course-card__footer">
+          <div class="course-card__rating">
+            <span class="course-card__stars"
+                  aria-label="${course.rating} out of 5 stars">★★★★★</span>
+            <span class="course-card__rating-text">
+              ${course.rating} (${course.ratingCount})
+            </span>
+          </div>
+        </div>
+      </div>
+    </article>`;
+}
+
+
+/**
+ * loadCourses
+ *
+ * Async function that drives the full data-loading lifecycle:
+ *
+ * 1. Fetch data/courses.json
+ * 2. Build HTML for all 12 cards using buildCardHTML()
+ * 3. Replace skeleton cards with real cards (one innerHTML write)
+ * 4. Re-query courseCards so filter/search have the real elements
+ * 5. Update the results counter
+ *
+ * If fetch fails (e.g. opened without Live Server), the skeletons
+ * stay visible and an error state appears explaining the problem.
+ */
+async function loadCourses() {
+  // Disable controls immediately — courseCards is empty until
+  // the JSON arrives. Prevents filter/search running on nothing.
+  setLoadingState(true);
+
+  try {
+    // Fetch the JSON file.
+    // '../data/courses.json' is relative to pages/courses.html —
+    // two dots means "go up one directory to the project root".
+    const response = await fetch('../data/courses.json');
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const courses = await response.json();
+
+    // Build all card HTML strings in one pass with map(),
+    // then join into a single string for one innerHTML write.
+    // One DOM write is faster than 12 individual appendChild calls.
+    const cardsHTML = courses.map(course => buildCardHTML(course)).join('');
+
+    // Replace the entire grid content (skeletons → real cards).
+    // innerHTML replaces everything inside the element atomically —
+    // the browser paints the new state in a single frame.
+    coursesGrid.innerHTML = cardsHTML;
+
+    // Re-query courseCards NOW that real cards are in the DOM.
+    // The original querySelectorAll at the top of the file ran before
+    // the cards existed and captured an empty NodeList.
+    // This fresh query captures all 12 real course card elements.
+    courseCards = document.querySelectorAll('.course-card');
+
+    // Set the initial counter now that we know how many courses loaded.
+    updateResultsCount();
+
+    // Re-enable controls now that courseCards has real elements.
+    // Filter and search are now safe to use.
+    setLoadingState(false);
+
+  } catch (error) {
+    // fetch() threw — most likely the page was opened via file://
+    // rather than Live Server.
+    console.error('Failed to load courses:', error);
+
+    // Replace skeletons with a helpful error state.
+    coursesGrid.innerHTML = `
+      <div class="empty-state" role="alert"
+           style="grid-column: 1 / -1;">
+        <div class="empty-state__icon">⚠️</div>
+        <div class="empty-state__content">
+          <h2 class="empty-state__title">Courses could not be loaded</h2>
+          <p class="empty-state__description">
+            Please open this page using Live Server in VS Code,
+            not by double-clicking the file.
+          </p>
+        </div>
+      </div>`;
+
+    // Update counter to 0 so it doesn't show stale "12 courses" text.
+    if (resultsCount) {
+      resultsCount.innerHTML = 'Showing <strong>0 courses</strong>';
+    }
+
+    // Re-enable controls even on error so the user isn't locked out.
+    // The error state message guides them on what to do.
+    setLoadingState(false);
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   SECTION 5: EVENT LISTENERS
 
    Event listeners watch for user interactions and run a
    function when they happen.
@@ -391,12 +581,11 @@ if (searchInput) {
 
 
 /* ═══════════════════════════════════════════════════════════════
-   SECTION 5: INITIALISATION
+   SECTION 6: INITIALISATION
 
-   Code that runs once when the page first loads.
-   Sets the initial state of the UI.
+   loadCourses() is the entry point. It fetches the data,
+   renders the cards, re-queries courseCards, and calls
+   updateResultsCount() — so there's nothing else to run here.
 ═══════════════════════════════════════════════════════════════ */
 
-// Set the initial results count when the page loads
-// (before any filtering or searching has happened)
-updateResultsCount();
+loadCourses();

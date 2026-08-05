@@ -18,7 +18,7 @@ Open `index.html` via [Live Server](https://marketplace.visualstudio.com/items?i
 |------|-------|--------|
 | Week 1 | Foundation, Homepage, Design System | ✅ Complete |
 | Week 2 | Courses Module, Course Detail Pages, UI States | ✅ Complete |
-| Week 3 | JavaScript Interactivity, Dynamic Content | 🔄 In Progress |
+| Week 3 | JavaScript Interactivity, Dynamic Content | 🔄 Day 3 of 5 Complete |
 | Week 4+ | Advanced Features, Backend Integration | Planned |
 
 ---
@@ -80,6 +80,17 @@ Open `index.html` via [Live Server](https://marketplace.visualstudio.com/items?i
 - Dynamic breadcrumb, level badge (with correct CSS modifier), instructor initials
 - Error state for invalid or missing course IDs
 - `async/await` with `try/catch` error handling
+
+**Day 3 — Dynamic Card Rendering from JSON**
+- Course cards rendered entirely from `courses.json` via JavaScript
+- `buildCardHTML(course)` — pure function, one JSON object → one card HTML string
+- `loadCourses()` — async function fetches JSON, renders all 12 cards, removes skeletons
+- `setLoadingState(isLoading)` — disables filter buttons and search during fetch, re-enables after
+- Skeleton cards replace hardcoded HTML as the initial loading state
+- Single `innerHTML` write for atomic skeleton → cards swap (no flicker)
+- `courseCards` NodeList re-queried after render so filter and search work on dynamic elements
+- Error state shown if `fetch()` fails (e.g. opened without Live Server)
+- All existing filter, search, and empty state behaviour preserved without changes
 
 ---
 
@@ -241,7 +252,8 @@ Navigate to `http://127.0.0.1:5500` in your browser.
 - [x] Dynamic empty states
 - [x] URL parameters and JSON data
 - [x] Dynamic course detail pages
-- [ ] Dynamic card rendering from JSON
+- [x] Dynamic card rendering from JSON
+- [x] Loading state management (disabled controls during fetch)
 - [ ] localStorage for saved courses
 
 ### Week 4+

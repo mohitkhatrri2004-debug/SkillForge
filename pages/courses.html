@@ -162,19 +162,19 @@
              skeleton cards below and hide real course cards until
              data loads. This improves perceived performance.
         ───────────────────────────────────────────────────── -->
-        <div class="courses-grid">
+        <!--
+          courses-grid is intentionally empty on page load.
+          courses.js fetches courses.json and renders cards here.
+          Skeleton cards below are shown while fetch is in progress,
+          then removed once real cards are inserted.
+        -->
+        <div class="courses-grid" id="courses-grid" aria-live="polite" aria-label="Course catalog">
 
-          <!-- ═══════════════════════════════════════════════════════
-               SKELETON LOADERS (Loading State - Commented Out)
-               
-               Uncomment these in Week 3 when adding JavaScript.
-               Show skeletons while fetching course data from API/JSON.
-               
-               ACCESSIBILITY: Use aria-hidden="true" to hide from
-               screen readers. Screen readers will only see real
-               content once it loads.
-          ═══════════════════════════════════════════════════════
-          
+          <!-- ─────────────────────────────────────────────────────
+               SKELETON CARDS — shown while courses.json is loading.
+               courses.js removes these and inserts real cards.
+               aria-hidden keeps them invisible to screen readers.
+          ───────────────────────────────────────────────────── -->
           <article class="skeleton-card" aria-hidden="true">
             <div class="skeleton-card__image"></div>
             <div class="skeleton-card__content">
@@ -243,421 +243,219 @@
               </div>
             </div>
           </article>
-          
-          ═══════════════════════════════════════════════════════ -->
 
-          <!-- ═══════════════════════════════════════════════════════
-               EMPTY STATES (Commented Out - For Week 3)
-               
-               Uncomment these when implementing JavaScript filtering
-               and search. Show appropriate empty state based on context.
-          ═══════════════════════════════════════════════════════
-
-          NO SEARCH RESULTS EXAMPLE:
-          
-          <div class="empty-state" role="status" aria-live="polite">
-            <div class="empty-state__icon empty-state__icon--search">🔍</div>
-            <div class="empty-state__content">
-              <h2 class="empty-state__title">No courses found</h2>
-              <p class="empty-state__description">
-                We couldn't find any courses matching "<strong id="search-term">JavaScript</strong>". 
-                Try adjusting your search or browse all courses.
-              </p>
-            </div>
-            <div class="empty-state__actions">
-              <button class="empty-state__button" onclick="clearSearch()">
-                Clear Search
-              </button>
-              <a href="courses.html" class="empty-state__link">
-                Browse all courses
-              </a>
-            </div>
-          </div>
-
-          NO FILTER RESULTS EXAMPLE:
-          
-          <div class="empty-state" role="status" aria-live="polite">
-            <div class="empty-state__icon empty-state__icon--filter">🎯</div>
-            <div class="empty-state__content">
-              <h2 class="empty-state__title">No courses in this category</h2>
-              <p class="empty-state__description">
-                We don't have any courses in the "<strong id="category-name">Data Science</strong>" category yet. 
-                Try another category or explore all courses.
-              </p>
-              <ul class="empty-state__suggestions">
-                <li>Try the "Programming" category</li>
-                <li>Browse "Design" courses</li>
-                <li>Check out "Business" topics</li>
-              </ul>
-            </div>
-            <div class="empty-state__actions">
-              <button class="empty-state__button" onclick="clearFilters()">
-                Clear Filters
-              </button>
-              <a href="courses.html" class="empty-state__link">
-                View all courses
-              </a>
-            </div>
-          </div>
-
-          ERROR STATE EXAMPLE:
-          
-          <div class="empty-state" role="alert">
-            <div class="empty-state__icon empty-state__icon--error">⚠️</div>
-            <div class="empty-state__content">
-              <h2 class="empty-state__title">Oops! Something went wrong</h2>
-              <p class="empty-state__description">
-                We're having trouble loading courses right now. 
-                Please try again in a moment.
-              </p>
-            </div>
-            <div class="empty-state__actions">
-              <button class="empty-state__button" onclick="location.reload()">
-                Retry
-              </button>
-              <a href="../index.html" class="empty-state__link">
-                Return to homepage
-              </a>
-            </div>
-          </div>
-
-          ═══════════════════════════════════════════════════════ -->
-
-          <!-- Course Card 1 -->
-          <article class="course-card" data-category="programming">
-            <div class="course-card__image">
-              <span class="course-card__badge">Beginner</span>
-            </div>
-            <div class="course-card__content">
-              <div class="course-card__category">Programming</div>
-              <h3 class="course-card__title">
-                <a href="course-detail.html?id=complete-web-development" class="course-card__link">
-                  Complete Web Development Bootcamp
-                </a>
-              </h3>
-              <p class="course-card__description">
-                Learn HTML, CSS, JavaScript, and modern frameworks. Build real-world projects.
-              </p>
-              <div class="course-card__meta">
-                <span class="course-card__instructor">Dr. Angela Yu</span>
-                <span class="course-card__duration">52 hours</span>
+          <article class="skeleton-card" aria-hidden="true">
+            <div class="skeleton-card__image"></div>
+            <div class="skeleton-card__content">
+              <div class="skeleton-card__category"></div>
+              <div class="skeleton-card__title">
+                <div class="skeleton-card__title-line"></div>
+                <div class="skeleton-card__title-line"></div>
               </div>
-              <div class="course-card__footer">
-                <div class="course-card__rating">
-                  <span class="course-card__stars" aria-label="4.8 out of 5 stars">★★★★★</span>
-                  <span class="course-card__rating-text">4.8 (12,345)</span>
-                </div>
+              <div class="skeleton-card__description">
+                <div class="skeleton-card__description-line"></div>
+                <div class="skeleton-card__description-line"></div>
+                <div class="skeleton-card__description-line"></div>
+              </div>
+              <div class="skeleton-card__meta">
+                <div class="skeleton-card__meta-item"></div>
+                <div class="skeleton-card__meta-item"></div>
+              </div>
+              <div class="skeleton-card__footer">
+                <div class="skeleton-card__rating"></div>
               </div>
             </div>
           </article>
 
-          <!-- Course Card 2 -->
-          <article class="course-card" data-category="design">
-            <div class="course-card__image">
-              <span class="course-card__badge course-card__badge--intermediate">Intermediate</span>
-            </div>
-            <div class="course-card__content">
-              <div class="course-card__category">Design</div>
-              <h3 class="course-card__title">
-                <a href="course-detail.html?id=ui-ux-design-fundamentals" class="course-card__link">
-                  UI/UX Design Fundamentals
-                </a>
-              </h3>
-              <p class="course-card__description">
-                Master the principles of user interface and experience design. Learn Figma and design thinking.
-              </p>
-              <div class="course-card__meta">
-                <span class="course-card__instructor">Sarah Johnson</span>
-                <span class="course-card__duration">28 hours</span>
+          <article class="skeleton-card" aria-hidden="true">
+            <div class="skeleton-card__image"></div>
+            <div class="skeleton-card__content">
+              <div class="skeleton-card__category"></div>
+              <div class="skeleton-card__title">
+                <div class="skeleton-card__title-line"></div>
+                <div class="skeleton-card__title-line"></div>
               </div>
-              <div class="course-card__footer">
-                <div class="course-card__rating">
-                  <span class="course-card__stars" aria-label="4.9 out of 5 stars">★★★★★</span>
-                  <span class="course-card__rating-text">4.9 (8,432)</span>
-                </div>
+              <div class="skeleton-card__description">
+                <div class="skeleton-card__description-line"></div>
+                <div class="skeleton-card__description-line"></div>
+                <div class="skeleton-card__description-line"></div>
+              </div>
+              <div class="skeleton-card__meta">
+                <div class="skeleton-card__meta-item"></div>
+                <div class="skeleton-card__meta-item"></div>
+              </div>
+              <div class="skeleton-card__footer">
+                <div class="skeleton-card__rating"></div>
               </div>
             </div>
           </article>
 
-          <!-- Course Card 3 -->
-          <article class="course-card" data-category="data-science">
-            <div class="course-card__image">
-              <span class="course-card__badge course-card__badge--advanced">Advanced</span>
-            </div>
-            <div class="course-card__content">
-              <div class="course-card__category">Data Science</div>
-              <h3 class="course-card__title">
-                <a href="course-detail.html?id=machine-learning-az" class="course-card__link">
-                  Machine Learning A-Z™
-                </a>
-              </h3>
-              <p class="course-card__description">
-                Learn to create ML algorithms from scratch. Master Python, R, and TensorFlow.
-              </p>
-              <div class="course-card__meta">
-                <span class="course-card__instructor">Kirill Eremenko</span>
-                <span class="course-card__duration">44 hours</span>
+          <article class="skeleton-card" aria-hidden="true">
+            <div class="skeleton-card__image"></div>
+            <div class="skeleton-card__content">
+              <div class="skeleton-card__category"></div>
+              <div class="skeleton-card__title">
+                <div class="skeleton-card__title-line"></div>
+                <div class="skeleton-card__title-line"></div>
               </div>
-              <div class="course-card__footer">
-                <div class="course-card__rating">
-                  <span class="course-card__stars" aria-label="4.7 out of 5 stars">★★★★★</span>
-                  <span class="course-card__rating-text">4.7 (45,678)</span>
-                </div>
+              <div class="skeleton-card__description">
+                <div class="skeleton-card__description-line"></div>
+                <div class="skeleton-card__description-line"></div>
+                <div class="skeleton-card__description-line"></div>
+              </div>
+              <div class="skeleton-card__meta">
+                <div class="skeleton-card__meta-item"></div>
+                <div class="skeleton-card__meta-item"></div>
+              </div>
+              <div class="skeleton-card__footer">
+                <div class="skeleton-card__rating"></div>
               </div>
             </div>
           </article>
 
-          <!-- Course Card 4 -->
-          <article class="course-card" data-category="business">
-            <div class="course-card__image">
-              <span class="course-card__badge">Beginner</span>
-            </div>
-            <div class="course-card__content">
-              <div class="course-card__category">Business</div>
-              <h3 class="course-card__title">
-                <a href="course-detail.html?id=digital-marketing-masterclass" class="course-card__link">
-                  Digital Marketing Masterclass
-                </a>
-              </h3>
-              <p class="course-card__description">
-                Learn SEO, social media, email marketing, and analytics. Grow your business online.
-              </p>
-              <div class="course-card__meta">
-                <span class="course-card__instructor">Phil Ebiner</span>
-                <span class="course-card__duration">36 hours</span>
+          <article class="skeleton-card" aria-hidden="true">
+            <div class="skeleton-card__image"></div>
+            <div class="skeleton-card__content">
+              <div class="skeleton-card__category"></div>
+              <div class="skeleton-card__title">
+                <div class="skeleton-card__title-line"></div>
+                <div class="skeleton-card__title-line"></div>
               </div>
-              <div class="course-card__footer">
-                <div class="course-card__rating">
-                  <span class="course-card__stars" aria-label="4.6 out of 5 stars">★★★★★</span>
-                  <span class="course-card__rating-text">4.6 (23,456)</span>
-                </div>
+              <div class="skeleton-card__description">
+                <div class="skeleton-card__description-line"></div>
+                <div class="skeleton-card__description-line"></div>
+                <div class="skeleton-card__description-line"></div>
+              </div>
+              <div class="skeleton-card__meta">
+                <div class="skeleton-card__meta-item"></div>
+                <div class="skeleton-card__meta-item"></div>
+              </div>
+              <div class="skeleton-card__footer">
+                <div class="skeleton-card__rating"></div>
               </div>
             </div>
           </article>
 
-          <!-- Course Card 5 -->
-          <article class="course-card" data-category="programming">
-            <div class="course-card__image">
-              <span class="course-card__badge course-card__badge--intermediate">Intermediate</span>
-            </div>
-            <div class="course-card__content">
-              <div class="course-card__category">Programming</div>
-              <h3 class="course-card__title">
-                <a href="course-detail.html?id=react-complete-guide" class="course-card__link">
-                  React - The Complete Guide
-                </a>
-              </h3>
-              <p class="course-card__description">
-                Master React.js with hooks, Redux, Next.js, and TypeScript. Build modern web apps.
-              </p>
-              <div class="course-card__meta">
-                <span class="course-card__instructor">Maximilian Schwarzmüller</span>
-                <span class="course-card__duration">48 hours</span>
+          <article class="skeleton-card" aria-hidden="true">
+            <div class="skeleton-card__image"></div>
+            <div class="skeleton-card__content">
+              <div class="skeleton-card__category"></div>
+              <div class="skeleton-card__title">
+                <div class="skeleton-card__title-line"></div>
+                <div class="skeleton-card__title-line"></div>
               </div>
-              <div class="course-card__footer">
-                <div class="course-card__rating">
-                  <span class="course-card__stars" aria-label="4.9 out of 5 stars">★★★★★</span>
-                  <span class="course-card__rating-text">4.9 (67,890)</span>
-                </div>
+              <div class="skeleton-card__description">
+                <div class="skeleton-card__description-line"></div>
+                <div class="skeleton-card__description-line"></div>
+                <div class="skeleton-card__description-line"></div>
+              </div>
+              <div class="skeleton-card__meta">
+                <div class="skeleton-card__meta-item"></div>
+                <div class="skeleton-card__meta-item"></div>
+              </div>
+              <div class="skeleton-card__footer">
+                <div class="skeleton-card__rating"></div>
               </div>
             </div>
           </article>
 
-          <!-- Course Card 6 -->
-          <article class="course-card" data-category="design">
-            <div class="course-card__image">
-              <span class="course-card__badge">Beginner</span>
-            </div>
-            <div class="course-card__content">
-              <div class="course-card__category">Design</div>
-              <h3 class="course-card__title">
-                <a href="course-detail.html?id=graphic-design-bootcamp" class="course-card__link">
-                  Graphic Design Bootcamp
-                </a>
-              </h3>
-              <p class="course-card__description">
-                Learn Adobe Photoshop, Illustrator, and InDesign. Create stunning visual designs.
-              </p>
-              <div class="course-card__meta">
-                <span class="course-card__instructor">Lindsay Marsh</span>
-                <span class="course-card__duration">24 hours</span>
+          <article class="skeleton-card" aria-hidden="true">
+            <div class="skeleton-card__image"></div>
+            <div class="skeleton-card__content">
+              <div class="skeleton-card__category"></div>
+              <div class="skeleton-card__title">
+                <div class="skeleton-card__title-line"></div>
+                <div class="skeleton-card__title-line"></div>
               </div>
-              <div class="course-card__footer">
-                <div class="course-card__rating">
-                  <span class="course-card__stars" aria-label="4.7 out of 5 stars">★★★★★</span>
-                  <span class="course-card__rating-text">4.7 (15,234)</span>
-                </div>
+              <div class="skeleton-card__description">
+                <div class="skeleton-card__description-line"></div>
+                <div class="skeleton-card__description-line"></div>
+                <div class="skeleton-card__description-line"></div>
+              </div>
+              <div class="skeleton-card__meta">
+                <div class="skeleton-card__meta-item"></div>
+                <div class="skeleton-card__meta-item"></div>
+              </div>
+              <div class="skeleton-card__footer">
+                <div class="skeleton-card__rating"></div>
               </div>
             </div>
           </article>
 
-          <!-- Course Card 7 -->
-          <article class="course-card" data-category="data-science">
-            <div class="course-card__image">
-              <span class="course-card__badge course-card__badge--advanced">Advanced</span>
-            </div>
-            <div class="course-card__content">
-              <div class="course-card__category">Data Science</div>
-              <h3 class="course-card__title">
-                <a href="course-detail.html?id=deep-learning-specialization" class="course-card__link">
-                  Deep Learning Specialization
-                </a>
-              </h3>
-              <p class="course-card__description">
-                Master neural networks, CNNs, RNNs, and transformers. Build AI applications from scratch.
-              </p>
-              <div class="course-card__meta">
-                <span class="course-card__instructor">Andrew Ng</span>
-                <span class="course-card__duration">60 hours</span>
+          <article class="skeleton-card" aria-hidden="true">
+            <div class="skeleton-card__image"></div>
+            <div class="skeleton-card__content">
+              <div class="skeleton-card__category"></div>
+              <div class="skeleton-card__title">
+                <div class="skeleton-card__title-line"></div>
+                <div class="skeleton-card__title-line"></div>
               </div>
-              <div class="course-card__footer">
-                <div class="course-card__rating">
-                  <span class="course-card__stars" aria-label="5.0 out of 5 stars">★★★★★</span>
-                  <span class="course-card__rating-text">5.0 (89,012)</span>
-                </div>
+              <div class="skeleton-card__description">
+                <div class="skeleton-card__description-line"></div>
+                <div class="skeleton-card__description-line"></div>
+                <div class="skeleton-card__description-line"></div>
+              </div>
+              <div class="skeleton-card__meta">
+                <div class="skeleton-card__meta-item"></div>
+                <div class="skeleton-card__meta-item"></div>
+              </div>
+              <div class="skeleton-card__footer">
+                <div class="skeleton-card__rating"></div>
               </div>
             </div>
           </article>
 
-          <!-- Course Card 8 -->
-          <article class="course-card" data-category="marketing">
-            <div class="course-card__image">
-              <span class="course-card__badge">Beginner</span>
-            </div>
-            <div class="course-card__content">
-              <div class="course-card__category">Marketing</div>
-              <h3 class="course-card__title">
-                <a href="course-detail.html?id=social-media-marketing" class="course-card__link">
-                  Social Media Marketing 2024
-                </a>
-              </h3>
-              <p class="course-card__description">
-                Master Instagram, Facebook, TikTok, and LinkedIn. Grow your brand and audience.
-              </p>
-              <div class="course-card__meta">
-                <span class="course-card__instructor">Ben Simmons</span>
-                <span class="course-card__duration">18 hours</span>
+          <article class="skeleton-card" aria-hidden="true">
+            <div class="skeleton-card__image"></div>
+            <div class="skeleton-card__content">
+              <div class="skeleton-card__category"></div>
+              <div class="skeleton-card__title">
+                <div class="skeleton-card__title-line"></div>
+                <div class="skeleton-card__title-line"></div>
               </div>
-              <div class="course-card__footer">
-                <div class="course-card__rating">
-                  <span class="course-card__stars" aria-label="4.5 out of 5 stars">★★★★★</span>
-                  <span class="course-card__rating-text">4.5 (12,678)</span>
-                </div>
+              <div class="skeleton-card__description">
+                <div class="skeleton-card__description-line"></div>
+                <div class="skeleton-card__description-line"></div>
+                <div class="skeleton-card__description-line"></div>
+              </div>
+              <div class="skeleton-card__meta">
+                <div class="skeleton-card__meta-item"></div>
+                <div class="skeleton-card__meta-item"></div>
+              </div>
+              <div class="skeleton-card__footer">
+                <div class="skeleton-card__rating"></div>
               </div>
             </div>
           </article>
 
-          <!-- Course Card 9 -->
-          <article class="course-card" data-category="programming">
-            <div class="course-card__image">
-              <span class="course-card__badge course-card__badge--intermediate">Intermediate</span>
-            </div>
-            <div class="course-card__content">
-              <div class="course-card__category">Programming</div>
-              <h3 class="course-card__title">
-                <a href="course-detail.html?id=python-for-data-science" class="course-card__link">
-                  Python for Data Science
-                </a>
-              </h3>
-              <p class="course-card__description">
-                Learn NumPy, Pandas, Matplotlib, and scikit-learn. Analyze data and build ML models.
-              </p>
-              <div class="course-card__meta">
-                <span class="course-card__instructor">Jose Portilla</span>
-                <span class="course-card__duration">32 hours</span>
+          <article class="skeleton-card" aria-hidden="true">
+            <div class="skeleton-card__image"></div>
+            <div class="skeleton-card__content">
+              <div class="skeleton-card__category"></div>
+              <div class="skeleton-card__title">
+                <div class="skeleton-card__title-line"></div>
+                <div class="skeleton-card__title-line"></div>
               </div>
-              <div class="course-card__footer">
-                <div class="course-card__rating">
-                  <span class="course-card__stars" aria-label="4.8 out of 5 stars">★★★★★</span>
-                  <span class="course-card__rating-text">4.8 (54,321)</span>
-                </div>
+              <div class="skeleton-card__description">
+                <div class="skeleton-card__description-line"></div>
+                <div class="skeleton-card__description-line"></div>
+                <div class="skeleton-card__description-line"></div>
+              </div>
+              <div class="skeleton-card__meta">
+                <div class="skeleton-card__meta-item"></div>
+                <div class="skeleton-card__meta-item"></div>
+              </div>
+              <div class="skeleton-card__footer">
+                <div class="skeleton-card__rating"></div>
               </div>
             </div>
           </article>
 
-          <!-- Course Card 10 -->
-          <article class="course-card" data-category="business">
-            <div class="course-card__image">
-              <span class="course-card__badge">Beginner</span>
-            </div>
-            <div class="course-card__content">
-              <div class="course-card__category">Business</div>
-              <h3 class="course-card__title">
-                <a href="course-detail.html?id=mba-essentials" class="course-card__link">
-                  MBA Essentials for Everyone
-                </a>
-              </h3>
-              <p class="course-card__description">
-                Learn business strategy, finance, and management. Essential MBA concepts simplified.
-              </p>
-              <div class="course-card__meta">
-                <span class="course-card__instructor">Chris Haroun</span>
-                <span class="course-card__duration">40 hours</span>
-              </div>
-              <div class="course-card__footer">
-                <div class="course-card__rating">
-                  <span class="course-card__stars" aria-label="4.6 out of 5 stars">★★★★★</span>
-                  <span class="course-card__rating-text">4.6 (34,567)</span>
-                </div>
-              </div>
-            </div>
-          </article>
 
-          <!-- Course Card 11 -->
-          <article class="course-card" data-category="design">
-            <div class="course-card__image">
-              <span class="course-card__badge course-card__badge--advanced">Advanced</span>
-            </div>
-            <div class="course-card__content">
-              <div class="course-card__category">Design</div>
-              <h3 class="course-card__title">
-                <a href="course-detail.html?id=advanced-ux-research" class="course-card__link">
-                  Advanced UX Research Methods
-                </a>
-              </h3>
-              <p class="course-card__description">
-                Master user research techniques, A/B testing, and usability studies. Data-driven design.
-              </p>
-              <div class="course-card__meta">
-                <span class="course-card__instructor">Emma Williams</span>
-                <span class="course-card__duration">22 hours</span>
-              </div>
-              <div class="course-card__footer">
-                <div class="course-card__rating">
-                  <span class="course-card__stars" aria-label="4.9 out of 5 stars">★★★★★</span>
-                  <span class="course-card__rating-text">4.9 (9,876)</span>
-                </div>
-              </div>
-            </div>
-          </article>
 
-          <!-- Course Card 12 -->
-          <article class="course-card" data-category="programming">
-            <div class="course-card__image">
-              <span class="course-card__badge course-card__badge--intermediate">Intermediate</span>
-            </div>
-            <div class="course-card__content">
-              <div class="course-card__category">Programming</div>
-              <h3 class="course-card__title">
-                <a href="course-detail.html?id=fullstack-javascript" class="course-card__link">
-                  Full-Stack JavaScript Developer
-                </a>
-              </h3>
-              <p class="course-card__description">
-                Build complete web apps with Node.js, Express, MongoDB, and React. End-to-end development.
-              </p>
-              <div class="course-card__meta">
-                <span class="course-card__instructor">Brad Traversy</span>
-                <span class="course-card__duration">56 hours</span>
-              </div>
-              <div class="course-card__footer">
-                <div class="course-card__rating">
-                  <span class="course-card__stars" aria-label="4.8 out of 5 stars">★★★★★</span>
-                  <span class="course-card__rating-text">4.8 (41,234)</span>
-                </div>
-              </div>
-            </div>
-          </article>
+
+
+
 
         </div>
 
