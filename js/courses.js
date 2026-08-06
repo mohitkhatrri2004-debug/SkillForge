@@ -54,6 +54,9 @@ const resultsCount = document.querySelector('.courses-catalog__count');
 // The search input field
 const searchInput = document.querySelector('#course-search');
 
+// The sort dropdown
+const sortSelect = document.querySelector('#course-sort');
+
 
 /* ═══════════════════════════════════════════════════════════════
    SECTION 2: STORAGE KEYS & STATE
@@ -78,6 +81,9 @@ const STORAGE_KEY_SEARCH = 'sf_active_search';
 // localStorage key for the array of saved course IDs
 const STORAGE_KEY_SAVED  = 'sf_saved_courses';
 
+// localStorage key for the active sort selection
+const STORAGE_KEY_SORT   = 'sf_active_sort';
+
 // The currently active filter category.
 // On first load, check localStorage for a saved value.
 // Fall back to 'all' if nothing is stored yet.
@@ -87,6 +93,15 @@ let activeFilter = localStorage.getItem(STORAGE_KEY_FILTER) || 'all';
 // On first load, check localStorage for a saved value.
 // Fall back to empty string if nothing is stored yet.
 let activeSearch = localStorage.getItem(STORAGE_KEY_SEARCH) || '';
+
+// The currently active sort selection.
+// On first load, check localStorage for a saved value.
+// Fall back to 'default' (original JSON order).
+let activeSort = localStorage.getItem(STORAGE_KEY_SORT) || 'default';
+
+// The full courses array as fetched from JSON — never mutated.
+// Stored here so sortCourses() can always sort from the original order.
+let allCourses = [];
 
 
 /* ═══════════════════════════════════════════════════════════════
@@ -99,27 +114,43 @@ let activeSearch = localStorage.getItem(STORAGE_KEY_SEARCH) || '';
 /**
  * updateResultsCount
  *
- * Counts the currently visible course cards and updates
- * the results counter text in the UI.
+ * Counts visible and total course cards, then updates the
+ * results counter text.
  *
- * WHY: After filtering, the counter should reflect how many
- * courses are actually visible, not the total of 12.
+ * FORMAT:
+ * - All cards visible  → "Showing 12 courses"
+ * - Some hidden        → "Showing 4 of 12 courses"
+ *
+ * WHY "X of Y":
+ * When a filter or search is active, showing only the visible
+ * count leaves users wondering if something is broken. "4 of 12"
+ * immediately communicates a subset is showing — industry standard
+ * used by Udemy, Airbnb, Amazon product listings.
+ *
+ * WHY courseCards.length FOR TOTAL:
+ * Hidden cards still exist in the NodeList — they have
+ * display:none but are not removed from the DOM. So .length
+ * always reflects all 12 rendered cards regardless of visibility.
  */
 function updateResultsCount() {
-  // Count cards that are not hidden
-  // Array.from converts NodeList to Array so we can use .filter()
-  const visibleCards = Array.from(courseCards).filter(card => {
-    // Cards we hide get a 'hidden' class — count the ones without it
-    return !card.classList.contains('course-card--hidden');
-  });
+  // Total cards rendered (hidden + visible)
+  const total = courseCards.length;
 
-  const count = visibleCards.length;
+  // Visible cards — those without the hidden modifier class
+  const visibleCards = Array.from(courseCards).filter(
+    card => !card.classList.contains('course-card--hidden')
+  );
+  const visible = visibleCards.length;
 
-  // Build the label — "1 course" vs "12 courses" (correct grammar)
-  const label = count === 1 ? 'course' : 'courses';
+  // "1 course" vs "4 courses" — correct grammar
+  const label = visible === 1 ? 'course' : 'courses';
 
-  // Update the counter text in the DOM
-  resultsCount.innerHTML = `Showing <strong>${count} ${label}</strong>`;
+  // Show "X of Y" only when a filter/search is active (visible < total)
+  const text = visible === total
+    ? `Showing <strong>${visible} ${label}</strong>`
+    : `Showing <strong>${visible} of ${total} ${label}</strong>`;
+
+  resultsCount.innerHTML = text;
 }
 
 
@@ -465,6 +496,98 @@ function updateAllSaveButtons() {
 
 
 /**
+ * parseDuration
+ *
+ * Extracts the numeric hour value from a duration string.
+ * e.g. "48 hours" → 48,  "28 hours" → 28
+ *
+ * WHY NOT SORT STRINGS DIRECTLY:
+ * Strings sort lexicographically. "9 hours" would sort AFTER
+ * "60 hours" because "9" > "6" character by character.
+ * Parsing to a number first gives correct numeric ordering.
+ *
+ * @param  {string} durationStr - e.g. "48 hours"
+ * @returns {number}            - The numeric part, e.g. 48
+ */
+function parseDuration(durationStr) {
+  // parseInt reads left-to-right and stops at first non-digit.
+  // "48 hours" → 48.  The radix 10 prevents octal interpretation.
+  return parseInt(durationStr, 10) || 0;
+}
+
+
+/**
+ * sortCourses
+ *
+ * Returns a sorted copy of the allCourses array based on the
+ * current activeSort value, then re-renders the grid.
+ *
+ * WHY A COPY ([...allCourses]):
+ * Array.sort() mutates the original array. If we sorted allCourses
+ * directly, switching back to "Default" would be impossible because
+ * the original order would be permanently lost. Spreading into a
+ * new array keeps allCourses unchanged as the source of truth.
+ *
+ * WHY RE-RENDER THE WHOLE GRID:
+ * Sorting requires the cards to appear in a completely new order.
+ * The simplest and most reliable way to achieve this is to rebuild
+ * the grid HTML from the sorted array — the same pattern loadCourses
+ * already uses. One innerHTML write, zero DOM-order edge cases.
+ */
+function sortCourses() {
+  // Work on a shallow copy — never mutate allCourses
+  const sorted = [...allCourses];
+
+  switch (activeSort) {
+    case 'rating-desc':
+      // Higher rating first. b - a gives descending order.
+      sorted.sort((a, b) => b.rating - a.rating);
+      break;
+
+    case 'students-desc':
+      // Higher student count first.
+      // Students are stored as formatted strings like "210,456".
+      // Remove commas before parsing so parseInt works correctly.
+      sorted.sort((a, b) => {
+        const countA = parseInt(a.students.replace(/,/g, ''), 10) || 0;
+        const countB = parseInt(b.students.replace(/,/g, ''), 10) || 0;
+        return countB - countA;
+      });
+      break;
+
+    case 'duration-asc':
+      // Shorter courses first (ascending hours).
+      sorted.sort((a, b) => parseDuration(a.duration) - parseDuration(b.duration));
+      break;
+
+    case 'duration-desc':
+      // Longer courses first (descending hours).
+      sorted.sort((a, b) => parseDuration(b.duration) - parseDuration(a.duration));
+      break;
+
+    default:
+      // 'default' — no sort needed, sorted is already a copy of
+      // allCourses which preserves the original JSON order.
+      break;
+  }
+
+  // Rebuild the grid with sorted cards (same pattern as loadCourses)
+  coursesGrid.innerHTML = sorted
+    .map(course => buildCardHTML(course))
+    .join('');
+
+  // Re-query courseCards so filter/search see the new card order
+  courseCards = document.querySelectorAll('.course-card');
+
+  // Re-apply the current filter and search to the newly sorted cards
+  filterCourses(activeFilter, activeSearch);
+
+  // Restore save button states on the fresh cards
+  updateAllSaveButtons();
+}
+
+
+/**
  * saveUIState
  *
  * Writes the current activeFilter and activeSearch values to
@@ -480,6 +603,7 @@ function updateAllSaveButtons() {
 function saveUIState() {
   localStorage.setItem(STORAGE_KEY_FILTER, activeFilter);
   localStorage.setItem(STORAGE_KEY_SEARCH, activeSearch);
+  localStorage.setItem(STORAGE_KEY_SORT,   activeSort);
 }
 
 
@@ -528,6 +652,13 @@ function restoreUIState() {
   // Apply the filter and search together so the correct cards show.
   // This is the same call the event listeners make — consistent.
   filterCourses(activeFilter, activeSearch);
+
+  // Restore the sort dropdown visual selection.
+  // This is purely visual — sortCourses() was already applied when
+  // loadCourses() called it before restoreUIState().
+  if (sortSelect && activeSort !== 'default') {
+    sortSelect.value = activeSort;
+  }
 }
 
 
@@ -569,11 +700,12 @@ function setLoadingState(isLoading) {
   // Disable/enable the search input
   if (searchInput) {
     searchInput.disabled = isLoading;
-
-    // aria-disabled communicates the state to screen readers
-    // even though <input disabled> already handles most of this.
-    // Belt-and-braces accessibility.
     searchInput.setAttribute('aria-disabled', String(isLoading));
+  }
+
+  // Disable/enable the sort dropdown
+  if (sortSelect) {
+    sortSelect.disabled = isLoading;
   }
 }
 
@@ -628,6 +760,10 @@ function buildCardHTML(course) {
               ${course.rating} (${course.ratingCount})
             </span>
           </div>
+          <span class="course-card__students"
+                aria-label="${course.students} students enrolled">
+            👥 ${course.students}
+          </span>
           <button class="course-card__save-btn"
                   data-course-id="${course.id}"
                   aria-label="Save ${course.title}"
@@ -671,21 +807,13 @@ async function loadCourses() {
 
     const courses = await response.json();
 
-    // Build all card HTML strings in one pass with map(),
-    // then join into a single string for one innerHTML write.
-    // One DOM write is faster than 12 individual appendChild calls.
-    const cardsHTML = courses.map(course => buildCardHTML(course)).join('');
+    // Cache the original JSON order in allCourses.
+    // sortCourses() always spreads from this — never mutates it.
+    allCourses = courses;
 
-    // Replace the entire grid content (skeletons → real cards).
-    // innerHTML replaces everything inside the element atomically —
-    // the browser paints the new state in a single frame.
-    coursesGrid.innerHTML = cardsHTML;
-
-    // Re-query courseCards NOW that real cards are in the DOM.
-    // The original querySelectorAll at the top of the file ran before
-    // the cards existed and captured an empty NodeList.
-    // This fresh query captures all 12 real course card elements.
-    courseCards = document.querySelectorAll('.course-card');
+    // Sort and render cards. sortCourses() re-queries courseCards
+    // internally, so we don't need a separate innerHTML write here.
+    sortCourses();
 
     // Set the initial counter now that we know how many courses loaded.
     updateResultsCount();
@@ -795,6 +923,22 @@ if (searchInput) {
     // Persist the new state so it survives a page reload
     saveUIState();
 
+  });
+}
+
+
+// Sort dropdown event listener
+// 'change' fires when the user selects a different option.
+if (sortSelect) {
+  sortSelect.addEventListener('change', () => {
+    // Read the chosen sort value from the dropdown
+    activeSort = sortSelect.value;
+
+    // Re-sort and re-render the grid
+    sortCourses();
+
+    // Persist so the chosen sort survives a page reload
+    saveUIState();
   });
 }
 

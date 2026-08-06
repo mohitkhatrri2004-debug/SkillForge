@@ -18,7 +18,7 @@ Open `index.html` via [Live Server](https://marketplace.visualstudio.com/items?i
 |------|-------|--------|
 | Week 1 | Foundation, Homepage, Design System | ✅ Complete |
 | Week 2 | Courses Module, Course Detail Pages, UI States | ✅ Complete |
-| Week 3 | JavaScript Interactivity, Dynamic Content | 🔄 Day 4 of 5 Complete |
+| Week 3 | JavaScript Interactivity, Dynamic Content | 🔄 Day 5 of 5 Complete |
 | Week 4+ | Advanced Features, Backend Integration | Planned |
 
 ---
@@ -92,7 +92,18 @@ Open `index.html` via [Live Server](https://marketplace.visualstudio.com/items?i
 - Error state shown if `fetch()` fails (e.g. opened without Live Server)
 - All existing filter, search, and empty state behaviour preserved without changes
 
-**Day 4 — localStorage Persistence & Wishlist**
+**Day 5 — Sorting, Counter Enhancement & Card Animations**
+- Sort dropdown with 5 options (Default, Highest Rated, Most Students, Shortest, Longest)
+- `parseDuration("48 hours")` → `48` — numeric extraction for correct duration sort
+- `sortCourses()` — sorts a `[...allCourses]` copy, never mutates the original JSON order
+- `allCourses` cache variable preserves original JSON order so "Default" always works
+- Student enrollment count (`👥 312,456`) added to every course card footer
+- "Most Students" sort uses `course.students` field (distinct from `ratingCount`)
+- Results counter enhanced: "Showing 12 courses" → "Showing 4 of 12 courses" when filtered
+- Card entrance animation (`@keyframes card-enter`) — 200ms fade + 12px rise on load and sort
+- `prefers-reduced-motion` disables animation for users with vestibular sensitivity
+- Sort selection persists to `localStorage` via `saveUIState()` / `restoreUIState()`
+- Sort dropdown disabled during fetch, re-enabled after cards render
 - `saveUIState()` — persists active filter and search term to `localStorage` on every change
 - `restoreUIState()` — reads saved filter/search from `localStorage` on page load and re-applies them
 - Active filter button and search input both restore correctly after page reload
@@ -273,7 +284,10 @@ Navigate to `http://127.0.0.1:5500` in your browser.
 - [x] localStorage — persist active filter across reloads
 - [x] localStorage — persist search term across reloads
 - [x] localStorage — course wishlist (save/unsave with ♡/♥)
-- [ ] Page transitions and polish
+- [x] Sort dropdown (Highest Rated, Most Students, Shortest, Longest, Default)
+- [x] Student enrollment count on course cards
+- [x] Results counter — "Showing X of Y courses" format
+- [x] Card entrance animation with reduced-motion support
 
 ### Week 4+
 - [ ] User authentication UI

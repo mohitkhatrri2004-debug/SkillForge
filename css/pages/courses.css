@@ -495,3 +495,122 @@
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   SORT DROPDOWN
+   
+   Sits alongside the search bar inside the filters bar.
+   Styled to match the search input in height and visual weight.
+═══════════════════════════════════════════════════════════════ */
+
+.filters__sort {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.filters__sort-select {
+  height: 44px;                           /* Matches search input height */
+  padding: 0 var(--space-4);              /* 16px horizontal */
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);              /* 14px */
+  font-weight: var(--font-medium);        /* 500 */
+  color: var(--color-text-primary);
+  background-color: var(--white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);        /* 8px */
+  cursor: pointer;
+  appearance: none;                       /* Remove OS default arrow */
+
+  /* Custom dropdown arrow using a CSS background image */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--space-3) center;
+  padding-right: var(--space-8);          /* Room for the arrow */
+
+  transition: border-color var(--duration-fast) var(--ease-default);
+}
+
+.filters__sort-select:hover {
+  border-color: var(--color-primary);
+}
+
+.filters__sort-select:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-color: var(--color-primary);
+}
+
+.filters__sort-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Mobile — full width like other filter controls */
+@media (max-width: 639px) {
+  .filters__sort {
+    width: 100%;
+  }
+
+  .filters__sort-select {
+    width: 100%;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   STUDENT ENROLLMENT COUNT
+   
+   Shown in the card footer between the rating and the save button.
+   Helps users understand "Most Students" sort ordering.
+═══════════════════════════════════════════════════════════════ */
+
+.course-card__students {
+  font-size: var(--text-xs);              /* 12px — smaller than rating */
+  color: var(--color-text-muted);
+  white-space: nowrap;                    /* Prevent wrapping on small cards */
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CARD ENTRANCE ANIMATION
+
+   Plays once when a course card is first inserted into the DOM.
+   Triggered automatically whenever innerHTML replaces grid content
+   (on load, on sort) because new elements always start fresh.
+
+   WHY opacity + translateY (not display):
+   display:none cannot be transitioned — elements appear/disappear
+   instantly. Animating opacity and transform operates on the GPU,
+   never causes layout reflow, and runs at a smooth 60fps.
+
+   WHY 200ms:
+   Fast enough to feel snappy, slow enough to register as
+   intentional. Longer durations (>300ms) feel sluggish on repeated
+   interactions like sorting.
+
+   prefers-reduced-motion:
+   Some users experience motion sickness or discomfort from
+   animations. The media query disables the animation entirely for
+   those users — WCAG 2.1 Success Criterion 2.3.3.
+═══════════════════════════════════════════════════════════════ */
+
+@keyframes card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.course-card {
+  animation: card-enter 200ms ease forwards;
+}
+
+/* Respect the user's OS-level reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .course-card {
+    animation: none;
+  }
+}
