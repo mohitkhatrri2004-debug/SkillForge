@@ -316,6 +316,69 @@ function showErrorState(message) {
 
 
 /* ═══════════════════════════════════════════════════════════════
+   HELPER: initSaveButton()
+
+   Wires up the "Save for Later" wishlist button on the course
+   hero. Reads and writes the same sf_saved_courses key used by
+   courses.js — one source of truth across the whole app.
+
+   BEHAVIOUR:
+   - On load: reads localStorage and sets the correct button state
+   - On click: toggles saved/unsaved, updates localStorage,
+     updates button text and style immediately
+
+   @param {string} courseId    - e.g. "react-complete-guide"
+   @param {string} courseTitle - Used in aria-label for accessibility
+═══════════════════════════════════════════════════════════════ */
+function initSaveButton(courseId, courseTitle) {
+  const btn = document.querySelector('.course-hero__wishlist-btn');
+  if (!btn) return;
+
+  const STORAGE_KEY = 'sf_saved_courses';
+
+  // Read the current saved array from localStorage
+  function getSaved() {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  }
+
+  // Write an updated array back to localStorage
+  function setSaved(arr) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+  }
+
+  // Update button visual state to match current saved status
+  function updateButton(isSaved) {
+    if (isSaved) {
+      btn.textContent = '♥ Saved';
+      btn.setAttribute('aria-label', `Remove ${courseTitle} from wishlist`);
+      btn.classList.add('course-hero__wishlist-btn--saved');
+    } else {
+      btn.textContent = '♥ Save for Later';
+      btn.setAttribute('aria-label', `Save ${courseTitle} for later`);
+      btn.classList.remove('course-hero__wishlist-btn--saved');
+    }
+  }
+
+  // Set the correct initial state based on localStorage
+  const initialSaved = getSaved().includes(courseId);
+  updateButton(initialSaved);
+
+  // Toggle on click
+  btn.addEventListener('click', () => {
+    const saved = getSaved();
+    const isSaved = saved.includes(courseId);
+
+    const updated = isSaved
+      ? saved.filter(id => id !== courseId)   // remove
+      : [...saved, courseId];                  // add
+
+    setSaved(updated);
+    updateButton(!isSaved);
+  });
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
    MAIN FUNCTION: loadCourse()
 
    Orchestrates the entire page population flow:
@@ -454,6 +517,12 @@ async function loadCourse() {
   fill('instructor-students',  course.instructorStudents);
   fill('instructor-courses',   course.instructorCourses);
   fill('instructor-bio',       course.instructorBio);
+
+  // --- Save for Later button ---
+  // Wire up the wishlist button now that we know the course ID.
+  // Uses the same sf_saved_courses localStorage key as courses.js
+  // so saving here is reflected on the courses catalog and dashboard.
+  initSaveButton(course.id, course.title);
 }
 
 

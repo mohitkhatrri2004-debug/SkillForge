@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Your SkillForge dashboard — view saved courses, track progress, and discover new learning paths.">
+  <meta name="theme-color" content="#6c63ff">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS Entry Point — same as every other page -->
+  <link rel="stylesheet" href="../css/main.css">
+
+  <!-- JavaScript: loads and renders personalised dashboard content -->
+  <script src="../js/dashboard.js" defer></script>
+
+  <title>My Dashboard — SkillForge</title>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════
+       NAVBAR — Identical to all other pages
+  ═══════════════════════════════════════════════════════ -->
+  <header class="navbar" role="banner">
+    <div class="navbar__container">
+
+      <a href="../index.html" class="navbar__logo" aria-label="SkillForge — Return to homepage">
+        <span class="navbar__logo-text">
+          Skill<span class="navbar__logo-accent">Forge</span>
+        </span>
+      </a>
+
+      <nav class="navbar__nav" aria-label="Main navigation">
+        <ul class="navbar__links">
+          <li class="navbar__item">
+            <a href="../index.html" class="navbar__link">Home</a>
+          </li>
+          <li class="navbar__item">
+            <a href="courses.html" class="navbar__link">Courses</a>
+          </li>
+          <li class="navbar__item">
+            <a href="dashboard.html"
+               class="navbar__link navbar__link--active"
+               aria-current="page">Dashboard</a>
+          </li>
+          <li class="navbar__item">
+            <a href="skill-paths.html" class="navbar__link">Paths</a>
+          </li>
+          <li class="navbar__item">
+            <a href="leaderboard.html" class="navbar__link">Leaderboard</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="navbar__actions">
+        <a href="login.html" class="navbar__btn navbar__btn--ghost">Log In</a>
+        <a href="register.html" class="navbar__btn navbar__btn--primary">Sign Up Free</a>
+      </div>
+
+    </div>
+  </header>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       MAIN CONTENT
+  ═══════════════════════════════════════════════════════ -->
+  <main id="main-content" class="dashboard">
+
+    <!-- ─────────────────────────────────────────────────────
+         WELCOME SECTION
+         Personalised greeting with user's name.
+         data-field="user-name" is filled by dashboard.js (Milestone 2).
+         Placeholder text shown until JavaScript runs.
+    ───────────────────────────────────────────────────── -->
+    <section class="dashboard-welcome" aria-labelledby="dashboard-greeting">
+
+      <div class="dashboard-welcome__container">
+
+        <!-- "GOOD MORNING" / "GOOD AFTERNOON" set by JS -->
+        <p class="dashboard-welcome__greeting" data-field="time-greeting">
+          Welcome back
+        </p>
+
+        <h1 class="dashboard-welcome__title" id="dashboard-greeting">
+          Hello, <span data-field="user-name">Learner</span> 👋
+        </h1>
+
+        <p class="dashboard-welcome__subtitle">
+          Ready to continue learning today? Pick up where you left off.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- ─────────────────────────────────────────────────────
+         STATS ROW
+         Three quick-glance numbers.
+         data-field attributes filled by dashboard.js (Milestone 2).
+    ───────────────────────────────────────────────────── -->
+    <section class="dashboard-stats" aria-label="Your learning statistics">
+
+      <div class="dashboard-stats__grid">
+
+        <div class="stat-card">
+          <span class="stat-card__number" data-field="stat-saved">0</span>
+          <span class="stat-card__label">Saved Courses</span>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-card__number" data-field="stat-enrolled">0</span>
+          <span class="stat-card__label">Enrolled</span>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-card__number" data-field="stat-completed">0</span>
+          <span class="stat-card__label">Completed</span>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ─────────────────────────────────────────────────────
+         TWO-COLUMN LAYOUT (Main + Sidebar)
+    ───────────────────────────────────────────────────── -->
+    <div class="dashboard-layout">
+
+
+      <!-- ═══ MAIN COLUMN ═══════════════════════════════════ -->
+      <div class="dashboard-layout__main">
+
+
+        <!-- ─────────────────────────────────────────────────
+             SAVED COURSES SECTION
+             
+             data-field="saved-courses-grid" is the container
+             dashboard.js fills with .dash-card elements.
+             
+             The count in the header is also dynamic.
+        ───────────────────────────────────────────────────── -->
+        <section class="dashboard-section"
+                 aria-labelledby="saved-heading">
+
+          <div class="dashboard-section__header">
+            <h2 class="dashboard-section__title" id="saved-heading">
+              Saved Courses
+            </h2>
+            <span class="dashboard-section__count"
+                  data-field="saved-count">0 courses</span>
+          </div>
+
+          <!--
+            This div is the render target for dashboard.js.
+            Milestone 2 will:
+            1. Read sf_saved_courses from localStorage
+            2. Fetch matching courses from courses.json
+            3. Render .dash-card elements here
+            4. Show .dashboard-empty if nothing is saved
+          -->
+          <div data-field="saved-courses-grid">
+
+            <!-- Default empty state shown before JS runs -->
+            <div class="dashboard-empty">
+              <div class="dashboard-empty__icon">📚</div>
+              <h3 class="dashboard-empty__title">No saved courses yet</h3>
+              <p class="dashboard-empty__text">
+                Browse courses and click ♡ to save them here.
+              </p>
+              <a href="courses.html" class="dashboard-empty__link">
+                Browse Courses
+              </a>
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- ─────────────────────────────────────────────────
+             RECOMMENDED SECTION
+
+             dashboard.js will render 3 recommended courses here
+             in Milestone 3. For now shows a placeholder state.
+        ───────────────────────────────────────────────────── -->
+        <section class="dashboard-section"
+                 aria-labelledby="recommended-heading">
+
+          <div class="dashboard-section__header">
+            <h2 class="dashboard-section__title" id="recommended-heading">
+              Recommended for You
+            </h2>
+            <a href="courses.html" class="dashboard-section__link">
+              View all
+            </a>
+          </div>
+
+          <!--
+            Render target for Milestone 3.
+            dashboard.js will fill this with 3 recommended courses.
+          -->
+          <div data-field="recommended-grid">
+
+            <!-- Placeholder until Milestone 3 -->
+            <div class="dashboard-empty">
+              <div class="dashboard-empty__icon">🎯</div>
+              <h3 class="dashboard-empty__title">Recommendations coming soon</h3>
+              <p class="dashboard-empty__text">
+                Save a few courses and we'll suggest what to learn next.
+              </p>
+            </div>
+
+          </div>
+
+        </section>
+
+
+      </div><!-- / .dashboard-layout__main -->
+
+
+      <!-- ═══ SIDEBAR COLUMN ════════════════════════════════ -->
+      <aside class="dashboard-layout__sidebar"
+             aria-label="Dashboard sidebar">
+
+
+        <!-- Quick Links Card -->
+        <div class="sidebar-card">
+          <h2 class="sidebar-card__title">Quick Links</h2>
+          <ul class="sidebar-card__list">
+            <li class="sidebar-card__item">
+              <span class="sidebar-card__icon">🔍</span>
+              <a href="courses.html" class="dashboard-section__link">
+                Browse all courses
+              </a>
+            </li>
+            <li class="sidebar-card__item">
+              <span class="sidebar-card__icon">📈</span>
+              <a href="skill-paths.html" class="dashboard-section__link">
+                View skill paths
+              </a>
+            </li>
+            <li class="sidebar-card__item">
+              <span class="sidebar-card__icon">🏆</span>
+              <a href="leaderboard.html" class="dashboard-section__link">
+                Leaderboard
+              </a>
+            </li>
+          </ul>
+          <a href="courses.html" class="sidebar-card__cta">
+            Start Learning
+          </a>
+        </div>
+
+
+        <!-- Account Card -->
+        <div class="sidebar-card">
+          <h2 class="sidebar-card__title">Your Account</h2>
+          <ul class="sidebar-card__list">
+            <li class="sidebar-card__item">
+              <span class="sidebar-card__icon">👤</span>
+              <span>
+                Signed in as
+                <strong data-field="sidebar-user-name">Learner</strong>
+              </span>
+            </li>
+            <li class="sidebar-card__item">
+              <span class="sidebar-card__icon">🎓</span>
+              <span data-field="sidebar-enrolled">0 courses enrolled</span>
+            </li>
+            <li class="sidebar-card__item">
+              <span class="sidebar-card__icon">♥</span>
+              <span data-field="sidebar-saved">0 courses saved</span>
+            </li>
+          </ul>
+          <a href="profile.html" class="sidebar-card__cta">
+            View Profile
+          </a>
+        </div>
+
+
+        <!-- Learning Tips Card — static content, no JS needed -->
+        <div class="sidebar-card">
+          <h2 class="sidebar-card__title">Learning Tips</h2>
+          <ul class="sidebar-card__list">
+            <li class="sidebar-card__item">
+              <span class="sidebar-card__icon">⏱️</span>
+              <span>Study 25 minutes daily for best retention</span>
+            </li>
+            <li class="sidebar-card__item">
+              <span class="sidebar-card__icon">📝</span>
+              <span>Take notes as you watch to reinforce concepts</span>
+            </li>
+            <li class="sidebar-card__item">
+              <span class="sidebar-card__icon">🔄</span>
+              <span>Review previous lessons before starting new ones</span>
+            </li>
+          </ul>
+        </div>
+
+
+      </aside><!-- / .dashboard-layout__sidebar -->
+
+
+    </div><!-- / .dashboard-layout -->
+
+
+  </main>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       FOOTER — Identical across all pages
+  ═══════════════════════════════════════════════════════ -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer__top">
+      <div class="footer__container">
+
+        <div class="footer__brand">
+          <a href="../index.html" class="footer__logo"
+             aria-label="SkillForge — Return to homepage">
+            Skill<span class="footer__logo-accent">Forge</span>
+          </a>
+          <p class="footer__tagline">Learn skills that matter.</p>
+          <p class="footer__description">
+            SkillForge is a student-focused learning platform where you can
+            discover courses, track progress, and earn certificates.
+          </p>
+        </div>
+
+        <section class="footer__section"
+                 aria-labelledby="footer-explore-heading">
+          <h3 class="footer__heading" id="footer-explore-heading">
+            Explore
+          </h3>
+          <nav aria-label="Footer explore navigation">
+            <ul class="footer__links">
+              <li>
+                <a href="courses.html" class="footer__link">Courses</a>
+              </li>
+              <li>
+                <a href="skill-paths.html" class="footer__link">Skill Paths</a>
+              </li>
+              <li>
+                <a href="leaderboard.html" class="footer__link">Leaderboard</a>
+              </li>
+              <li>
+                <a href="about.html" class="footer__link">About Us</a>
+              </li>
+            </ul>
+          </nav>
+        </section>
+
+        <section class="footer__section"
+                 aria-labelledby="footer-connect-heading">
+          <h3 class="footer__heading" id="footer-connect-heading">
+            Connect
+          </h3>
+          <nav aria-label="Footer social navigation">
+            <ul class="footer__links">
+              <li>
+                <a href="https://twitter.com" class="footer__link"
+                   target="_blank" rel="noopener noreferrer"
+                   aria-label="Follow SkillForge on Twitter (opens in new tab)">
+                  Twitter
+                </a>
+              </li>
+              <li>
+                <a href="https://linkedin.com" class="footer__link"
+                   target="_blank" rel="noopener noreferrer"
+                   aria-label="Connect on LinkedIn (opens in new tab)">
+                  LinkedIn
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com" class="footer__link"
+                   target="_blank" rel="noopener noreferrer"
+                   aria-label="View on GitHub (opens in new tab)">
+                  GitHub
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </section>
+
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <div class="footer__container">
+        <small class="footer__copyright">
+          &copy; 2024 SkillForge. All rights reserved.
+        </small>
+        <nav class="footer__legal" aria-label="Legal navigation">
+          <a href="privacy.html" class="footer__legal-link">Privacy Policy</a>
+          <a href="terms.html" class="footer__legal-link">Terms of Service</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+
+</body>
+</html>

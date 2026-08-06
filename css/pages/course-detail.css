@@ -270,6 +270,19 @@ html {
   color: var(--color-primary);
 }
 
+/* Saved state — filled appearance when course is in wishlist */
+.course-hero__wishlist-btn--saved {
+  background-color: var(--color-primary-subtle);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  font-weight: var(--font-semibold);
+}
+
+.course-hero__wishlist-btn--saved:hover {
+  background-color: var(--color-primary);
+  color: var(--white);
+}
+
 /* ═══════════════════════════════════════════════════════════════
    COURSE CONTENT SECTION
    

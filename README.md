@@ -19,7 +19,8 @@ Open `index.html` via [Live Server](https://marketplace.visualstudio.com/items?i
 | Week 1 | Foundation, Homepage, Design System | ✅ Complete |
 | Week 2 | Courses Module, Course Detail Pages, UI States | ✅ Complete |
 | Week 3 | JavaScript Interactivity, Dynamic Content | ✅ Complete |
-| Week 4+ | Dashboard, Forms, Advanced Features | Planned |
+| Week 4 | Dashboard, User State, Multi-page Features | 🔄 Day 1 Complete |
+| Week 5+ | Advanced Features, Backend Integration | Planned |
 
 ---
 
@@ -116,6 +117,27 @@ Open `index.html` via [Live Server](https://marketplace.visualstudio.com/items?i
 - `scroll-margin-top` CSS property compensates for sticky navbar height (no hardcoded pixel values)
 - `window.matchMedia('prefers-reduced-motion')` check — passes `'instant'` behaviour for sensitive users
 - Scroll triggered only on sort change, not on filter or search interactions
+
+### Week 4 — Dashboard & Multi-page State
+
+**Day 1 — Dashboard Page**
+- `pages/dashboard.html` — full personalised dashboard with welcome section, stats, saved courses, recommendations, sidebar
+- `css/pages/dashboard.css` — dashboard-specific styles: welcome band, stat cards, two-column grid with named template areas, compact dash cards, empty states
+- `js/dashboard.js` — reads localStorage, fetches `courses.json`, renders dynamic content
+- `getTimeGreeting()` — time-based greeting (morning / afternoon / evening)
+- `getStoredArray(key)` — safe localStorage read helper, always returns `[]` for missing keys
+- `buildDashCard(course)` — compact card template for dashboard (different from catalog card)
+- `renderSavedCourses(savedCourses)` — renders saved courses grid or empty state
+- `getRecommendations(allCourses, savedIds)` — pure function, filters saved, sorts by rating, returns top 3
+- `renderRecommendations(courses)` — renders recommendations reusing `buildDashCard()`
+- Welcome section personalised with user name and time-based greeting
+- Stats row shows saved / enrolled / completed counts from localStorage
+- Saved Courses section reads `sf_saved_courses` and matches IDs against `courses.json`
+- Recommended section shows 3 highest-rated unsaved courses, never duplicates saved courses
+- Sidebar shows quick links, account summary, and learning tips
+- Dashboard link added to navbar on all pages (index, courses, course detail)
+- "Save for Later" button on course detail pages wired up — reads and writes `sf_saved_courses` in sync with the courses catalog
+- `initSaveButton()` in `course-detail.js` — toggles saved state, updates button text/style, shares `sf_saved_courses` key with `courses.js`
 - `saveUIState()` — persists active filter and search term to `localStorage` on every change
 - `restoreUIState()` — reads saved filter/search from `localStorage` on page load and re-applies them
 - Active filter button and search input both restore correctly after page reload
@@ -137,8 +159,9 @@ SkillForge/
 ├── index.html                        Homepage
 │
 ├── pages/
-│   ├── courses.html                  Course catalog (12 cards, filter, search)
+│   ├── courses.html                  Course catalog (12 cards, filter, search, sort)
 │   ├── course-detail.html            Dynamic course detail template
+│   ├── dashboard.html                Personalised user dashboard
 │   ├── course-web-development.html   Static detail page (legacy)
 │   ├── course-ui-ux-design.html      Static detail page (legacy)
 │   ├── course-machine-learning.html  Static detail page (legacy)
@@ -159,11 +182,13 @@ SkillForge/
 │   └── pages/
 │       ├── home.css
 │       ├── courses.css               Catalog styles + JS-controlled states
-│       └── course-detail.css         Detail page styles
+│       ├── course-detail.css         Detail page styles
+│       └── dashboard.css             Dashboard page styles
 │
 ├── js/
-│   ├── courses.js                    Filter, search, empty state logic
-│   └── course-detail.js              URL params, fetch, DOM rendering
+│   ├── courses.js                    Filter, search, sort, empty state, wishlist
+│   ├── course-detail.js              URL params, fetch, DOM rendering, save button
+│   └── dashboard.js                  localStorage reads, course rendering, recommendations
 │
 ├── data/
 │   └── courses.json                  All 12 courses with full structured data
@@ -306,14 +331,15 @@ Navigate to `http://127.0.0.1:5500` in your browser.
 - [x] Search clear button (×) with accessible visibility toggle
 - [x] Smooth scroll to catalog on sort change (scrollIntoView + scroll-margin-top)
 
-### Week 4+
-- [ ] User authentication UI
-- [ ] Dashboard and progress tracking
-- [ ] Certificate generation
-- [ ] Dark mode
-- [ ] Backend API integration (Node.js + Express)
-- [ ] Database (MongoDB)
-- [ ] Cloud deployment
+### Week 4 (In Progress)
+- [x] Dashboard page with welcome section, stats, saved courses, recommendations
+- [x] `localStorage` multi-page state sharing (courses → dashboard)
+- [x] Recommendation algorithm (filter saved, sort by rating, top 3)
+- [x] Save for Later button wired up on course detail pages
+- [x] Dashboard link added to all page navbars
+- [ ] Profile page
+- [ ] Enroll button with localStorage tracking
+- [ ] Progress indicators
 
 ---
 
