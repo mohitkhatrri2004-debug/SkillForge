@@ -54,6 +54,9 @@ const resultsCount = document.querySelector('.courses-catalog__count');
 // The search input field
 const searchInput = document.querySelector('#course-search');
 
+// The search clear (×) button
+const searchClear = document.querySelector('.filters__search-clear');
+
 // The sort dropdown
 const sortSelect = document.querySelector('#course-sort');
 
@@ -102,6 +105,11 @@ let activeSort = localStorage.getItem(STORAGE_KEY_SORT) || 'default';
 // The full courses array as fetched from JSON — never mutated.
 // Stored here so sortCourses() can always sort from the original order.
 let allCourses = [];
+
+// Timer ID for the debounced search.
+// Stored outside the event listener so clearTimeout() can cancel
+// the previous timer before scheduling a new one.
+let searchTimer = null;
 
 
 /* ═══════════════════════════════════════════════════════════════
@@ -588,6 +596,44 @@ function sortCourses() {
 
 
 /**
+ * scrollToGrid
+ *
+ * Smoothly scrolls the viewport to the top of the courses catalog
+ * section after a sort change, so the user sees the new order from
+ * the beginning rather than from wherever they had scrolled to.
+ *
+ * WHY scrollIntoView() OVER window.scrollTo():
+ * scrollIntoView() is element-relative. If the layout shifts, the
+ * scroll target still points to the right place. window.scrollTo()
+ * uses hardcoded pixel coordinates that break when layout changes.
+ *
+ * WHY courses-catalog, NOT courses-grid:
+ * Scrolling to the catalog section shows the page heading and
+ * results counter, giving the user full context of the new state.
+ * Scrolling directly to the grid would hide the counter and heading.
+ *
+ * WHY prefers-reduced-motion CHECK:
+ * Smooth scrolling is an animation. Users who set "reduce motion"
+ * in their OS accessibility settings should not see it.
+ * We check the media query and pass 'instant' for those users.
+ */
+function scrollToGrid() {
+  const catalog = document.querySelector('.courses-catalog');
+  if (!catalog) return;
+
+  // Check if the user prefers reduced motion
+  const prefersReduced = window.matchMedia(
+    '(prefers-reduced-motion: reduce)'
+  ).matches;
+
+  catalog.scrollIntoView({
+    behavior: prefersReduced ? 'instant' : 'smooth',
+    block: 'start'
+  });
+}
+
+
+/**
  * saveUIState
  *
  * Writes the current activeFilter and activeSearch values to
@@ -636,6 +682,8 @@ function restoreUIState() {
   // Restore the search input value visually
   if (searchInput && hasSearch) {
     searchInput.value = activeSearch;
+    // Also show the clear button since the field now has a value
+    if (searchClear) searchClear.hidden = false;
   }
 
   // Restore the active filter button highlight.
@@ -908,20 +956,72 @@ filterButtons.forEach(button => {
 });
 
 
-// Search input event listener
-// 'input' fires after every value change: typing, paste, autocomplete
+// Search input event listener — debounced
+// 'input' fires after every value change: typing, paste, autocomplete.
+//
+// WHY DEBOUNCE:
+// Without debouncing, filterCourses() runs on every single keystroke.
+// With 12 local cards this is fine, but on a real API it would fire
+// a network request per character. Debouncing delays execution until
+// the user stops typing for 250ms — one call instead of many.
+//
+// HOW IT WORKS:
+// 1. User types a character → clearTimeout cancels the previous timer
+// 2. setTimeout schedules filterCourses() to run in 250ms
+// 3. If the user types again before 250ms, step 1 cancels that timer
+// 4. Only when the user pauses does filterCourses() actually run
 if (searchInput) {
   searchInput.addEventListener('input', () => {
 
-    // Read and store the current search term
+    // Read the current search term immediately (before the delay)
+    // so activeSearch is always in sync with the input value
     activeSearch = searchInput.value;
 
-    // Re-run the combined filter+search with the current category
-    // This means search always works WITHIN the active category
-    filterCourses(activeFilter, activeSearch);
+    // Show the clear button when there is text, hide it when empty.
+    // Toggling the HTML `hidden` attribute is the most accessible
+    // approach — it also removes the button from the tab order when
+    // invisible, so keyboard users never tab to a hidden button.
+    if (searchClear) {
+      searchClear.hidden = activeSearch === '';
+    }
 
-    // Persist the new state so it survives a page reload
+    // Cancel any previously scheduled filterCourses() call
+    clearTimeout(searchTimer);
+
+    // Schedule a new call — runs only if no further input arrives
+    // within 250ms
+    searchTimer = setTimeout(() => {
+      filterCourses(activeFilter, activeSearch);
+      saveUIState();
+    }, 250);
+
+  });
+}
+
+
+// Search clear button click listener
+// Clears the input, hides the button, resets results immediately
+// (no debounce needed — this is a deliberate action, not typing)
+if (searchClear) {
+  searchClear.addEventListener('click', () => {
+
+    // Clear the input value and state
+    searchInput.value = '';
+    activeSearch      = '';
+
+    // Hide the clear button again
+    searchClear.hidden = true;
+
+    // Cancel any pending debounce timer — not needed anymore
+    clearTimeout(searchTimer);
+
+    // Run filterCourses immediately (no delay — user clicked, not typed)
+    filterCourses(activeFilter, activeSearch);
     saveUIState();
+
+    // Return focus to the search input so keyboard users can
+    // continue typing without having to re-click the field
+    searchInput.focus();
 
   });
 }
@@ -939,6 +1039,11 @@ if (sortSelect) {
 
     // Persist so the chosen sort survives a page reload
     saveUIState();
+
+    // Scroll back to the top of the catalog so the user sees
+    // the re-sorted cards from position 1, not from mid-page.
+    // Only on sort — not on filter/search which are incremental.
+    scrollToGrid();
   });
 }
 

@@ -18,8 +18,8 @@ Open `index.html` via [Live Server](https://marketplace.visualstudio.com/items?i
 |------|-------|--------|
 | Week 1 | Foundation, Homepage, Design System | ✅ Complete |
 | Week 2 | Courses Module, Course Detail Pages, UI States | ✅ Complete |
-| Week 3 | JavaScript Interactivity, Dynamic Content | 🔄 Day 5 of 5 Complete |
-| Week 4+ | Advanced Features, Backend Integration | Planned |
+| Week 3 | JavaScript Interactivity, Dynamic Content | ✅ Complete |
+| Week 4+ | Dashboard, Forms, Advanced Features | Planned |
 
 ---
 
@@ -104,6 +104,18 @@ Open `index.html` via [Live Server](https://marketplace.visualstudio.com/items?i
 - `prefers-reduced-motion` disables animation for users with vestibular sensitivity
 - Sort selection persists to `localStorage` via `saveUIState()` / `restoreUIState()`
 - Sort dropdown disabled during fetch, re-enabled after cards render
+
+**Day 6 — Debounced Search, Clear Button & Scroll Polish**
+- Search input debounced with `setTimeout` / `clearTimeout` — 250ms delay prevents excessive calls
+- `searchTimer` variable holds the pending timer ID so each keystroke cancels the previous one
+- Search clear button (`×`) appears inside the input when text is present, hidden when empty
+- HTML `hidden` attribute used for accessible visibility toggle — removes button from tab order when invisible
+- Clear button click: clears input, cancels debounce timer, runs `filterCourses()` immediately, returns focus to input
+- Clear button restored on page reload when a saved search exists (via `restoreUIState()`)
+- `scrollToGrid()` — scrolls viewport to the courses catalog after sort change using `scrollIntoView()`
+- `scroll-margin-top` CSS property compensates for sticky navbar height (no hardcoded pixel values)
+- `window.matchMedia('prefers-reduced-motion')` check — passes `'instant'` behaviour for sensitive users
+- Scroll triggered only on sort change, not on filter or search interactions
 - `saveUIState()` — persists active filter and search term to `localStorage` on every change
 - `restoreUIState()` — reads saved filter/search from `localStorage` on page load and re-applies them
 - Active filter button and search input both restore correctly after page reload
@@ -198,7 +210,7 @@ All visual values are defined as CSS custom properties in `variables.css`:
 ### JavaScript Architecture
 
 - DOM selections performed once at the top of each file
-- State tracked in module-level variables (`activeFilter`, `activeSearch`)
+- State tracked in module-level variables (`activeFilter`, `activeSearch`, `activeSort`)
 - Pure helper functions with single responsibilities
 - `async/await` for all asynchronous operations
 - `try/catch` on all `fetch()` calls
@@ -207,6 +219,8 @@ All visual values are defined as CSS custom properties in `variables.css`:
 - `sf_` prefixed `localStorage` keys prevent clashes with other scripts
 - Event delegation for dynamically rendered elements (one listener per container)
 - `JSON.stringify` / `JSON.parse` for persisting arrays to `localStorage`
+- Debounced input handlers (`setTimeout` / `clearTimeout`) for performance
+- `window.matchMedia('prefers-reduced-motion')` checked before triggering animations
 
 ---
 
@@ -273,7 +287,7 @@ Navigate to `http://127.0.0.1:5500` in your browser.
 
 ## Roadmap
 
-### Week 3 (In Progress)
+### Week 3 (Complete ✅)
 - [x] Category filtering with JavaScript
 - [x] Live search
 - [x] Dynamic empty states
@@ -288,6 +302,9 @@ Navigate to `http://127.0.0.1:5500` in your browser.
 - [x] Student enrollment count on course cards
 - [x] Results counter — "Showing X of Y courses" format
 - [x] Card entrance animation with reduced-motion support
+- [x] Debounced search input (250ms delay, setTimeout/clearTimeout)
+- [x] Search clear button (×) with accessible visibility toggle
+- [x] Smooth scroll to catalog on sort change (scrollIntoView + scroll-margin-top)
 
 ### Week 4+
 - [ ] User authentication UI

@@ -82,6 +82,11 @@
 .courses-catalog {
   padding-block: var(--space-20);         /* 80px */
   background-color: var(--white);
+
+  /* When scrollIntoView() targets this element, leave room for
+     the sticky navbar so it doesn't cover the section heading.
+     navbar-height (70px) + space-4 (16px) = 86px offset.       */
+  scroll-margin-top: calc(var(--navbar-height) + var(--space-4));
 }
 
 .courses-catalog__container {
@@ -613,4 +618,64 @@
   .course-card {
     animation: none;
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SEARCH CLEAR BUTTON
+
+   The × button sits inside .filters__search, positioned
+   absolutely at the right edge of the input.
+
+   Hidden by default (opacity 0, pointer-events none).
+   Shown when .filters__search--has-value is on the wrapper —
+   added/removed by courses.js as the input value changes.
+═══════════════════════════════════════════════════════════════ */
+
+/* Make the search wrapper the positioning context */
+.filters__search {
+  position: relative;
+}
+
+.filters__search-clear {
+  /* Position inside the input on the right side */
+  position: absolute;
+  right: var(--space-3);                  /* 12px from right edge */
+  top: 50%;
+  transform: translateY(-50%);
+
+  /* Size — large enough for a comfortable tap target */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+
+  /* Visual style — subtle circle */
+  background-color: var(--gray-400);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);              /* 12px */
+  line-height: 1;
+  cursor: pointer;
+
+  /* Hidden by default — shown via JS toggling `hidden` attribute */
+  /* The `hidden` HTML attribute is removed/added by JS */
+  transition: background-color var(--duration-fast) var(--ease-default),
+              opacity var(--duration-fast) var(--ease-default);
+}
+
+.filters__search-clear:hover {
+  background-color: var(--gray-500);
+}
+
+.filters__search-clear:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Push input text left so it doesn't overlap the clear button */
+.filters__search-input {
+  padding-right: var(--space-8);          /* 32px — room for × button */
 }

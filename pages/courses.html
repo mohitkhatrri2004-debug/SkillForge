@@ -149,6 +149,17 @@
               placeholder="Search courses..."
               aria-label="Search for courses by name or keyword"
             >
+            <!--
+              Clear button — hidden by default via CSS.
+              Becomes visible when .filters__search--has-value is on
+              the parent wrapper. JS adds/removes that class.
+            -->
+            <button
+              class="filters__search-clear"
+              type="button"
+              aria-label="Clear search"
+              hidden
+            >×</button>
           </div>
 
           <!-- Sort Control -->
