@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Your SkillForge profile — manage your display name and account settings.">
+  <meta name="theme-color" content="#6c63ff">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/main.css">
+
+  <script src="../js/profile.js" defer></script>
+
+  <title>My Profile — SkillForge</title>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════
+       NAVBAR
+  ═══════════════════════════════════════════════════════ -->
+  <header class="navbar" role="banner">
+    <div class="navbar__container">
+
+      <a href="../index.html" class="navbar__logo"
+         aria-label="SkillForge — Return to homepage">
+        <span class="navbar__logo-text">
+          Skill<span class="navbar__logo-accent">Forge</span>
+        </span>
+      </a>
+
+      <nav class="navbar__nav" aria-label="Main navigation">
+        <ul class="navbar__links">
+          <li class="navbar__item">
+            <a href="../index.html" class="navbar__link">Home</a>
+          </li>
+          <li class="navbar__item">
+            <a href="courses.html" class="navbar__link">Courses</a>
+          </li>
+          <li class="navbar__item">
+            <a href="dashboard.html" class="navbar__link">Dashboard</a>
+          </li>
+          <li class="navbar__item">
+            <a href="skill-paths.html" class="navbar__link">Paths</a>
+          </li>
+          <li class="navbar__item">
+            <a href="leaderboard.html" class="navbar__link">Leaderboard</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="navbar__actions">
+        <a href="profile.html" class="navbar__link navbar__link--profile navbar__link--active"
+           aria-current="page"
+           aria-label="My Profile">👤 Profile</a>
+        <a href="login.html" class="navbar__btn navbar__btn--ghost">Log In</a>
+        <a href="register.html" class="navbar__btn navbar__btn--primary">Sign Up Free</a>
+      </div>
+
+    </div>
+  </header>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       MAIN CONTENT
+  ═══════════════════════════════════════════════════════ -->
+  <main id="main-content" class="profile">
+
+    <!-- ─────────────────────────────────────────────────────
+         PROFILE HEADER
+         
+         Avatar circle shows user initials.
+         data-field="avatar-initials" and "profile-name"
+         filled by profile.js in Milestone 2.
+    ───────────────────────────────────────────────────── -->
+    <section class="profile-header" aria-labelledby="profile-heading">
+      <div class="profile-header__container">
+
+        <div class="profile-header__avatar"
+             aria-hidden="true"
+             data-field="avatar-initials">
+          ?
+        </div>
+
+        <div class="profile-header__info">
+          <h1 class="profile-header__name" id="profile-heading"
+              data-field="profile-name">
+            Your Profile
+          </h1>
+          <p class="profile-header__meta">
+            Member of SkillForge · Saved
+            <strong data-field="header-saved-count">0</strong> courses
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────────────────────
+         STATS ROW
+         
+         Same stat-card pattern as the dashboard.
+         Values filled by profile.js.
+    ───────────────────────────────────────────────────── -->
+    <section class="profile-stats" aria-label="Your learning statistics">
+      <div class="profile-stats__grid">
+
+        <div class="stat-card">
+          <span class="stat-card__number" data-field="stat-saved">0</span>
+          <span class="stat-card__label">Saved Courses</span>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-card__number" data-field="stat-enrolled">0</span>
+          <span class="stat-card__label">Enrolled</span>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-card__number" data-field="stat-completed">0</span>
+          <span class="stat-card__label">Completed</span>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────────────────────
+         SETTINGS CARDS + DANGER ZONE
+    ───────────────────────────────────────────────────── -->
+    <div class="profile-layout">
+
+
+      <!-- Display Name Card -->
+      <div class="settings-card">
+
+        <h2 class="settings-card__title">Display Name</h2>
+        <p class="settings-card__description">
+          This name appears on your dashboard and throughout SkillForge.
+        </p>
+
+        <!--
+          ACCESSIBILITY:
+          - <form> fires submit on Enter key + button click
+          - Each input has an explicit <label> linked by for/id
+          - aria-describedby links the input to its hint text
+          - Error text uses role="alert" so screen readers announce it
+          
+          JAVASCRIPT TARGETS:
+          - id="name-form"     → profile.js attaches submit listener
+          - id="name-input"    → read value, show error state
+          - id="name-error"    → show/hide validation error text
+          - id="name-feedback" → show success/error feedback message
+        -->
+        <form id="name-form" class="profile-form" novalidate>
+
+          <div class="form-group">
+            <label for="name-input" class="form-label">
+              Your display name
+            </label>
+            <input
+              type="text"
+              id="name-input"
+              class="form-input"
+              placeholder="e.g. Mohit"
+              maxlength="50"
+              autocomplete="name"
+              aria-describedby="name-hint name-error"
+              data-field="name-input-value"
+            >
+            <span id="name-hint" class="form-hint">
+              Between 2 and 50 characters. This is how your name
+              appears on the dashboard.
+            </span>
+            <!--
+              Error text — hidden by default.
+              profile.js removes hidden and sets textContent.
+            -->
+            <span id="name-error"
+                  class="form-error-text"
+                  role="alert"
+                  hidden>
+            </span>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="form-btn--primary">
+              Save Name
+            </button>
+          </div>
+
+        </form>
+
+        <!--
+          Feedback message — hidden by default.
+          profile.js shows this after a save attempt.
+          role="status" announces updates to screen readers.
+        -->
+        <div id="name-feedback"
+             class="form-feedback"
+             role="status"
+             aria-live="polite"
+             hidden>
+        </div>
+
+      </div>
+
+
+      <!-- About You Card — static, no JS needed -->
+      <div class="settings-card">
+
+        <h2 class="settings-card__title">About You</h2>
+        <p class="settings-card__description">
+          Your learning snapshot at SkillForge.
+        </p>
+
+        <ul class="sidebar-card__list">
+          <li class="sidebar-card__item">
+            <span class="sidebar-card__icon">🎓</span>
+            <span>
+              <strong data-field="about-saved">0</strong> courses saved
+              to your wishlist
+            </span>
+          </li>
+          <li class="sidebar-card__item">
+            <span class="sidebar-card__icon">📚</span>
+            <span>
+              <strong data-field="about-enrolled">0</strong> courses
+              currently enrolled
+            </span>
+          </li>
+          <li class="sidebar-card__item">
+            <span class="sidebar-card__icon">🏆</span>
+            <span>
+              <strong data-field="about-completed">0</strong> courses
+              completed
+            </span>
+          </li>
+        </ul>
+
+      </div>
+
+
+      <!-- ─────────────────────────────────────────────────────
+           DANGER ZONE
+           
+           GitHub-style warning section for destructive actions.
+           Two actions:
+           1. Clear Wishlist  — removes sf_saved_courses
+           2. Reset All Data  — clears all sf_ localStorage keys
+      ───────────────────────────────────────────────────── -->
+      <div class="danger-zone" role="region" aria-labelledby="danger-heading">
+
+        <h2 class="danger-zone__title" id="danger-heading">
+          ⚠️ Danger Zone
+        </h2>
+        <p class="danger-zone__description">
+          These actions are permanent and cannot be undone.
+          Please be careful.
+        </p>
+
+        <div class="danger-zone__actions">
+
+          <!-- Clear Wishlist -->
+          <div class="danger-zone__item">
+            <div class="danger-zone__item-info">
+              <h3 class="danger-zone__item-title">Clear Wishlist</h3>
+              <p class="danger-zone__item-text">
+                Removes all saved courses from your wishlist.
+                This cannot be undone.
+              </p>
+            </div>
+            <button
+              class="danger-btn"
+              id="clear-wishlist-btn"
+              type="button"
+              aria-label="Clear all saved courses from wishlist"
+            >
+              Clear Wishlist
+            </button>
+          </div>
+
+          <!-- Reset All Data -->
+          <div class="danger-zone__item">
+            <div class="danger-zone__item-info">
+              <h3 class="danger-zone__item-title">Reset All Data</h3>
+              <p class="danger-zone__item-text">
+                Clears your display name, saved courses, and all
+                SkillForge preferences from this browser.
+              </p>
+            </div>
+            <button
+              class="danger-btn"
+              id="reset-all-btn"
+              type="button"
+              aria-label="Reset all SkillForge data from this browser"
+            >
+              Reset All Data
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+
+    </div><!-- / .profile-layout -->
+
+  </main>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       FOOTER — Identical across all pages
+  ═══════════════════════════════════════════════════════ -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer__top">
+      <div class="footer__container">
+
+        <div class="footer__brand">
+          <a href="../index.html" class="footer__logo"
+             aria-label="SkillForge — Return to homepage">
+            Skill<span class="footer__logo-accent">Forge</span>
+          </a>
+          <p class="footer__tagline">Learn skills that matter.</p>
+          <p class="footer__description">
+            SkillForge is a student-focused learning platform where you can
+            discover courses, track progress, and earn certificates.
+          </p>
+        </div>
+
+        <section class="footer__section"
+                 aria-labelledby="footer-explore-heading">
+          <h3 class="footer__heading" id="footer-explore-heading">
+            Explore
+          </h3>
+          <nav aria-label="Footer explore navigation">
+            <ul class="footer__links">
+              <li><a href="courses.html" class="footer__link">Courses</a></li>
+              <li><a href="dashboard.html" class="footer__link">Dashboard</a></li>
+              <li><a href="skill-paths.html" class="footer__link">Skill Paths</a></li>
+              <li><a href="leaderboard.html" class="footer__link">Leaderboard</a></li>
+            </ul>
+          </nav>
+        </section>
+
+        <section class="footer__section"
+                 aria-labelledby="footer-connect-heading">
+          <h3 class="footer__heading" id="footer-connect-heading">
+            Connect
+          </h3>
+          <nav aria-label="Footer social navigation">
+            <ul class="footer__links">
+              <li>
+                <a href="https://twitter.com" class="footer__link"
+                   target="_blank" rel="noopener noreferrer"
+                   aria-label="Follow SkillForge on Twitter (opens in new tab)">
+                  Twitter
+                </a>
+              </li>
+              <li>
+                <a href="https://linkedin.com" class="footer__link"
+                   target="_blank" rel="noopener noreferrer"
+                   aria-label="Connect on LinkedIn (opens in new tab)">
+                  LinkedIn
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com" class="footer__link"
+                   target="_blank" rel="noopener noreferrer"
+                   aria-label="View on GitHub (opens in new tab)">
+                  GitHub
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </section>
+
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <div class="footer__container">
+        <small class="footer__copyright">
+          &copy; 2024 SkillForge. All rights reserved.
+        </small>
+        <nav class="footer__legal" aria-label="Legal navigation">
+          <a href="privacy.html" class="footer__legal-link">Privacy Policy</a>
+          <a href="terms.html" class="footer__legal-link">Terms of Service</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+
+</body>
+</html>

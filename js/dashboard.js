@@ -380,3 +380,67 @@ async function loadDashboard() {
    exist before this runs. No DOMContentLoaded needed.
 ═══════════════════════════════════════════════════════════════ */
 loadDashboard();
+
+
+/* ═══════════════════════════════════════════════════════════════
+   CROSS-TAB SYNC — storage event
+
+   The 'storage' event fires in OTHER open tabs when localStorage
+   changes. It does NOT fire in the tab that made the change.
+
+   WHY THIS MATTERS:
+   If the user has the dashboard open in Tab A and updates their
+   name on the profile page in Tab B, without this listener the
+   dashboard would show the old name until Tab A is manually
+   refreshed. With this listener it updates instantly.
+
+   HOW IT WORKS:
+   event.key    → which localStorage key changed
+   event.newValue → the new value (null if key was removed)
+   event.oldValue → the previous value
+
+   WHAT WE SYNC:
+   - sf_user_name       → update welcome greeting and name
+   - sf_saved_courses   → update saved count stats
+   - sf_enrolled_courses  → update enrolled stat
+   - sf_completed_courses → update completed stat
+═══════════════════════════════════════════════════════════════ */
+window.addEventListener('storage', (event) => {
+
+  // Only respond to keys in our sf_ namespace
+  if (!event.key || !event.key.startsWith('sf_')) return;
+
+  switch (event.key) {
+
+    case 'sf_user_name': {
+      // Name changed in another tab — update welcome and sidebar
+      const newName = event.newValue || 'Learner';
+      fill('user-name',         newName);
+      fill('sidebar-user-name', newName);
+      fill('time-greeting',     getTimeGreeting());
+      break;
+    }
+
+    case 'sf_saved_courses': {
+      // Wishlist changed in another tab — update stats
+      const saved = JSON.parse(event.newValue || '[]');
+      fill('stat-saved',    saved.length);
+      fill('sidebar-saved', `${saved.length} ${saved.length === 1 ? 'course' : 'courses'} saved`);
+      break;
+    }
+
+    case 'sf_enrolled_courses': {
+      const enrolled = JSON.parse(event.newValue || '[]');
+      fill('stat-enrolled',    enrolled.length);
+      fill('sidebar-enrolled', `${enrolled.length} ${enrolled.length === 1 ? 'course' : 'courses'} enrolled`);
+      break;
+    }
+
+    case 'sf_completed_courses': {
+      const completed = JSON.parse(event.newValue || '[]');
+      fill('stat-completed', completed.length);
+      break;
+    }
+
+  }
+});

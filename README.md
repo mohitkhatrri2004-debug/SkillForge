@@ -19,7 +19,7 @@ Open `index.html` via [Live Server](https://marketplace.visualstudio.com/items?i
 | Week 1 | Foundation, Homepage, Design System | ✅ Complete |
 | Week 2 | Courses Module, Course Detail Pages, UI States | ✅ Complete |
 | Week 3 | JavaScript Interactivity, Dynamic Content | ✅ Complete |
-| Week 4 | Dashboard, User State, Multi-page Features | 🔄 Day 1 Complete |
+| Week 4 | Dashboard, Profile, Multi-page Features | 🔄 Day 2 Complete |
 | Week 5+ | Advanced Features, Backend Integration | Planned |
 
 ---
@@ -130,25 +130,25 @@ Open `index.html` via [Live Server](https://marketplace.visualstudio.com/items?i
 - `renderSavedCourses(savedCourses)` — renders saved courses grid or empty state
 - `getRecommendations(allCourses, savedIds)` — pure function, filters saved, sorts by rating, returns top 3
 - `renderRecommendations(courses)` — renders recommendations reusing `buildDashCard()`
-- Welcome section personalised with user name and time-based greeting
 - Stats row shows saved / enrolled / completed counts from localStorage
-- Saved Courses section reads `sf_saved_courses` and matches IDs against `courses.json`
 - Recommended section shows 3 highest-rated unsaved courses, never duplicates saved courses
-- Sidebar shows quick links, account summary, and learning tips
-- Dashboard link added to navbar on all pages (index, courses, course detail)
-- "Save for Later" button on course detail pages wired up — reads and writes `sf_saved_courses` in sync with the courses catalog
-- `initSaveButton()` in `course-detail.js` — toggles saved state, updates button text/style, shares `sf_saved_courses` key with `courses.js`
-- `saveUIState()` — persists active filter and search term to `localStorage` on every change
-- `restoreUIState()` — reads saved filter/search from `localStorage` on page load and re-applies them
-- Active filter button and search input both restore correctly after page reload
-- `getSavedCourses()` — reads saved course ID array from `localStorage` (JSON.parse + fallback)
-- `toggleSavedCourse(courseId)` — adds or removes a course ID from the saved array, persists to `localStorage`
-- Save button (♡/♥) added to every course card footer via `buildCardHTML()`
-- `updateSaveButton()` — updates one button's visual state and accessible `aria-label`
-- `updateAllSaveButtons()` — restores saved visual state across all cards on page load
-- Event delegation on the grid — one listener handles all save button clicks
-- `sf_` prefixed `localStorage` keys prevent clashes with browser extensions
-- `JSON.stringify` / `JSON.parse` used correctly to persist arrays
+- Dashboard link added to navbar on all pages
+- `initSaveButton()` in `course-detail.js` — Save for Later button wired on detail pages
+
+**Day 2 — Profile Page, Form Validation & Cross-Tab Sync**
+- `pages/profile.html` — full profile page with avatar, stats, display name form, danger zone
+- `css/pages/profile.css` — profile-specific styles: form inputs, error/success feedback, danger zone (GitHub-style red border)
+- `js/profile.js` — complete profile page logic
+- `loadProfile()` — reads all user state from localStorage, fills avatar initials, name, stats, pre-fills form
+- `getInitials(name)` — derives 1–2 initials ("Mohit Khatri" → "MK", "Mohit" → "MO")
+- `initNameForm()` — form `submit` listener with `event.preventDefault()`, validates length, saves to localStorage, shows feedback
+- `showFormError()` — three-signal error: red border, inline text, `role="alert"` screen reader announcement
+- `showFeedback()` — success/error message with 4-second auto-hide for successes
+- `clearFormError()` — clears error state on every keystroke so errors disappear as user corrects them
+- `initDangerZone()` — "Clear Wishlist" (`removeItem`) and "Reset All Data" (all `sf_` keys), both gated with `window.confirm()`
+- `👤 Profile` link added to navbar on all pages
+- `window.addEventListener('storage')` in `dashboard.js` — cross-tab sync: name and stats update live when another tab changes localStorage
+- `window.addEventListener('storage')` in `courses.js` — save button states sync across tabs when wishlist changes
 
 ---
 
@@ -162,6 +162,7 @@ SkillForge/
 │   ├── courses.html                  Course catalog (12 cards, filter, search, sort)
 │   ├── course-detail.html            Dynamic course detail template
 │   ├── dashboard.html                Personalised user dashboard
+│   ├── profile.html                  User profile and settings page
 │   ├── course-web-development.html   Static detail page (legacy)
 │   ├── course-ui-ux-design.html      Static detail page (legacy)
 │   ├── course-machine-learning.html  Static detail page (legacy)
@@ -183,12 +184,14 @@ SkillForge/
 │       ├── home.css
 │       ├── courses.css               Catalog styles + JS-controlled states
 │       ├── course-detail.css         Detail page styles
-│       └── dashboard.css             Dashboard page styles
+│       ├── dashboard.css             Dashboard page styles
+│       └── profile.css               Profile and settings page styles
 │
 ├── js/
 │   ├── courses.js                    Filter, search, sort, empty state, wishlist
 │   ├── course-detail.js              URL params, fetch, DOM rendering, save button
-│   └── dashboard.js                  localStorage reads, course rendering, recommendations
+│   ├── dashboard.js                  localStorage reads, course rendering, recommendations
+│   └── profile.js                    Form validation, name save, danger zone, cross-tab sync
 │
 ├── data/
 │   └── courses.json                  All 12 courses with full structured data
@@ -337,7 +340,11 @@ Navigate to `http://127.0.0.1:5500` in your browser.
 - [x] Recommendation algorithm (filter saved, sort by rating, top 3)
 - [x] Save for Later button wired up on course detail pages
 - [x] Dashboard link added to all page navbars
-- [ ] Profile page
+- [x] Profile page with display name form and validation
+- [x] Avatar initials computed from display name
+- [x] Danger zone — Clear Wishlist and Reset All Data
+- [x] Cross-tab sync via `window.addEventListener('storage')`
+- [x] `👤 Profile` link in navbar across all pages
 - [ ] Enroll button with localStorage tracking
 - [ ] Progress indicators
 

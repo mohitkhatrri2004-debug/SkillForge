@@ -1,0 +1,423 @@
+/* ═══════════════════════════════════════════════════════════════
+   SKILLFORGE — PROFILE PAGE STYLES
+
+   Styles for the user profile and settings page.
+   Includes: avatar section, stats, edit name form, danger zone.
+
+   SECTIONS:
+   1. Profile page wrapper
+   2. Profile header (.profile-header)
+   3. Profile layout (.profile-layout)
+   4. Settings card (.settings-card)
+   5. Form elements (.profile-form)
+   6. Feedback messages (.form-feedback)
+   7. Danger zone (.danger-zone)
+
+   DEPENDENCIES:
+   - variables.css (design tokens)
+
+   LAST UPDATED: Week 4, Day 2
+═══════════════════════════════════════════════════════════════ */
+
+
+/* ═══════════════════════════════════════════════════════════════
+   PROFILE PAGE WRAPPER
+═══════════════════════════════════════════════════════════════ */
+
+.profile {
+  min-height: 100vh;
+  background-color: var(--color-bg);
+  padding-bottom: var(--space-20);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   PROFILE HEADER
+
+   Full-width gradient band showing the user's avatar,
+   display name, and join date.
+═══════════════════════════════════════════════════════════════ */
+
+.profile-header {
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-subtle) 0%,
+    var(--white) 100%
+  );
+  border-bottom: 1px solid var(--color-border);
+  padding-block: var(--space-12);
+}
+
+.profile-header__container {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-6);
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+/* Avatar circle — shows user initials */
+.profile-header__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 96px;
+  height: 96px;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--blue-700) 100%
+  );
+  color: var(--white);
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+  box-shadow: var(--shadow-md);
+}
+
+.profile-header__info {
+  flex: 1;
+}
+
+.profile-header__name {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  color: var(--color-text-primary);
+  line-height: var(--leading-tight);
+  margin: 0 0 var(--space-2) 0;
+}
+
+.profile-header__meta {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   STATS ROW
+
+   Quick counts below the avatar.
+═══════════════════════════════════════════════════════════════ */
+
+.profile-stats {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-6);
+  padding-block: var(--space-8);
+}
+
+.profile-stats__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+}
+
+/* Reuses .stat-card from dashboard.css through shared component token */
+
+
+/* ═══════════════════════════════════════════════════════════════
+   PROFILE LAYOUT
+
+   Single-column main area (no sidebar needed for a settings page).
+   Centred at a comfortable reading width.
+═══════════════════════════════════════════════════════════════ */
+
+.profile-layout {
+  max-width: 720px;
+  margin-inline: auto;
+  padding-inline: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   SETTINGS CARD
+
+   Reusable white card for each settings section.
+   Same visual weight as .sidebar-card in dashboard.css.
+═══════════════════════════════════════════════════════════════ */
+
+.settings-card {
+  background-color: var(--white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  box-shadow: var(--shadow-sm);
+}
+
+.settings-card__title {
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-2) 0;
+}
+
+.settings-card__description {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-6) 0;
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   PROFILE FORM
+
+   Clean single-field form for setting the display name.
+
+   WHY A <form> ELEMENT:
+   Using a real <form> means the Enter key submits it natively,
+   and the submit event fires consistently whether the user
+   clicks the button or presses Enter — no extra key listeners.
+═══════════════════════════════════════════════════════════════ */
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.form-label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+}
+
+.form-input {
+  width: 100%;
+  height: 44px;
+  padding: 0 var(--space-4);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+  background-color: var(--white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: border-color var(--duration-fast) var(--ease-default),
+              box-shadow var(--duration-fast) var(--ease-default);
+  box-sizing: border-box;
+}
+
+.form-input:focus-visible {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
+}
+
+/* Error state — shown by JS when validation fails */
+.form-input--error {
+  border-color: var(--red-500);
+}
+
+.form-input--error:focus-visible {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
+.form-hint {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.form-actions {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.form-btn--primary {
+  padding: var(--space-3) var(--space-6);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--white);
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-default);
+}
+
+.form-btn--primary:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.form-btn--primary:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   FORM FEEDBACK MESSAGES
+
+   Inline success or error messages below the form.
+   Hidden by default — shown by JS after form submission.
+
+   WHY hidden ATTRIBUTE:
+   Same pattern as the search clear button — removes element
+   from the accessibility tree and tab order when invisible.
+═══════════════════════════════════════════════════════════════ */
+
+.form-feedback {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+}
+
+.form-feedback--success {
+  background-color: var(--green-100);
+  color: var(--green-600);
+  border: 1px solid var(--green-500);
+}
+
+.form-feedback--error {
+  background-color: var(--red-100);
+  color: var(--red-500);
+  border: 1px solid var(--red-500);
+}
+
+.form-error-text {
+  font-size: var(--text-xs);
+  color: var(--red-500);
+  font-weight: var(--font-medium);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   DANGER ZONE
+
+   Red-bordered section for destructive actions.
+   Visually communicates "be careful here".
+
+   The warning pattern — red border, red heading — is the same
+   used by GitHub's repository settings danger zone.
+═══════════════════════════════════════════════════════════════ */
+
+.danger-zone {
+  background-color: var(--white);
+  border: 1px solid var(--red-500);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+}
+
+.danger-zone__title {
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  color: var(--red-500);
+  margin: 0 0 var(--space-2) 0;
+}
+
+.danger-zone__description {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-6) 0;
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--red-100);
+}
+
+.danger-zone__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.danger-zone__item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.danger-zone__item-info {
+  flex: 1;
+}
+
+.danger-zone__item-title {
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-1) 0;
+}
+
+.danger-zone__item-text {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.danger-btn {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--red-500);
+  background-color: var(--white);
+  border: 1px solid var(--red-500);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all var(--duration-fast) var(--ease-default);
+}
+
+.danger-btn:hover {
+  background-color: var(--red-500);
+  color: var(--white);
+}
+
+.danger-btn:focus-visible {
+  outline: 2px solid var(--red-500);
+  outline-offset: 2px;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 639px) {
+
+  .profile-header__container {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--space-4);
+  }
+
+  .profile-header__avatar {
+    width: 72px;
+    height: 72px;
+    font-size: var(--text-2xl);
+  }
+
+  .profile-header__name {
+    font-size: var(--text-2xl);
+  }
+
+  .profile-stats__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .danger-zone__item {
+    flex-direction: column;
+  }
+
+  .danger-btn {
+    width: 100%;
+  }
+
+}

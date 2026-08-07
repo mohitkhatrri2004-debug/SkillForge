@@ -1089,3 +1089,43 @@ if (coursesGrid) {
 ═══════════════════════════════════════════════════════════════ */
 
 loadCourses();
+
+
+/* ═══════════════════════════════════════════════════════════════
+   CROSS-TAB SYNC — storage event
+
+   If the user clears their wishlist on the profile page while
+   the courses page is open in another tab, the save buttons
+   should reflect the change without a manual reload.
+
+   We also respond to a full data reset (sf_saved_courses removed)
+   by resetting all save buttons to their default ♡ state.
+═══════════════════════════════════════════════════════════════ */
+window.addEventListener('storage', (event) => {
+
+  // Only care about wishlist changes
+  if (event.key !== 'sf_saved_courses') return;
+
+  // newValue is null when the key was deleted (e.g. Reset All Data)
+  const saved = JSON.parse(event.newValue || '[]');
+
+  // Re-apply correct ♡ / ♥ state to every save button in the grid
+  coursesGrid.querySelectorAll('.course-card__save-btn').forEach(btn => {
+    const courseId = btn.dataset.courseId;
+    const isSaved  = saved.includes(courseId);
+
+    if (isSaved) {
+      btn.classList.add('course-card__save-btn--saved');
+      btn.textContent = '♥';
+      btn.setAttribute('aria-label',
+        btn.getAttribute('aria-label').replace('Save ', 'Unsave ')
+      );
+    } else {
+      btn.classList.remove('course-card__save-btn--saved');
+      btn.textContent = '♡';
+      btn.setAttribute('aria-label',
+        btn.getAttribute('aria-label').replace('Unsave ', 'Save ')
+      );
+    }
+  });
+});
