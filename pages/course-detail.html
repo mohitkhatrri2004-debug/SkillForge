@@ -165,6 +165,36 @@
             </button>
           </div>
 
+          <!--
+            Progress control — hidden until JS confirms enrollment.
+            initProgressControl() in course-detail.js shows this,
+            sets the active button, and wires click listeners.
+          -->
+          <div class="progress-control" id="progress-control" hidden>
+            <p class="progress-control__label">
+              Your Progress
+            </p>
+            <div class="progress-control__track"
+                 role="progressbar"
+                 aria-valuemin="0"
+                 aria-valuemax="100"
+                 aria-valuenow="0"
+                 id="progress-track">
+              <div class="progress-control__fill"
+                   id="progress-fill"
+                   style="width: 0%"></div>
+            </div>
+            <div class="progress-control__buttons"
+                 role="group"
+                 aria-label="Update your progress">
+              <button class="progress-control__btn" data-progress="0"   type="button">0%</button>
+              <button class="progress-control__btn" data-progress="25"  type="button">25%</button>
+              <button class="progress-control__btn" data-progress="50"  type="button">50%</button>
+              <button class="progress-control__btn" data-progress="75"  type="button">75%</button>
+              <button class="progress-control__btn" data-progress="100" type="button">100%</button>
+            </div>
+          </div>
+
         </div>
       </div>
     </section>

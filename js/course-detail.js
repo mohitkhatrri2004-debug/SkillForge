@@ -316,6 +316,83 @@ function showErrorState(message) {
 
 
 /* ═══════════════════════════════════════════════════════════════
+   HELPER: initProgressControl()
+
+   Shows the progress control widget only when the user is enrolled.
+   Reads current progress from sf_course_progress, sets the active
+   button and fill width, then writes back on every button click.
+
+   STORAGE STRUCTURE:
+   sf_course_progress = { "react-complete-guide": 75, ... }
+   An object keyed by course ID — fast lookup, easy partial update.
+
+   @param {string} courseId - e.g. "react-complete-guide"
+═══════════════════════════════════════════════════════════════ */
+function initProgressControl(courseId) {
+  const ENROLLED_KEY = 'sf_enrolled_courses';
+  const PROGRESS_KEY = 'sf_course_progress';
+
+  // Only show the control if the user is enrolled
+  const enrolled = JSON.parse(localStorage.getItem(ENROLLED_KEY) || '[]');
+  if (!enrolled.includes(courseId)) return;
+
+  const control = document.getElementById('progress-control');
+  const fill    = document.getElementById('progress-fill');
+  const track   = document.getElementById('progress-track');
+  const buttons = document.querySelectorAll('.progress-control__btn');
+
+  if (!control || !fill || !track || !buttons.length) return;
+
+  // Read current progress for this course (0 if not started)
+  function getProgress() {
+    const map = JSON.parse(localStorage.getItem(PROGRESS_KEY) || '{}');
+    return map[courseId] ?? 0;
+  }
+
+  // Write updated progress to localStorage
+  function saveProgress(value) {
+    const map = JSON.parse(localStorage.getItem(PROGRESS_KEY) || '{}');
+    map[courseId] = value;
+    localStorage.setItem(PROGRESS_KEY, JSON.stringify(map));
+  }
+
+  // Update the visual bar and button states
+  function updateUI(value) {
+    // Update the fill bar width
+    fill.style.width = `${value}%`;
+
+    // Toggle green colour at 100%
+    fill.classList.toggle('progress-control__fill--complete', value >= 100);
+
+    // Update aria attributes for screen readers
+    track.setAttribute('aria-valuenow', value);
+
+    // Highlight only the active button
+    buttons.forEach(btn => {
+      const isActive = Number(btn.dataset.progress) === value;
+      btn.classList.toggle('progress-control__btn--active', isActive);
+      btn.setAttribute('aria-pressed', String(isActive));
+    });
+  }
+
+  // Show the control (remove hidden attribute)
+  control.hidden = false;
+
+  // Set the initial state from localStorage
+  updateUI(getProgress());
+
+  // Wire up button clicks
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const value = Number(btn.dataset.progress);
+      saveProgress(value);
+      updateUI(value);
+    });
+  });
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
    HELPER: initEnrollButton()
 
    Wires up the "Enroll Now" buttons on the course detail page.
@@ -600,9 +677,10 @@ async function loadCourse() {
   initSaveButton(course.id, course.title);
 
   // --- Enroll Now button ---
-  // Wire up both enroll buttons (hero + sidebar CTA).
-  // Writes to sf_enrolled_courses — the same key dashboard.js reads.
   initEnrollButton(course.id, course.title);
+
+  // --- Progress control ---
+  initProgressControl(course.id);
 }
 
 

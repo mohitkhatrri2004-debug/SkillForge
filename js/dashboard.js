@@ -112,10 +112,25 @@ function getTimeGreeting() {
    @param  {Object} course - Full course object from courses.json
    @returns {string}       - HTML string for one dashboard card
 ═══════════════════════════════════════════════════════════════ */
-function buildDashCard(course) {
+function buildDashCard(course, progress = null) {
   const badgeModifier = course.level !== 'beginner'
     ? ` dash-card__badge--${course.level}`
     : '';
+
+  // Build progress bar HTML only when a progress value is provided
+  // (enrolled cards) — saved and recommended cards get nothing
+  const progressHTML = progress !== null ? `
+    <div class="progress-bar" role="progressbar"
+         aria-valuenow="${progress}"
+         aria-valuemin="0" aria-valuemax="100"
+         aria-label="${progress}% complete">
+      <div class="progress-bar__fill ${progress >= 100 ? 'progress-bar__fill--complete' : ''}"
+           style="width: ${progress}%"></div>
+    </div>
+    <div class="dash-card__progress-label">
+      <span>${progress >= 100 ? '✓ Completed' : 'In Progress'}</span>
+      <span>${progress}%</span>
+    </div>` : '';
 
   return `
     <article class="dash-card">
@@ -139,6 +154,7 @@ function buildDashCard(course) {
           <span>·</span>
           <span class="dash-card__rating">★ ${course.rating}</span>
         </div>
+        ${progressHTML}
       </div>
     </article>`;
 }
@@ -220,12 +236,21 @@ function renderEnrolledCourses(enrolledCourses) {
     count.textContent = `${enrolledCourses.length} ${label}`;
   }
 
-  // Nothing enrolled — leave the default empty state in place
   if (!grid || enrolledCourses.length === 0) return;
+
+  // Read the progress object — { "course-id": percentage, ... }
+  // Defaults to {} so courses with no recorded progress show 0%
+  const progressMap = JSON.parse(
+    localStorage.getItem('sf_course_progress') || '{}'
+  );
 
   grid.innerHTML = `
     <div class="dashboard-courses">
-      ${enrolledCourses.map(course => buildDashCard(course)).join('')}
+      ${enrolledCourses.map(course => {
+        // Get progress for this course, default to 0 if not yet started
+        const progress = progressMap[course.id] ?? 0;
+        return buildDashCard(course, progress);
+      }).join('')}
     </div>`;
 }
 
@@ -475,6 +500,27 @@ window.addEventListener('storage', (event) => {
     case 'sf_completed_courses': {
       const completed = JSON.parse(event.newValue || '[]');
       fill('stat-completed', completed.length);
+      break;
+    }
+
+    case 'sf_course_progress': {
+      // Progress updated in another tab — re-render enrolled cards
+      // so the progress bars reflect the new values immediately.
+      // We re-use the same enrolled IDs already in storage.
+      const enrolledIds = JSON.parse(
+        localStorage.getItem('sf_enrolled_courses') || '[]'
+      );
+      if (enrolledIds.length === 0) break;
+
+      fetch('../data/courses.json')
+        .then(r => r.json())
+        .then(allCourses => {
+          const enrolledCourses = enrolledIds
+            .map(id => allCourses.find(c => c.id === id))
+            .filter(Boolean);
+          renderEnrolledCourses(enrolledCourses);
+        })
+        .catch(() => {}); // silent — dashboard still functional if fetch fails
       break;
     }
 
