@@ -349,11 +349,29 @@ function initProgressControl(courseId) {
     return map[courseId] ?? 0;
   }
 
-  // Write updated progress to localStorage
+  // Write updated progress to localStorage.
+  // Also manages sf_completed_courses:
+  // - progress === 100 → add courseId to completed array
+  // - progress  <  100 → remove courseId from completed array
   function saveProgress(value) {
+    // Update the progress map
     const map = JSON.parse(localStorage.getItem(PROGRESS_KEY) || '{}');
     map[courseId] = value;
     localStorage.setItem(PROGRESS_KEY, JSON.stringify(map));
+
+    // Sync the completed courses array
+    const COMPLETED_KEY = 'sf_completed_courses';
+    const completed = JSON.parse(localStorage.getItem(COMPLETED_KEY) || '[]');
+
+    if (value >= 100 && !completed.includes(courseId)) {
+      // Mark as complete
+      localStorage.setItem(COMPLETED_KEY, JSON.stringify([...completed, courseId]));
+    } else if (value < 100 && completed.includes(courseId)) {
+      // Un-mark as complete (user moved progress back below 100)
+      localStorage.setItem(COMPLETED_KEY,
+        JSON.stringify(completed.filter(id => id !== courseId))
+      );
+    }
   }
 
   // Update the visual bar and button states

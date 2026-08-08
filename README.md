@@ -19,7 +19,7 @@ Open `index.html` via [Live Server](https://marketplace.visualstudio.com/items?i
 | Week 1 | Foundation, Homepage, Design System | ✅ Complete |
 | Week 2 | Courses Module, Course Detail Pages, UI States | ✅ Complete |
 | Week 3 | JavaScript Interactivity, Dynamic Content | ✅ Complete |
-| Week 4 | Dashboard, Profile, Multi-page Features | 🔄 Day 3 Complete |
+| Week 4 | Dashboard, Profile, Multi-page Features | 🔄 Day 5 Complete |
 | Week 5+ | Advanced Features, Backend Integration | Planned |
 
 ---
@@ -149,6 +149,23 @@ Open `index.html` via [Live Server](https://marketplace.visualstudio.com/items?i
 - `👤 Profile` link added to navbar on all pages
 - `window.addEventListener('storage')` in `dashboard.js` — cross-tab sync: name and stats update live when another tab changes localStorage
 - `window.addEventListener('storage')` in `courses.js` — save button states sync across tabs when wishlist changes
+
+**Day 3 — Enroll Button & My Courses Dashboard Section**
+- `initEnrollButton()` in `course-detail.js` — writes/reads `sf_enrolled_courses`, keeps hero + sidebar CTA in sync
+- Green enrolled state via `.course-hero__enroll-btn--enrolled` CSS modifier
+- `renderEnrolledCourses()` on dashboard — reuses `buildDashCard()`, renders enrolled cards in My Courses section
+
+**Day 4 — Progress Tracking, Bars & Update Control**
+- `sf_course_progress` object stores per-course percentage `{ courseId: 0–100 }`
+- `buildDashCard(course, progress)` — optional second param adds progress bar to enrolled cards
+- `initProgressControl()` — 5 quick-select buttons on course detail, only shown when enrolled
+- `storage` event case for `sf_course_progress` — re-renders enrolled cards cross-tab
+
+**Day 5 — Auto-Complete, Continue Learning & Full User Journey**
+- `saveProgress()` auto-writes `sf_completed_courses` at 100%, removes entry below 100%
+- `renderContinueLearning()` — picks highest in-progress enrolled course, prominent card at top of dashboard
+- CTA adapts: "Start Learning" (0%) / "Continue" (1–99%) / "Review Course" (100%)
+- Full user journey complete: Discover → Save → Enroll → Track Progress → Complete
 
 ---
 
@@ -348,6 +365,11 @@ Navigate to `http://127.0.0.1:5500` in your browser.
 - [x] Enroll Now button on course detail pages (sf_enrolled_courses)
 - [x] Enrolled Courses section on dashboard (My Courses)
 - [x] Enrolled count updates on dashboard and profile stats
+- [x] Progress bars on enrolled dashboard cards (sf_course_progress)
+- [x] Progress update control on course detail page (0/25/50/75/100%)
+- [x] Auto-complete: 100% progress writes to sf_completed_courses
+- [x] Continue Learning section at top of dashboard
+- [x] Cross-tab sync for progress changes via storage event
 - [ ] Progress indicators
 
 ---

@@ -160,6 +160,62 @@ function buildDashCard(course, progress = null) {
 }
 
 
+/**
+ * renderContinueLearning
+ *
+ * Finds the most recently progressed enrolled course and renders
+ * a prominent "Continue Learning" card at the top of the dashboard.
+ *
+ * @param {Object[]} enrolledCourses - Matched enrolled course objects
+ */
+function renderContinueLearning(enrolledCourses) {
+  const section = document.getElementById('continue-section');
+  const target  = document.querySelector('[data-field="continue-card"]');
+
+  if (!section || !target || enrolledCourses.length === 0) return;
+
+  const progressMap = JSON.parse(
+    localStorage.getItem('sf_course_progress') || '{}'
+  );
+
+  // Pick highest in-progress (< 100%) course, fallback to first enrolled
+  const inProgress = enrolledCourses
+    .filter(c => (progressMap[c.id] ?? 0) < 100)
+    .sort((a, b) => (progressMap[b.id] ?? 0) - (progressMap[a.id] ?? 0));
+
+  const course = inProgress[0] || enrolledCourses[0];
+  const pct    = progressMap[course.id] ?? 0;
+
+  target.innerHTML = `
+    <div class="continue-card">
+      <div class="continue-card__colour-bar"></div>
+      <div class="continue-card__body">
+        <p class="continue-card__label">Continue where you left off</p>
+        <h3 class="continue-card__title">
+          <a href="course-detail.html?id=${course.id}">${course.title}</a>
+        </h3>
+        <p class="continue-card__meta">${course.instructor} · ${course.duration}</p>
+        <div class="continue-card__progress"
+             role="progressbar"
+             aria-valuenow="${pct}"
+             aria-valuemin="0" aria-valuemax="100"
+             aria-label="${pct}% complete">
+          <div class="continue-card__progress-track">
+            <div class="continue-card__progress-fill ${pct >= 100 ? 'continue-card__progress-fill--complete' : ''}"
+                 style="width: ${pct}%"></div>
+          </div>
+          <span class="continue-card__progress-pct">${pct}%</span>
+        </div>
+        <a href="course-detail.html?id=${course.id}" class="continue-card__cta">
+          ${pct === 0 ? 'Start Learning' : pct >= 100 ? 'Review Course' : 'Continue'}
+        </a>
+      </div>
+    </div>`;
+
+  section.hidden = false;
+}
+
+
 /* ═══════════════════════════════════════════════════════════════
    HELPER: renderSavedCourses()
 
@@ -421,6 +477,9 @@ async function loadDashboard() {
     .filter(Boolean);
 
   renderEnrolledCourses(enrolledCourses);
+
+  // Show the most recently progressed course at the top
+  renderContinueLearning(enrolledCourses);
 
 
   /* ─── STEP 7: Calculate and render recommendations ────────── */

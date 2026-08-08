@@ -136,6 +136,30 @@
       <!-- ═══ MAIN COLUMN ═══════════════════════════════════ -->
       <div class="dashboard-layout__main">
 
+        <!-- ─────────────────────────────────────────────────
+             CONTINUE LEARNING SECTION
+
+             Shows the most recently progressed enrolled course.
+             Hidden by default — dashboard.js shows it only when
+             a course with recorded progress exists.
+        ───────────────────────────────────────────────────── -->
+        <section class="dashboard-section"
+                 id="continue-section"
+                 aria-labelledby="continue-heading"
+                 hidden>
+
+          <div class="dashboard-section__header">
+            <h2 class="dashboard-section__title" id="continue-heading">
+              Continue Learning
+            </h2>
+          </div>
+
+          <div data-field="continue-card">
+            <!-- Filled by dashboard.js -->
+          </div>
+
+        </section>
+
 
         <!-- ─────────────────────────────────────────────────
              SAVED COURSES SECTION
