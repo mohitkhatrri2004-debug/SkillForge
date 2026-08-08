@@ -814,3 +814,22 @@ html {
     font-size: var(--text-5xl);           /* 48px */
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   ENROLLED STATE — Enroll button modifier
+   
+   Applied by initEnrollButton() when the user is enrolled.
+   Green background signals success/completion — distinct from
+   the purple brand colour used for unenrolled actions.
+═══════════════════════════════════════════════════════════════ */
+
+.course-hero__enroll-btn--enrolled {
+  background-color: var(--green-600);
+  cursor: default;
+}
+
+.course-hero__enroll-btn--enrolled:hover {
+  background-color: var(--green-500);
+  transform: none;
+  box-shadow: none;
+}

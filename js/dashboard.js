@@ -204,6 +204,33 @@ function renderSavedCourses(savedCourses) {
    enhancement pattern used by LinkedIn's dashboard.
 ═══════════════════════════════════════════════════════════════ */
 /**
+ * renderEnrolledCourses
+ *
+ * Renders enrolled courses into [data-field="enrolled-courses-grid"].
+ * Reuses buildDashCard() — identical card template to saved courses.
+ *
+ * @param {Object[]} enrolledCourses - Matched course objects
+ */
+function renderEnrolledCourses(enrolledCourses) {
+  const grid  = document.querySelector('[data-field="enrolled-courses-grid"]');
+  const count = document.querySelector('[data-field="enrolled-count"]');
+
+  if (count) {
+    const label = enrolledCourses.length === 1 ? 'course' : 'courses';
+    count.textContent = `${enrolledCourses.length} ${label}`;
+  }
+
+  // Nothing enrolled — leave the default empty state in place
+  if (!grid || enrolledCourses.length === 0) return;
+
+  grid.innerHTML = `
+    <div class="dashboard-courses">
+      ${enrolledCourses.map(course => buildDashCard(course)).join('')}
+    </div>`;
+}
+
+
+/**
  * getRecommendations
  *
  * Pure function — takes all courses and saved IDs, returns the
@@ -362,7 +389,16 @@ async function loadDashboard() {
   renderSavedCourses(savedCourses);
 
 
-  /* ─── STEP 6: Calculate and render recommendations ────────── */
+  /* ─── STEP 6: Render enrolled courses ────────────────────── */
+
+  const enrolledCourses = enrolledIds
+    .map(id => allCourses.find(c => c.id === id))
+    .filter(Boolean);
+
+  renderEnrolledCourses(enrolledCourses);
+
+
+  /* ─── STEP 7: Calculate and render recommendations ────────── */
 
   // getRecommendations is a pure function — no DOM access.
   // It filters out saved courses, sorts by rating, takes top 3.

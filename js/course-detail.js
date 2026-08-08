@@ -316,6 +316,84 @@ function showErrorState(message) {
 
 
 /* ═══════════════════════════════════════════════════════════════
+   HELPER: initEnrollButton()
+
+   Wires up the "Enroll Now" buttons on the course detail page.
+   There are two: the hero button and the sidebar CTA.
+   Both are wired to the same logic — clicking either one enrolls
+   or unenrolls the course.
+
+   STORAGE KEY: sf_enrolled_courses (same key dashboard.js reads)
+   
+   BEHAVIOUR:
+   - On load: reads localStorage, sets correct button state
+   - First click:  enroll  — button shows "✓ Enrolled"
+   - Second click: unenroll — button reverts to "Enroll Now — Free"
+
+   WHY TWO BUTTONS:
+   Both the hero and the sidebar CTA should stay in sync.
+   A user scrolling past the hero should be able to enroll from
+   the sidebar without the state being inconsistent.
+
+   @param {string} courseId    - e.g. "react-complete-guide"
+   @param {string} courseTitle - used in aria-label
+═══════════════════════════════════════════════════════════════ */
+function initEnrollButton(courseId, courseTitle) {
+  // Select both enroll buttons — hero and sidebar CTA
+  const heroBtn    = document.querySelector('.course-hero__enroll-btn');
+  const sidebarBtn = document.querySelector('.course-info-card__cta');
+
+  if (!heroBtn && !sidebarBtn) return;
+
+  const STORAGE_KEY = 'sf_enrolled_courses';
+
+  function getEnrolled() {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  }
+
+  function setEnrolled(arr) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+  }
+
+  // Update both buttons to reflect the current enrolled state
+  function updateButtons(isEnrolled) {
+    const btns = [heroBtn, sidebarBtn].filter(Boolean);
+
+    btns.forEach(btn => {
+      if (isEnrolled) {
+        btn.textContent = '✓ Enrolled';
+        btn.setAttribute('aria-label', `You are enrolled in ${courseTitle}. Click to unenroll.`);
+        btn.classList.add('course-hero__enroll-btn--enrolled');
+      } else {
+        btn.textContent = 'Enroll Now — Free';
+        btn.setAttribute('aria-label', `Enroll in ${courseTitle}`);
+        btn.classList.remove('course-hero__enroll-btn--enrolled');
+      }
+    });
+  }
+
+  // Set the correct initial state from localStorage
+  updateButtons(getEnrolled().includes(courseId));
+
+  // Toggle on click — same handler attached to both buttons
+  function handleClick() {
+    const enrolled  = getEnrolled();
+    const isEnrolled = enrolled.includes(courseId);
+
+    const updated = isEnrolled
+      ? enrolled.filter(id => id !== courseId)   // unenroll
+      : [...enrolled, courseId];                  // enroll
+
+    setEnrolled(updated);
+    updateButtons(!isEnrolled);
+  }
+
+  if (heroBtn)    heroBtn.addEventListener('click', handleClick);
+  if (sidebarBtn) sidebarBtn.addEventListener('click', handleClick);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
    HELPER: initSaveButton()
 
    Wires up the "Save for Later" wishlist button on the course
@@ -519,10 +597,12 @@ async function loadCourse() {
   fill('instructor-bio',       course.instructorBio);
 
   // --- Save for Later button ---
-  // Wire up the wishlist button now that we know the course ID.
-  // Uses the same sf_saved_courses localStorage key as courses.js
-  // so saving here is reflected on the courses catalog and dashboard.
   initSaveButton(course.id, course.title);
+
+  // --- Enroll Now button ---
+  // Wire up both enroll buttons (hero + sidebar CTA).
+  // Writes to sf_enrolled_courses — the same key dashboard.js reads.
+  initEnrollButton(course.id, course.title);
 }
 
 

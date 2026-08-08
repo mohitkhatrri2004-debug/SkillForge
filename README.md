@@ -19,7 +19,7 @@ Open `index.html` via [Live Server](https://marketplace.visualstudio.com/items?i
 | Week 1 | Foundation, Homepage, Design System | ✅ Complete |
 | Week 2 | Courses Module, Course Detail Pages, UI States | ✅ Complete |
 | Week 3 | JavaScript Interactivity, Dynamic Content | ✅ Complete |
-| Week 4 | Dashboard, Profile, Multi-page Features | 🔄 Day 2 Complete |
+| Week 4 | Dashboard, Profile, Multi-page Features | 🔄 Day 3 Complete |
 | Week 5+ | Advanced Features, Backend Integration | Planned |
 
 ---
@@ -345,7 +345,9 @@ Navigate to `http://127.0.0.1:5500` in your browser.
 - [x] Danger zone — Clear Wishlist and Reset All Data
 - [x] Cross-tab sync via `window.addEventListener('storage')`
 - [x] `👤 Profile` link in navbar across all pages
-- [ ] Enroll button with localStorage tracking
+- [x] Enroll Now button on course detail pages (sf_enrolled_courses)
+- [x] Enrolled Courses section on dashboard (My Courses)
+- [x] Enrolled count updates on dashboard and profile stats
 - [ ] Progress indicators
 
 ---

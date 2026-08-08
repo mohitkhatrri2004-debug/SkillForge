@@ -184,6 +184,41 @@
 
 
         <!-- ─────────────────────────────────────────────────
+             ENROLLED COURSES SECTION
+
+             Populated by dashboard.js — reads sf_enrolled_courses
+             from localStorage, matches IDs to courses.json,
+             renders compact dash cards for each enrolled course.
+        ───────────────────────────────────────────────────── -->
+        <section class="dashboard-section"
+                 aria-labelledby="enrolled-heading">
+
+          <div class="dashboard-section__header">
+            <h2 class="dashboard-section__title" id="enrolled-heading">
+              My Courses
+            </h2>
+            <span class="dashboard-section__count"
+                  data-field="enrolled-count">0 courses</span>
+          </div>
+
+          <div data-field="enrolled-courses-grid">
+            <!-- Default empty state shown before JS runs -->
+            <div class="dashboard-empty">
+              <div class="dashboard-empty__icon">🎓</div>
+              <h3 class="dashboard-empty__title">No enrolled courses yet</h3>
+              <p class="dashboard-empty__text">
+                Click "Enroll Now" on any course page to start learning.
+              </p>
+              <a href="courses.html" class="dashboard-empty__link">
+                Browse Courses
+              </a>
+            </div>
+          </div>
+
+        </section>
+
+
+        <!-- ─────────────────────────────────────────────────
              RECOMMENDED SECTION
 
              dashboard.js will render 3 recommended courses here
