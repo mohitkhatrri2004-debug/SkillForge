@@ -87,3 +87,39 @@
 ═══════════════════════════════════════════════════════════════ */
 
 /* Utility imports will go here */
+
+
+/* ═══════════════════════════════════════════════════════════════
+   PAGE ENTRANCE ANIMATION — Week 5 Day 1
+
+   Plays once on every page load. The body fades in and rises
+   8px, creating a smooth entrance instead of a hard cut.
+
+   WHY ON body:
+   Animating the body element means every page gets the effect
+   automatically — no per-page CSS changes needed.
+
+   prefers-reduced-motion: disables for users with vestibular
+   sensitivity, consistent with all other animations in the project.
+═══════════════════════════════════════════════════════════════ */
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+body {
+  animation: page-enter 300ms ease forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body {
+    animation: none;
+  }
+}
