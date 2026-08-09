@@ -833,3 +833,51 @@ html {
   transform: none;
   box-shadow: none;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   COURSE TABS — Week 5 Day 2
+
+   ARIA tab pattern: tablist > tab buttons + tabpanel divs.
+   Panels use the HTML `hidden` attribute — JS removes/adds it.
+═══════════════════════════════════════════════════════════════ */
+
+.course-tabs__list {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--color-border);
+  margin-bottom: var(--space-8);
+}
+
+.course-tabs__tab {
+  padding: var(--space-3) var(--space-5);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-muted);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;                    /* Overlap the list border */
+  cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-default),
+              border-color var(--duration-fast) var(--ease-default);
+}
+
+.course-tabs__tab:hover {
+  color: var(--color-text-primary);
+}
+
+.course-tabs__tab--active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+.course-tabs__tab:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Panels — shown/hidden via the `hidden` HTML attribute */
+.course-tabs__panel[hidden] {
+  display: none;
+}

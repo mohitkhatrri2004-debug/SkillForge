@@ -210,45 +210,110 @@
         <!-- ─── MAIN CONTENT COLUMN ─────────────────────────── -->
         <div class="course-content__main">
 
-          <!-- What You'll Learn
-               The <ul> is populated dynamically by JS. -->
-          <article class="course-section" id="what-youll-learn">
-            <h2 class="course-section__title">What You'll Learn</h2>
-            <ul class="learning-objectives"
-                data-field="objectives">
-              <!-- JS inserts <li> elements here -->
-            </ul>
-          </article>
+          <!-- ─────────────────────────────────────────────────
+               TAB NAVIGATION
+               
+               ARIA pattern: role="tablist" contains role="tab"
+               buttons. Each tab controls a role="tabpanel" via
+               aria-controls / id pairing.
 
-          <!-- Course Overview -->
-          <article class="course-section" id="overview">
-            <h2 class="course-section__title">Course Overview</h2>
-            <div class="course-section__content"
-                 data-field="long-description">
-              <!-- JS inserts <p> elements here -->
-            </div>
-          </article>
+               JS in course-detail.js wires click + keyboard nav.
+               First tab is active by default.
+          ───────────────────────────────────────────────────── -->
+          <div class="course-tabs">
 
-          <!-- Course Curriculum
-               The .curriculum <div> is populated dynamically.
-               JS builds <details> elements for each module. -->
-          <article class="course-section" id="curriculum">
-            <h2 class="course-section__title">Course Curriculum</h2>
-            <div class="curriculum"
-                 data-field="curriculum">
-              <!-- JS inserts <details> module blocks here -->
-            </div>
-          </article>
+            <div class="course-tabs__list"
+                 role="tablist"
+                 aria-label="Course content sections">
 
-          <!-- Student Reviews
-               The .reviews <div> is populated dynamically. -->
-          <article class="course-section" id="reviews">
-            <h2 class="course-section__title">Student Reviews</h2>
-            <div class="reviews"
-                 data-field="reviews">
-              <!-- JS inserts .review blocks here -->
-            </div>
-          </article>
+              <button class="course-tabs__tab course-tabs__tab--active"
+                      id="tab-overview"
+                      role="tab"
+                      aria-selected="true"
+                      aria-controls="panel-overview"
+                      type="button">
+                Overview
+              </button>
+
+              <button class="course-tabs__tab"
+                      id="tab-curriculum"
+                      role="tab"
+                      aria-selected="false"
+                      aria-controls="panel-curriculum"
+                      type="button">
+                Curriculum
+              </button>
+
+              <button class="course-tabs__tab"
+                      id="tab-reviews"
+                      role="tab"
+                      aria-selected="false"
+                      aria-controls="panel-reviews"
+                      type="button">
+                Reviews
+              </button>
+
+            </div><!-- / tablist -->
+
+
+            <!-- Panel 1: Overview (What You'll Learn + Course Overview) -->
+            <div class="course-tabs__panel"
+                 id="panel-overview"
+                 role="tabpanel"
+                 aria-labelledby="tab-overview">
+
+              <article class="course-section" id="what-youll-learn">
+                <h2 class="course-section__title">What You'll Learn</h2>
+                <ul class="learning-objectives"
+                    data-field="objectives">
+                </ul>
+              </article>
+
+              <article class="course-section" id="overview">
+                <h2 class="course-section__title">Course Overview</h2>
+                <div class="course-section__content"
+                     data-field="long-description">
+                </div>
+              </article>
+
+            </div><!-- / panel-overview -->
+
+
+            <!-- Panel 2: Curriculum -->
+            <div class="course-tabs__panel"
+                 id="panel-curriculum"
+                 role="tabpanel"
+                 aria-labelledby="tab-curriculum"
+                 hidden>
+
+              <article class="course-section" id="curriculum">
+                <h2 class="course-section__title">Course Curriculum</h2>
+                <div class="curriculum"
+                     data-field="curriculum">
+                </div>
+              </article>
+
+            </div><!-- / panel-curriculum -->
+
+
+            <!-- Panel 3: Reviews -->
+            <div class="course-tabs__panel"
+                 id="panel-reviews"
+                 role="tabpanel"
+                 aria-labelledby="tab-reviews"
+                 hidden>
+
+              <article class="course-section" id="reviews">
+                <h2 class="course-section__title">Student Reviews</h2>
+                <div class="reviews"
+                     data-field="reviews">
+                </div>
+              </article>
+
+            </div><!-- / panel-reviews -->
+
+
+          </div><!-- / course-tabs -->
 
         </div>
 

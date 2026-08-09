@@ -699,6 +699,86 @@ async function loadCourse() {
 
   // --- Progress control ---
   initProgressControl(course.id);
+
+  // --- Tab navigation ---
+  initTabs();
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   HELPER: initTabs()
+
+   Wires click and keyboard navigation for the course content tabs.
+
+   ARIA PATTERN:
+   - Tabs are role="tab" buttons inside a role="tablist"
+   - Each tab has aria-controls pointing to its panel's id
+   - Active tab: aria-selected="true" + .course-tabs__tab--active
+   - Panels use the HTML `hidden` attribute — removed to show
+
+   KEYBOARD NAVIGATION (WCAG 2.1 keyboard pattern for tabs):
+   - Arrow Left / Arrow Right: move focus between tabs
+   - Home / End: jump to first / last tab
+   - Enter / Space: handled automatically (button elements)
+═══════════════════════════════════════════════════════════════ */
+function initTabs() {
+  const tabs   = document.querySelectorAll('[role="tab"]');
+  const panels = document.querySelectorAll('[role="tabpanel"]');
+
+  if (!tabs.length || !panels.length) return;
+
+  function activateTab(tab) {
+    // Deactivate all tabs and hide all panels
+    tabs.forEach(t => {
+      t.classList.remove('course-tabs__tab--active');
+      t.setAttribute('aria-selected', 'false');
+      t.setAttribute('tabindex', '-1');
+    });
+    panels.forEach(p => { p.hidden = true; });
+
+    // Activate the selected tab and show its panel
+    tab.classList.add('course-tabs__tab--active');
+    tab.setAttribute('aria-selected', 'true');
+    tab.setAttribute('tabindex', '0');
+    tab.focus();
+
+    const panel = document.getElementById(tab.getAttribute('aria-controls'));
+    if (panel) panel.hidden = false;
+  }
+
+  // Click listener on each tab
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => activateTab(tab));
+  });
+
+  // Keyboard navigation — arrow keys move between tabs
+  tabs.forEach((tab, index) => {
+    tab.addEventListener('keydown', (e) => {
+      let next;
+
+      if (e.key === 'ArrowRight') {
+        next = tabs[index + 1] || tabs[0];           // wrap around
+      } else if (e.key === 'ArrowLeft') {
+        next = tabs[index - 1] || tabs[tabs.length - 1]; // wrap around
+      } else if (e.key === 'Home') {
+        next = tabs[0];
+      } else if (e.key === 'End') {
+        next = tabs[tabs.length - 1];
+      }
+
+      if (next) {
+        e.preventDefault();
+        activateTab(next);
+      }
+    });
+  });
+
+  // Set correct tabindex on load — only the active tab is in tab order
+  tabs.forEach(tab => {
+    tab.setAttribute('tabindex',
+      tab.getAttribute('aria-selected') === 'true' ? '0' : '-1'
+    );
+  });
 }
 
 
