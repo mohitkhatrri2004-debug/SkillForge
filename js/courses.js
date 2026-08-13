@@ -57,6 +57,9 @@ const searchInput = document.querySelector('#course-search');
 // The search clear (×) button
 const searchClear = document.querySelector('.filters__search-clear');
 
+// The suggestions dropdown
+const suggestionsBox = document.querySelector('#search-suggestions');
+
 // The sort dropdown
 const sortSelect = document.querySelector('#course-sort');
 
@@ -911,6 +914,72 @@ async function loadCourses() {
 }
 
 
+/**
+ * buildSuggestions
+ *
+ * Filters allCourses by the search term and renders matching
+ * course titles into the suggestions dropdown.
+ *
+ * Uses RegExp to highlight the matching portion of each title.
+ * Escape special regex characters from user input to prevent errors.
+ *
+ * @param {string} term - Current search input value (trimmed)
+ */
+function buildSuggestions(term) {
+  if (!suggestionsBox) return;
+
+  // Hide if empty term or no courses loaded yet
+  if (!term || !allCourses.length) {
+    hideSuggestions();
+    return;
+  }
+
+  // Escape special regex characters in the user's input
+  const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const regex   = new RegExp(`(${escaped})`, 'gi');
+
+  // Find matching courses (title only — more focused than full text search)
+  const matches = allCourses
+    .filter(c => c.title.toLowerCase().includes(term.toLowerCase()))
+    .slice(0, 5);           // cap at 5 suggestions
+
+  if (!matches.length) {
+    hideSuggestions();
+    return;
+  }
+
+  // Build suggestion items with highlighted match
+  suggestionsBox.innerHTML = matches
+    .map(course => {
+      const highlighted = course.title.replace(
+        regex,
+        '<mark>$1</mark>'
+      );
+      return `
+        <div class="filters__suggestion-item"
+             role="option"
+             data-value="${course.title}"
+             tabindex="-1">
+          <span class="filters__suggestion-icon">🔍</span>
+          <span>${highlighted}</span>
+        </div>`;
+    })
+    .join('');
+
+  suggestionsBox.classList.add('filters__suggestions--visible');
+}
+
+
+/**
+ * hideSuggestions — hides and clears the dropdown
+ */
+function hideSuggestions() {
+  if (!suggestionsBox) return;
+  suggestionsBox.classList.remove('filters__suggestions--visible');
+  suggestionsBox.innerHTML = '';
+}
+
+
 /* ═══════════════════════════════════════════════════════════════
    SECTION 5: EVENT LISTENERS
 
@@ -972,29 +1041,50 @@ filterButtons.forEach(button => {
 // 4. Only when the user pauses does filterCourses() actually run
 if (searchInput) {
   searchInput.addEventListener('input', () => {
-
-    // Read the current search term immediately (before the delay)
-    // so activeSearch is always in sync with the input value
     activeSearch = searchInput.value;
 
-    // Show the clear button when there is text, hide it when empty.
-    // Toggling the HTML `hidden` attribute is the most accessible
-    // approach — it also removes the button from the tab order when
-    // invisible, so keyboard users never tab to a hidden button.
     if (searchClear) {
       searchClear.hidden = activeSearch === '';
     }
 
-    // Cancel any previously scheduled filterCourses() call
     clearTimeout(searchTimer);
 
-    // Schedule a new call — runs only if no further input arrives
-    // within 250ms
+    // Show suggestions while typing (no delay — instant feedback)
+    buildSuggestions(activeSearch.trim());
+
     searchTimer = setTimeout(() => {
       filterCourses(activeFilter, activeSearch);
       saveUIState();
     }, 250);
+  });
 
+  // Hide suggestions when focus leaves the search area
+  searchInput.addEventListener('blur', () => {
+    // Small delay so a click on a suggestion registers first
+    setTimeout(hideSuggestions, 150);
+  });
+}
+
+
+// Suggestion click handler — select a suggestion
+if (suggestionsBox) {
+  suggestionsBox.addEventListener('click', (event) => {
+    const item = event.target.closest('.filters__suggestion-item');
+    if (!item) return;
+
+    const value = item.dataset.value;
+    if (!value) return;
+
+    // Fill the input and trigger filter
+    searchInput.value   = value;
+    activeSearch        = value;
+    if (searchClear) searchClear.hidden = false;
+
+    hideSuggestions();
+    clearTimeout(searchTimer);
+    filterCourses(activeFilter, activeSearch);
+    saveUIState();
+    searchInput.focus();
   });
 }
 
@@ -1011,6 +1101,9 @@ if (searchClear) {
 
     // Hide the clear button again
     searchClear.hidden = true;
+
+    // Hide suggestions
+    hideSuggestions();
 
     // Cancel any pending debounce timer — not needed anymore
     clearTimeout(searchTimer);

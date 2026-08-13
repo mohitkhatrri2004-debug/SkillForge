@@ -128,6 +128,7 @@
   background-color: var(--color-bg);
   border-radius: var(--radius-lg);        /* 12px */
   border: 1px solid var(--color-border);
+  overflow: visible;                      /* Allow suggestions to overflow */
 }
 
 /* Category Filter Pills */
@@ -634,6 +635,7 @@
 /* Make the search wrapper the positioning context */
 .filters__search {
   position: relative;
+  overflow: visible;                      /* Allow dropdown to overflow */
 }
 
 .filters__search-clear {
@@ -678,4 +680,76 @@
 /* Push input text left so it doesn't overlap the clear button */
 .filters__search-input {
   padding-right: var(--space-8);          /* 32px — room for × button */
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SEARCH SUGGESTIONS DROPDOWN — Week 5 Day 3
+
+   Positioned absolutely below the search input.
+   Hidden by default — JS adds .filters__suggestions--visible.
+═══════════════════════════════════════════════════════════════ */
+
+.filters__suggestions {
+  position: absolute;
+  top: calc(100% + 4px);                  /* Just below the input */
+  left: 0;
+  right: 0;
+  background-color: var(--white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  z-index: var(--z-dropdown);
+  max-height: 280px;
+  overflow-y: auto;
+  display: none;                          /* Hidden by default */
+}
+
+.filters__suggestions--visible {
+  display: block;
+}
+
+.filters__suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color var(--duration-fast) var(--ease-default);
+}
+
+.filters__suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.filters__suggestion-item:hover,
+.filters__suggestion-item--focused {
+  background-color: var(--color-primary-subtle);
+  color: var(--color-text-primary);
+}
+
+.filters__suggestion-icon {
+  font-size: var(--text-base);
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+}
+
+/* Highlighted match text inside suggestions */
+.filters__suggestion-item mark {
+  background-color: transparent;
+  color: var(--color-primary);
+  font-weight: var(--font-semibold);
+}
+
+.filters__suggestion-label {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  padding: var(--space-2) var(--space-4);
+  display: block;
+  border-bottom: 1px solid var(--color-border);
+  font-weight: var(--font-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
