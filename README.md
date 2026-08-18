@@ -19,8 +19,9 @@ Open `index.html` via [Live Server](https://marketplace.visualstudio.com/items?i
 | Week 1 | Foundation, Homepage, Design System | ✅ Complete |
 | Week 2 | Courses Module, Course Detail Pages, UI States | ✅ Complete |
 | Week 3 | JavaScript Interactivity, Dynamic Content | ✅ Complete |
-| Week 4 | Dashboard, Profile, Multi-page Features | 🔄 Day 5 Complete |
-| Week 5+ | Advanced Features, Backend Integration | Planned |
+| Week 4 | Dashboard, Profile, Multi-page Features | ✅ Complete |
+| Week 5 | Polish, Performance & Advanced Features | 🔄 Day 3 Complete |
+| Week 6+ | Backend Integration | Planned |
 
 ---
 
@@ -149,6 +150,32 @@ Open `index.html` via [Live Server](https://marketplace.visualstudio.com/items?i
 - `👤 Profile` link added to navbar on all pages
 - `window.addEventListener('storage')` in `dashboard.js` — cross-tab sync: name and stats update live when another tab changes localStorage
 - `window.addEventListener('storage')` in `courses.js` — save button states sync across tabs when wishlist changes
+
+### Week 5 — Polish & Advanced Features
+
+**Day 1 — Page Transitions**
+- `@keyframes page-enter` on `body` in `main.css` — 300ms fade-in on every page load
+- `js/transitions.js` — View Transitions API (`document.startViewTransition`) for smooth cross-fade between pages on Chrome 111+
+- Progressive enhancement — CSS fade-in always plays, API used when available
+- All external links, hash anchors, and modifier-key clicks skipped correctly
+- Added to all 10 HTML pages via `defer` script tag
+
+**Day 2 — Course Detail Tab Navigation**
+- Three-tab interface: Overview · Curriculum · Reviews
+- ARIA tab pattern: `role="tablist"`, `role="tab"`, `role="tabpanel"`, `aria-controls`, `aria-selected`
+- `initTabs()` in `course-detail.js` — click switching, active state, panel show/hide via `hidden`
+- Keyboard navigation: Arrow Left/Right, Home, End
+- `tabindex="-1"` on inactive tabs — only active tab in tab order
+
+**Day 3 — Search Suggestions, Highlighting & History**
+- `#search-suggestions` dropdown in `courses.html` — `position: absolute` below search input
+- `buildSuggestions(term)` — filters `allCourses` by title, highlights match with `<mark>`, caps at 5 results
+- `hideSuggestions()` — clears and hides the dropdown
+- `highlightCardTitles(term)` — wraps matched text in course card titles with `<mark>` after filtering
+- `saveSearchHistory(term)` — saves completed searches to `sf_search_history` (max 5, deduplicated)
+- `showSearchHistory()` — shows recent searches with 🕐 icon when input is focused and empty
+- `RegExp` constructor with escaped user input for safe dynamic regex
+- Highlight clears when search is cleared or filter runs with no term
 
 **Day 3 — Enroll Button & My Courses Dashboard Section**
 - `initEnrollButton()` in `course-detail.js` — writes/reads `sf_enrolled_courses`, keeps hero + sidebar CTA in sync
@@ -371,6 +398,16 @@ Navigate to `http://127.0.0.1:5500` in your browser.
 - [x] Continue Learning section at top of dashboard
 - [x] Cross-tab sync for progress changes via storage event
 - [ ] Progress indicators
+
+### Week 5 (In Progress)
+- [x] Page fade-in animation (`@keyframes page-enter` on `body`)
+- [x] View Transitions API for smooth cross-page cross-fade
+- [x] Course detail tab navigation with ARIA and keyboard support
+- [x] Search suggestions dropdown with regex highlighting
+- [x] Highlighted match text in course card titles
+- [x] Search history (localStorage, max 5 recent searches)
+- [ ] Accessibility audit and keyboard navigation pass
+- [ ] Performance and Lighthouse audit
 
 ---
 

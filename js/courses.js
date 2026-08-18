@@ -88,7 +88,10 @@ const STORAGE_KEY_SEARCH = 'sf_active_search';
 const STORAGE_KEY_SAVED  = 'sf_saved_courses';
 
 // localStorage key for the active sort selection
-const STORAGE_KEY_SORT   = 'sf_active_sort';
+const STORAGE_KEY_SORT    = 'sf_active_sort';
+
+// localStorage key for search history (array of last 5 searches)
+const STORAGE_KEY_HISTORY = 'sf_search_history';
 
 // The currently active filter category.
 // On first load, check localStorage for a saved value.
@@ -199,6 +202,56 @@ function getCardSearchText(card) {
 
 
 /**
+ * highlightCardTitles
+ *
+ * Wraps matching text in <mark> on visible course card titles.
+ * Called after filterCourses() decides which cards are visible.
+ * Clears highlights when term is empty.
+ *
+ * WHY innerHTML on the link only (not the whole card):
+ * Only the title link text needs highlighting — touching other
+ * elements would risk breaking event listeners or data attributes.
+ *
+ * @param {string} term - Normalised search term (lowercase, trimmed)
+ */
+function highlightCardTitles(term) {
+  courseCards.forEach(card => {
+    const link = card.querySelector('.course-card__link');
+    if (!link) return;
+
+    // Store original text on first call so we can restore it
+    if (!link.dataset.originalText) {
+      link.dataset.originalText = link.textContent.trim();
+    }
+
+    const original = link.dataset.originalText;
+
+    if (!term || card.classList.contains('course-card--hidden')) {
+      // No search active or card hidden — restore plain text
+      link.textContent = original;
+      return;
+    }
+
+    // Escape special regex chars in user input
+    const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex   = new RegExp(`(${escaped})`, 'gi');
+
+    // Only highlight if there's actually a match
+    if (!regex.test(original)) {
+      link.textContent = original;
+      return;
+    }
+
+    // Wrap the match in <mark> — use innerHTML since we're inserting tags
+    link.innerHTML = original.replace(
+      new RegExp(`(${escaped})`, 'gi'),
+      '<mark class="search-highlight">$1</mark>'
+    );
+  });
+}
+
+
+/**
  * filterCourses
  *
  * The single source of truth for which cards are visible.
@@ -244,6 +297,9 @@ function filterCourses(category, search) {
       card.classList.add('course-card--hidden');
     }
   });
+
+  // After showing/hiding, highlight matching text in visible titles
+  highlightCardTitles(term);
 
   // Update the counter to reflect new visible count
   updateResultsCount();
@@ -980,6 +1036,45 @@ function hideSuggestions() {
 }
 
 
+/**
+ * saveSearchHistory
+ * Saves the term to sf_search_history (max 5, no duplicates).
+ * @param {string} term - The completed search term
+ */
+function saveSearchHistory(term) {
+  if (!term || term.length < 2) return;
+  const history = JSON.parse(localStorage.getItem(STORAGE_KEY_HISTORY) || '[]');
+  // Remove duplicate if exists, then prepend
+  const updated = [term, ...history.filter(h => h !== term)].slice(0, 5);
+  localStorage.setItem(STORAGE_KEY_HISTORY, JSON.stringify(updated));
+}
+
+
+/**
+ * showSearchHistory
+ * Shows recent searches when input is focused and empty.
+ */
+function showSearchHistory() {
+  if (!suggestionsBox) return;
+  const history = JSON.parse(localStorage.getItem(STORAGE_KEY_HISTORY) || '[]');
+  if (!history.length) return;
+
+  suggestionsBox.innerHTML =
+    `<span class="filters__suggestion-label">Recent Searches</span>` +
+    history.map(term => `
+      <div class="filters__suggestion-item"
+           role="option"
+           data-value="${term}"
+           tabindex="-1">
+        <span class="filters__suggestion-icon">🕐</span>
+        <span>${term}</span>
+      </div>`
+    ).join('');
+
+  suggestionsBox.classList.add('filters__suggestions--visible');
+}
+
+
 /* ═══════════════════════════════════════════════════════════════
    SECTION 5: EVENT LISTENERS
 
@@ -1060,8 +1155,19 @@ if (searchInput) {
 
   // Hide suggestions when focus leaves the search area
   searchInput.addEventListener('blur', () => {
+    // Save to history when user finishes typing a meaningful term
+    if (activeSearch.trim().length >= 2) {
+      saveSearchHistory(activeSearch.trim());
+    }
     // Small delay so a click on a suggestion registers first
     setTimeout(hideSuggestions, 150);
+  });
+
+  // Show history when focused while empty
+  searchInput.addEventListener('focus', () => {
+    if (!activeSearch.trim()) {
+      showSearchHistory();
+    }
   });
 }
 

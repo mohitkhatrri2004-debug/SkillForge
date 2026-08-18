@@ -753,3 +753,13 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   SEARCH HIGHLIGHT — wraps matched text in course card titles
+═══════════════════════════════════════════════════════════════ */
+
+.search-highlight {
+  background-color: transparent;
+  color: var(--color-primary);
+  font-weight: var(--font-semibold);
+}
