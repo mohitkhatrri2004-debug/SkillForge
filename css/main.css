@@ -123,3 +123,47 @@ body {
     animation: none;
   }
 }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   SKIP-TO-CONTENT LINK — Week 5 Day 4
+
+   Visually hidden until focused via keyboard (Tab key).
+   First interactive element on every page — WCAG 2.1 SC 2.4.1.
+
+   WHY translate(-50%, -100%):
+   Moves the element off-screen vertically when not focused.
+   On focus, translateY(0) brings it back into view at the top.
+   Does not affect page layout — no reflow.
+═══════════════════════════════════════════════════════════════ */
+
+.skip-link {
+  position: fixed;
+  top: var(--space-4);
+  left: 50%;
+  transform: translate(-50%, -200%);     /* Hidden above viewport */
+  z-index: var(--z-toast);               /* Above everything */
+
+  padding: var(--space-3) var(--space-6);
+  background-color: var(--color-primary);
+  color: var(--white);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  box-shadow: var(--shadow-lg);
+
+  transition: transform 200ms ease;
+}
+
+.skip-link:focus {
+  transform: translate(-50%, 0);         /* Slides into view on focus */
+  outline: 3px solid var(--white);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skip-link {
+    transition: none;
+  }
+}

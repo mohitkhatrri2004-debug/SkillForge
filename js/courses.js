@@ -1169,6 +1169,51 @@ if (searchInput) {
       showSearchHistory();
     }
   });
+
+  // Keyboard navigation inside the suggestions dropdown
+  searchInput.addEventListener('keydown', (e) => {
+    const items = suggestionsBox
+      ? [...suggestionsBox.querySelectorAll('.filters__suggestion-item')]
+      : [];
+
+    if (!items.length) return;
+
+    const focused = suggestionsBox.querySelector('.filters__suggestion-item--focused');
+    const idx = items.indexOf(focused);
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      // Move focus to first item, or next item
+      const next = idx === -1 ? 0 : Math.min(idx + 1, items.length - 1);
+      items.forEach(i => i.classList.remove('filters__suggestion-item--focused'));
+      items[next].classList.add('filters__suggestion-item--focused');
+      items[next].scrollIntoView({ block: 'nearest' });
+
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      const prev = idx <= 0 ? 0 : idx - 1;
+      items.forEach(i => i.classList.remove('filters__suggestion-item--focused'));
+      items[prev].classList.add('filters__suggestion-item--focused');
+      items[prev].scrollIntoView({ block: 'nearest' });
+
+    } else if (e.key === 'Enter' && focused) {
+      e.preventDefault();
+      const value = focused.dataset.value;
+      if (value) {
+        searchInput.value   = value;
+        activeSearch        = value;
+        if (searchClear) searchClear.hidden = false;
+        hideSuggestions();
+        clearTimeout(searchTimer);
+        filterCourses(activeFilter, activeSearch);
+        saveUIState();
+      }
+
+    } else if (e.key === 'Escape') {
+      hideSuggestions();
+      searchInput.blur();
+    }
+  });
 }
 
 
