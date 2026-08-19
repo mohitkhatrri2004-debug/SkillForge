@@ -42,6 +42,12 @@
    @param {string} fieldName  - The data-field attribute value
    @param {string} value      - The text to set
 ═══════════════════════════════════════════════════════════════ */
+
+/* ─── API Configuration ─────────────────────────────────────── */
+// Same constant as courses.js — single URL to change for production
+const API_BASE = 'http://localhost:3000/api';
+
+
 function fill(fieldName, value) {
   const el = document.querySelector(`[data-field="${fieldName}"]`);
 
@@ -589,45 +595,37 @@ async function loadCourse() {
     return; // Stop — nothing more to do
   }
 
-  /* ─── STEP 2: Fetch the JSON data ───────────────────────────
-     fetch() returns a Promise that resolves to a Response object.
-     await pauses execution until the Response arrives.
-     .json() parses the response body as JSON — also async.
-
-     The path '../data/courses.json' is relative to the HTML file
-     in the pages/ folder. Two dots means "go up one directory."
+  /* ─── STEP 2: Fetch the specific course from the API ──────────
+     GET /api/courses/:id returns exactly one course object,
+     or 404 if not found. This is more efficient than fetching
+     all 12 courses and finding the match client-side.
   ─────────────────────────────────────────────────────────── */
-  let courses;
+  let course;
 
   try {
-    const response = await fetch('../data/courses.json');
+    const response = await fetch(`${API_BASE}/courses/${encodeURIComponent(courseId)}`);
 
-    // If the server responded but with an error (404, 500, etc.)
-    if (!response.ok) {
-      throw new Error(`Failed to load course data (HTTP ${response.status})`);
+    // 404 means valid request but course not found — show friendly message
+    if (response.status === 404) {
+      showErrorState(
+        `No course found with the ID "${courseId}". It may have been removed or the link may be incorrect.`
+      );
+      return;
     }
 
-    courses = await response.json();
+    // Any other non-OK status is a server error
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    // The API returns the course object directly (not wrapped)
+    course = await response.json();
 
   } catch (error) {
-    // fetch() itself threw — likely no server (file:// protocol)
-    // or the JSON file path is wrong
+    // fetch() itself threw — server not running
     console.error('Course data fetch failed:', error);
     showErrorState(
-      'Course data could not be loaded. Please make sure you are using Live Server and try again.'
-    );
-    return;
-  }
-
-  /* ─── STEP 3: Find the matching course ──────────────────────
-     Array.find() returns the first item that satisfies the test.
-     If no course has a matching id, it returns undefined.
-  ─────────────────────────────────────────────────────────── */
-  const course = courses.find(c => c.id === courseId);
-
-  if (!course) {
-    showErrorState(
-      `No course found with the ID "${courseId}". It may have been removed or the link may be incorrect.`
+      'Course data could not be loaded. Make sure the SkillForge API server is running: cd server && npm run dev'
     );
     return;
   }

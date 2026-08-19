@@ -65,6 +65,17 @@ const sortSelect = document.querySelector('#course-sort');
 
 
 /* ═══════════════════════════════════════════════════════════════
+   API CONFIGURATION
+
+   Single source of truth for the backend URL.
+   Change this one constant when deploying to production.
+   Week 6: local Express server
+   Future: production API URL (e.g. https://api.skillforge.com/api)
+═══════════════════════════════════════════════════════════════ */
+const API_BASE = 'http://localhost:3000/api';
+
+
+/* ═══════════════════════════════════════════════════════════════
    SECTION 2: STORAGE KEYS & STATE
 
    localStorage keys are prefixed with 'sf_' (SkillForge) to
@@ -903,16 +914,19 @@ async function loadCourses() {
   setLoadingState(true);
 
   try {
-    // Fetch the JSON file.
-    // '../data/courses.json' is relative to pages/courses.html —
-    // two dots means "go up one directory to the project root".
-    const response = await fetch('../data/courses.json');
+    // Fetch courses from the Express API (Week 6+).
+    // Falls back gracefully if the server is not running —
+    // the error handler below shows a helpful message.
+    const response = await fetch(`${API_BASE}/courses`);
 
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }
 
-    const courses = await response.json();
+    // The API returns { count, total, courses: [...] }
+    // We extract the courses array to match the previous shape.
+    const data = await response.json();
+    const courses = data.courses || data; // handle both formats safely
 
     // Cache the original JSON order in allCourses.
     // sortCourses() always spreads from this — never mutates it.
@@ -940,8 +954,7 @@ async function loadCourses() {
     updateAllSaveButtons();
 
   } catch (error) {
-    // fetch() threw — most likely the page was opened via file://
-    // rather than Live Server.
+    // fetch() threw — server not running or network error
     console.error('Failed to load courses:', error);
 
     // Replace skeletons with a helpful error state.
@@ -952,8 +965,8 @@ async function loadCourses() {
         <div class="empty-state__content">
           <h2 class="empty-state__title">Courses could not be loaded</h2>
           <p class="empty-state__description">
-            Please open this page using Live Server in VS Code,
-            not by double-clicking the file.
+            Make sure the SkillForge API server is running.<br>
+            In your terminal: <strong>cd server &amp;&amp; npm run dev</strong>
           </p>
         </div>
       </div>`;
