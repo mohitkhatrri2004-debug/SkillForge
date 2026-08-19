@@ -1,0 +1,25 @@
+# ─── Node.js ────────────────────────────────────────────────────
+node_modules/
+server/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ─── Environment variables ──────────────────────────────────────
+# Never commit secrets, API keys, or database credentials
+.env
+.env.local
+.env.*.local
+
+# ─── Build output ───────────────────────────────────────────────
+dist/
+build/
+
+# ─── OS / Editor ────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/settings.json
+
+# ─── Logs ───────────────────────────────────────────────────────
+*.log
+logs/
