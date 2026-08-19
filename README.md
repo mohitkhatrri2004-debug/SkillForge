@@ -20,8 +20,8 @@ Open `index.html` via [Live Server](https://marketplace.visualstudio.com/items?i
 | Week 2 | Courses Module, Course Detail Pages, UI States | ✅ Complete |
 | Week 3 | JavaScript Interactivity, Dynamic Content | ✅ Complete |
 | Week 4 | Dashboard, Profile, Multi-page Features | ✅ Complete |
-| Week 5 | Polish, Performance & Advanced Features | 🔄 Day 3 Complete |
-| Week 6+ | Backend Integration | Planned |
+| Week 5 | Polish, Performance & Advanced Features | ✅ Complete |
+| Week 6 | Backend Integration (Express API) | 🔄 Day 2 Complete |
 
 ---
 
@@ -194,6 +194,26 @@ Open `index.html` via [Live Server](https://marketplace.visualstudio.com/items?i
 - CTA adapts: "Start Learning" (0%) / "Continue" (1–99%) / "Review Course" (100%)
 - Full user journey complete: Discover → Save → Enroll → Track Progress → Complete
 
+### Week 6 — Backend Integration (Express API)
+
+**Day 1 — Express Server Setup**
+- `server/server.js` — Express server on port 3000
+- `GET /api/health` — health check endpoint
+- `GET /api/courses` — returns all courses from `data/courses.json` as `{ courses: [...] }`
+- `GET /api/courses/:id` — returns a single course by slug ID, 404 if not found
+- CORS configured with `cors` middleware, allows requests from the Live Server origin
+- Input validation on `:id` parameter — rejects slugs with invalid characters
+- `server/package.json` with `nodemon` for auto-reload during development
+- `.gitignore` updated to exclude `server/node_modules`
+
+**Day 2 — Frontend Connected to API**
+- `js/courses.js` — `API_BASE` constant (`http://localhost:3000/api`), `loadCourses()` now fetches from `${API_BASE}/courses`
+- Response parsing handles both `{ courses: [...] }` wrapper and raw array formats (`data.courses || data`)
+- `js/course-detail.js` — fetches from `${API_BASE}/courses/${encodeURIComponent(courseId)}` instead of fetching all and using `.find()`
+- Direct single-course lookup — server does the ID match, returns one object
+- 404 handled explicitly: server returns 404 → frontend shows the existing error state
+- `encodeURIComponent` on course ID for safe URL construction
+
 ---
 
 ## File Structure
@@ -239,6 +259,10 @@ SkillForge/
 │
 ├── data/
 │   └── courses.json                  All 12 courses with full structured data
+│
+├── server/
+│   ├── server.js                     Express API server (port 3000)
+│   └── package.json                  Server dependencies (express, cors, nodemon)
 │
 ├── assets/                           Images and media (planned)
 ├── .gitignore
@@ -340,7 +364,7 @@ Mobile-first approach with three primary breakpoints:
 
 ## Getting Started
 
-**Prerequisites:** VS Code with the [Live Server extension](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) installed.
+**Prerequisites:** VS Code with the [Live Server extension](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) installed. Node.js 18+ for the backend API.
 
 ```bash
 # Clone the repository
@@ -349,11 +373,17 @@ git clone https://github.com/YOUR_USERNAME/SkillForge.git
 # Open in VS Code
 code SkillForge
 
+# Start the API server (terminal 1)
+cd server
+npm install
+npm run dev          # starts Express on http://localhost:3000
+
+# Start the frontend (terminal 2)
 # Right-click index.html in the Explorer panel
 # Select "Open with Live Server"
 ```
 
-Navigate to `http://127.0.0.1:5500` in your browser.
+Navigate to `http://127.0.0.1:5500` in your browser. The API server must be running for the courses catalog and course detail pages to load data.
 
 ---
 
@@ -409,9 +439,17 @@ Navigate to `http://127.0.0.1:5500` in your browser.
 - [ ] Accessibility audit and keyboard navigation pass
 - [ ] Performance and Lighthouse audit
 
----
+### Week 6 (In Progress)
+- [x] Express server with CORS and validation
+- [x] `GET /api/health`, `GET /api/courses`, `GET /api/courses/:id`
+- [x] Frontend courses page fetches from Express API
+- [x] Frontend course detail page fetches single course from Express API
+- [x] 404 handled end-to-end (server + frontend error state)
+- [ ] Auth endpoints — `POST /api/auth/register`, `POST /api/auth/login`
+- [ ] Frontend connected to auth (register / login forms)
+- [ ] CORS hardening, environment variables (`.env` + `dotenv`)
 
-## Author
+---
 
 **Mohit Khatri**
 B.Tech CSE (IoT)
