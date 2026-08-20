@@ -1,0 +1,316 @@
+/* ═══════════════════════════════════════════════════════════════
+   SKILLFORGE — AUTH PAGE STYLES
+
+   Styles for the combined Sign Up / Log In page (auth.html).
+   Uses the same design token system as the rest of the project.
+
+   STRUCTURE:
+   .auth-page          — full-height centering wrapper
+   .auth-card          — the white card containing both forms
+   .auth-tabs          — tab switcher (Sign Up / Log In)
+   .auth-form          — shared form styles
+   .auth-form__field   — label + input group
+   .auth-form__error   — inline field error
+   .auth-form__footer  — submit button + switch-tab link
+   .auth-message       — success / error banner below form
+
+   LAST UPDATED: Week 6, Day 4
+═══════════════════════════════════════════════════════════════ */
+
+
+/* ─────────────────────────────────────────────────────────────
+   PAGE WRAPPER — centres the card vertically and horizontally
+───────────────────────────────────────────────────────────── */
+
+.auth-page {
+  min-height: calc(100vh - 64px); /* full viewport minus navbar height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) var(--space-4);
+  background-color: var(--color-bg-secondary); /* light gray page bg */
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   AUTH CARD — white rounded box
+───────────────────────────────────────────────────────────── */
+
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   TAB SWITCHER — Sign Up | Log In
+───────────────────────────────────────────────────────────── */
+
+.auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.auth-tab {
+  padding: var(--space-4) var(--space-5);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-default),
+              background-color var(--duration-fast) var(--ease-default);
+  position: relative;
+}
+
+.auth-tab:hover {
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-secondary);
+}
+
+/* Active tab — bottom border highlight */
+.auth-tab[aria-selected="true"] {
+  color: var(--color-primary);
+  background-color: var(--color-bg-primary);
+}
+
+.auth-tab[aria-selected="true"]::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--color-primary);
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   FORM PANELS — each tab shows one panel
+───────────────────────────────────────────────────────────── */
+
+.auth-panel {
+  padding: var(--space-8) var(--space-7);
+}
+
+.auth-panel[hidden] {
+  display: none;
+}
+
+.auth-panel__title {
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-1);
+}
+
+.auth-panel__subtitle {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-6);
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   FORM FIELDS
+───────────────────────────────────────────────────────────── */
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.auth-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.auth-form__label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--color-text-primary);
+}
+
+.auth-form__input {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
+  font-family: inherit;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: border-color var(--duration-fast) var(--ease-default),
+              box-shadow var(--duration-fast) var(--ease-default);
+  box-sizing: border-box;
+}
+
+.auth-form__input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-subtle);
+}
+
+/* Error state on input */
+.auth-form__input--error {
+  border-color: var(--color-error);
+}
+
+.auth-form__input--error:focus {
+  box-shadow: 0 0 0 3px var(--red-100, #fee2e2);
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   INLINE FIELD ERRORS
+───────────────────────────────────────────────────────────── */
+
+.auth-form__error {
+  font-size: var(--text-xs);
+  color: var(--color-error);
+  margin-top: var(--space-1);
+}
+
+.auth-form__error[hidden] {
+  display: none;
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   SUBMIT BUTTON — full-width primary
+───────────────────────────────────────────────────────────── */
+
+.auth-form__submit {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  font-family: inherit;
+  color: var(--color-text-on-primary);
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-default),
+              box-shadow var(--duration-fast) var(--ease-default),
+              opacity var(--duration-fast) var(--ease-default);
+  margin-top: var(--space-2);
+}
+
+.auth-form__submit:hover {
+  background-color: var(--color-primary-hover);
+  box-shadow: var(--shadow-md);
+}
+
+.auth-form__submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   SWITCH-TAB LINK — "Already have an account? Log In"
+───────────────────────────────────────────────────────────── */
+
+.auth-form__switch {
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-4);
+}
+
+.auth-form__switch a,
+.auth-form__switch button {
+  color: var(--color-primary);
+  font-weight: var(--font-medium);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  text-decoration: underline;
+}
+
+.auth-form__switch a:hover,
+.auth-form__switch button:hover {
+  color: var(--color-primary-hover);
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   MESSAGE BANNER — success / error below the form
+───────────────────────────────────────────────────────────── */
+
+.auth-message {
+  margin: 0 var(--space-7) var(--space-6);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  display: none; /* shown via JS by removing this */
+}
+
+.auth-message[hidden] {
+  display: none;
+}
+
+.auth-message--success {
+  background-color: var(--green-100, #d1fae5);
+  color: var(--green-700, #065f46);
+  border: 1px solid var(--green-200, #a7f3d0);
+}
+
+.auth-message--error {
+  background-color: var(--red-100, #fee2e2);
+  color: var(--color-error);
+  border: 1px solid var(--red-200, #fecaca);
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   DIVIDER — "or continue with"
+───────────────────────────────────────────────────────────── */
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--color-text-tertiary);
+  font-size: var(--text-xs);
+  margin: var(--space-2) 0;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background-color: var(--color-border);
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   RESPONSIVE — tighten padding on small screens
+───────────────────────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .auth-panel {
+    padding: var(--space-6) var(--space-5);
+  }
+
+  .auth-card {
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+  }
+}

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sign up or log in to SkillForge — your personalised learning platform.">
+  <meta name="theme-color" content="#6c63ff">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"></noscript>
+
+  <link rel="stylesheet" href="../css/main.css">
+  <script src="../js/transitions.js" defer></script>
+  <script src="../js/auth.js" defer></script>
+
+  <title>Sign Up / Log In — SkillForge</title>
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ═══════════════════════════════════════════════════════
+       NAVBAR
+  ═══════════════════════════════════════════════════════ -->
+  <header class="navbar" role="banner">
+    <div class="navbar__container">
+
+      <a href="../index.html" class="navbar__logo" aria-label="SkillForge - Return to homepage">
+        <span class="navbar__logo-text">
+          Skill<span class="navbar__logo-accent">Forge</span>
+        </span>
+      </a>
+
+      <nav class="navbar__nav" aria-label="Main navigation">
+        <ul class="navbar__links">
+          <li class="navbar__item">
+            <a href="../index.html" class="navbar__link">Home</a>
+          </li>
+          <li class="navbar__item">
+            <a href="courses.html" class="navbar__link">Courses</a>
+          </li>
+          <li class="navbar__item">
+            <a href="dashboard.html" class="navbar__link">Dashboard</a>
+          </li>
+          <li class="navbar__item">
+            <a href="skill-paths.html" class="navbar__link">Paths</a>
+          </li>
+          <li class="navbar__item">
+            <a href="leaderboard.html" class="navbar__link">Leaderboard</a>
+          </li>
+          <li class="navbar__item">
+            <a href="about.html" class="navbar__link">About</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="navbar__actions" id="navbar-actions">
+        <a href="profile.html" class="navbar__link navbar__link--profile"
+           aria-label="My Profile">👤 Profile</a>
+        <a href="auth.html?tab=login" class="navbar__btn navbar__btn--ghost">Log In</a>
+        <a href="auth.html?tab=register" class="navbar__btn navbar__btn--primary">Sign Up Free</a>
+      </div>
+
+    </div>
+  </header>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       MAIN CONTENT
+  ═══════════════════════════════════════════════════════ -->
+  <main id="main-content" class="auth-page">
+
+    <div class="auth-card" role="region" aria-label="Authentication">
+
+      <!-- ─── Tab Switcher ─────────────────────────────────── -->
+      <div class="auth-tabs" role="tablist" aria-label="Sign up or log in">
+
+        <button
+          class="auth-tab"
+          id="tab-register"
+          role="tab"
+          aria-selected="true"
+          aria-controls="panel-register"
+        >
+          Sign Up
+        </button>
+
+        <button
+          class="auth-tab"
+          id="tab-login"
+          role="tab"
+          aria-selected="false"
+          aria-controls="panel-login"
+        >
+          Log In
+        </button>
+
+      </div>
+
+
+      <!-- ─── Register Panel ───────────────────────────────── -->
+      <div
+        class="auth-panel"
+        id="panel-register"
+        role="tabpanel"
+        aria-labelledby="tab-register"
+      >
+
+        <h1 class="auth-panel__title">Create your account</h1>
+        <p class="auth-panel__subtitle">
+          Join thousands of learners building real skills.
+        </p>
+
+        <form class="auth-form" id="register-form" novalidate>
+
+          <div class="auth-form__field">
+            <label class="auth-form__label" for="register-name">
+              Full name
+            </label>
+            <input
+              class="auth-form__input"
+              type="text"
+              id="register-name"
+              name="name"
+              autocomplete="name"
+              placeholder="Mohit Khatri"
+              required
+              minlength="2"
+              maxlength="100"
+            >
+            <span class="auth-form__error" id="register-name-error" role="alert" hidden></span>
+          </div>
+
+          <div class="auth-form__field">
+            <label class="auth-form__label" for="register-email">
+              Email address
+            </label>
+            <input
+              class="auth-form__input"
+              type="email"
+              id="register-email"
+              name="email"
+              autocomplete="email"
+              placeholder="you@example.com"
+              required
+            >
+            <span class="auth-form__error" id="register-email-error" role="alert" hidden></span>
+          </div>
+
+          <div class="auth-form__field">
+            <label class="auth-form__label" for="register-password">
+              Password
+            </label>
+            <input
+              class="auth-form__input"
+              type="password"
+              id="register-password"
+              name="password"
+              autocomplete="new-password"
+              placeholder="At least 6 characters"
+              required
+              minlength="6"
+            >
+            <span class="auth-form__error" id="register-password-error" role="alert" hidden></span>
+          </div>
+
+          <button type="submit" class="auth-form__submit" id="register-submit">
+            Create account
+          </button>
+
+        </form>
+
+        <!-- Success / error banner -->
+        <div class="auth-message" id="register-message" role="alert" hidden></div>
+
+        <p class="auth-form__switch">
+          Already have an account?
+          <button type="button" id="switch-to-login">Log In</button>
+        </p>
+
+      </div>
+
+
+      <!-- ─── Login Panel ──────────────────────────────────── -->
+      <div
+        class="auth-panel"
+        id="panel-login"
+        role="tabpanel"
+        aria-labelledby="tab-login"
+        hidden
+      >
+
+        <h1 class="auth-panel__title">Welcome back</h1>
+        <p class="auth-panel__subtitle">Log in to continue your learning journey.</p>
+
+        <form class="auth-form" id="login-form" novalidate>
+
+          <div class="auth-form__field">
+            <label class="auth-form__label" for="login-email">
+              Email address
+            </label>
+            <input
+              class="auth-form__input"
+              type="email"
+              id="login-email"
+              name="email"
+              autocomplete="email"
+              placeholder="you@example.com"
+              required
+            >
+            <span class="auth-form__error" id="login-email-error" role="alert" hidden></span>
+          </div>
+
+          <div class="auth-form__field">
+            <label class="auth-form__label" for="login-password">
+              Password
+            </label>
+            <input
+              class="auth-form__input"
+              type="password"
+              id="login-password"
+              name="password"
+              autocomplete="current-password"
+              placeholder="Your password"
+              required
+            >
+            <span class="auth-form__error" id="login-password-error" role="alert" hidden></span>
+          </div>
+
+          <button type="submit" class="auth-form__submit" id="login-submit">
+            Log In
+          </button>
+
+        </form>
+
+        <!-- Success / error banner -->
+        <div class="auth-message" id="login-message" role="alert" hidden></div>
+
+        <p class="auth-form__switch">
+          Don't have an account?
+          <button type="button" id="switch-to-register">Sign Up Free</button>
+        </p>
+
+      </div>
+
+    </div><!-- /.auth-card -->
+
+  </main>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════════════════ -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer__container">
+      <div class="footer__bottom">
+        <p class="footer__copyright">
+          © 2025 SkillForge. Built for learning.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -375,7 +375,9 @@ function initDangerZone() {
         PROFILE_KEY_COMPLETED,
         'sf_active_filter',
         'sf_active_search',
-        'sf_active_sort'
+        'sf_active_sort',
+        'sf_auth_token',        // Week 6 Day 4 — auth keys
+        'sf_auth_user'
       ];
 
       keysToRemove.forEach(key => localStorage.removeItem(key));
