@@ -21,7 +21,7 @@ Open `index.html` via [Live Server](https://marketplace.visualstudio.com/items?i
 | Week 3 | JavaScript Interactivity, Dynamic Content | ✅ Complete |
 | Week 4 | Dashboard, Profile, Multi-page Features | ✅ Complete |
 | Week 5 | Polish, Performance & Advanced Features | ✅ Complete |
-| Week 6 | Backend Integration (Express API) | 🔄 Day 2 Complete |
+| Week 6 | Backend Integration (Express API) | 🔄 Day 4 Complete |
 
 ---
 
@@ -206,13 +206,26 @@ Open `index.html` via [Live Server](https://marketplace.visualstudio.com/items?i
 - `server/package.json` with `nodemon` for auto-reload during development
 - `.gitignore` updated to exclude `server/node_modules`
 
-**Day 2 — Frontend Connected to API**
-- `js/courses.js` — `API_BASE` constant (`http://localhost:3000/api`), `loadCourses()` now fetches from `${API_BASE}/courses`
-- Response parsing handles both `{ courses: [...] }` wrapper and raw array formats (`data.courses || data`)
-- `js/course-detail.js` — fetches from `${API_BASE}/courses/${encodeURIComponent(courseId)}` instead of fetching all and using `.find()`
-- Direct single-course lookup — server does the ID match, returns one object
-- 404 handled explicitly: server returns 404 → frontend shows the existing error state
-- `encodeURIComponent` on course ID for safe URL construction
+**Day 3 — Auth Endpoints**
+- `POST /api/auth/register` — validates name/email/password, hashes with bcrypt (10 rounds), stores in-memory, returns `{ token, user }`
+- `POST /api/auth/login` — timing-safe bcrypt compare, same error for bad email/bad password (prevents enumeration), returns `{ token, user }`
+- `bcryptjs@2.4.3` — pure JS, no native binaries, works on Node v24
+- `jsonwebtoken@9.0.2` — JWT signed with `JWT_SECRET`, expires in 7 days
+- In-memory `users` array — resets on server restart, replaced by DB in a later week
+- Password never stored in plain text — only bcrypt hash
+
+**Day 4 — Frontend Authentication**
+- `pages/auth.html` — tabbed Sign Up / Log In page, ARIA tab pattern with keyboard support
+- `pages/login.html` + `pages/register.html` — instant-redirect shims so existing navbar links work
+- `js/auth.js` — register form (POST `/api/auth/register`), login form (POST `/api/auth/login`), client-side validation, error display, JWT + user stored in localStorage on success, redirect to dashboard
+- `js/navbar-auth.js` — loaded on every page, reads auth state from localStorage, swaps navbar between logged-out (Log In / Sign Up Free) and logged-in (username link + Log Out button) states
+- `css/pages/auth.css` — auth card, tab switcher, form fields, inline errors, message banners
+- Logout removes only `sf_auth_token` and `sf_auth_user` — does not touch wishlist, enrolled courses, progress, or any other SkillForge data
+- Cross-tab sync — `storage` event keeps all open tabs in sync when login/logout fires
+- `sf_user_name` written on login/register so existing dashboard and profile pages work unchanged
+- Profile page Reset All Data updated to also clear auth keys
+- Fixed `??` emoji encoding bug in `courses.html` profile link
+- Password is never stored anywhere in the browser
 
 ---
 
@@ -231,7 +244,10 @@ SkillForge/
 │   ├── course-ui-ux-design.html      Static detail page (legacy)
 │   ├── course-machine-learning.html  Static detail page (legacy)
 │   ├── skeleton-demo.html            Skeleton loader demo
-│   └── empty-state-demo.html         Empty state demo
+│   ├── empty-state-demo.html         Empty state demo
+│   ├── auth.html                     Sign Up / Log In page (tabbed)
+│   ├── login.html                    Redirect shim → auth.html?tab=login
+│   └── register.html                 Redirect shim → auth.html?tab=register
 │
 ├── css/
 │   ├── main.css                      CSS entry point (imports all layers)
@@ -249,13 +265,17 @@ SkillForge/
 │       ├── courses.css               Catalog styles + JS-controlled states
 │       ├── course-detail.css         Detail page styles
 │       ├── dashboard.css             Dashboard page styles
-│       └── profile.css               Profile and settings page styles
+│       ├── profile.css               Profile and settings page styles
+│       └── auth.css                  Sign Up / Log In page styles
 │
 ├── js/
 │   ├── courses.js                    Filter, search, sort, empty state, wishlist
 │   ├── course-detail.js              URL params, fetch, DOM rendering, save button
 │   ├── dashboard.js                  localStorage reads, course rendering, recommendations
-│   └── profile.js                    Form validation, name save, danger zone, cross-tab sync
+│   ├── profile.js                    Form validation, name save, danger zone, cross-tab sync
+│   ├── auth.js                       Register/login forms, API calls, JWT storage
+│   ├── navbar-auth.js                Navbar auth state (loaded on every page)
+│   └── transitions.js                View Transitions API page animations
 │
 ├── data/
 │   └── courses.json                  All 12 courses with full structured data
@@ -445,9 +465,15 @@ Navigate to `http://127.0.0.1:5500` in your browser. The API server must be runn
 - [x] Frontend courses page fetches from Express API
 - [x] Frontend course detail page fetches single course from Express API
 - [x] 404 handled end-to-end (server + frontend error state)
-- [ ] Auth endpoints — `POST /api/auth/register`, `POST /api/auth/login`
-- [ ] Frontend connected to auth (register / login forms)
+- [x] `POST /api/auth/register` — bcrypt password hashing, JWT response
+- [x] `POST /api/auth/login` — timing-safe comparison, JWT response
+- [x] `pages/auth.html` — tabbed Sign Up / Log In page
+- [x] `js/auth.js` — register + login forms connected to API
+- [x] `js/navbar-auth.js` — dynamic navbar auth state on every page
+- [x] Logout removes JWT, restores logged-out navbar
+- [x] Cross-tab auth sync via `storage` event
 - [ ] CORS hardening, environment variables (`.env` + `dotenv`)
+- [ ] Protected API routes (require valid JWT)
 
 ---
 
