@@ -44,8 +44,12 @@
 ═══════════════════════════════════════════════════════════════ */
 
 /* ─── API Configuration ─────────────────────────────────────── */
-// Same constant as courses.js — single URL to change for production
-const API_BASE = 'http://localhost:3000/api';
+// Environment-aware: localhost → dev server on :3000, deployed → same-origin /api
+const API_BASE = (() => {
+  const { hostname } = window.location;
+  const isDev = hostname === 'localhost' || hostname === '127.0.0.1';
+  return isDev ? 'http://localhost:3000/api' : '/api';
+})();
 
 
 function fill(fieldName, value) {

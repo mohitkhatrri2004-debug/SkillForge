@@ -72,7 +72,30 @@ const sortSelect = document.querySelector('#course-sort');
    Week 6: local Express server
    Future: production API URL (e.g. https://api.skillforge.com/api)
 ═══════════════════════════════════════════════════════════════ */
-const API_BASE = 'http://localhost:3000/api';
+/* ═══════════════════════════════════════════════════════════════
+   API CONFIGURATION
+
+   API_BASE is derived from the current page origin so the same
+   code works in development AND when deployed.
+
+   Development (Live Server on :5500):
+     window.location.hostname === '127.0.0.1' or 'localhost'
+     → API runs on http://localhost:3000/api
+
+   Deployed (e.g. Vercel / Netlify / VPS):
+     window.location.hostname is your real domain
+     → API is expected on the SAME domain at /api
+       (or update the production URL below)
+
+   To point at a different production API, replace the string
+   in the else branch with your deployed API URL:
+     'https://api.yoursite.com/api'
+═══════════════════════════════════════════════════════════════ */
+const API_BASE = (() => {
+  const { hostname } = window.location;
+  const isDev = hostname === 'localhost' || hostname === '127.0.0.1';
+  return isDev ? 'http://localhost:3000/api' : '/api';
+})();
 
 
 /* ═══════════════════════════════════════════════════════════════
