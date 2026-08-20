@@ -22,6 +22,7 @@ Open `index.html` via [Live Server](https://marketplace.visualstudio.com/items?i
 | Week 4 | Dashboard, Profile, Multi-page Features | ✅ Complete |
 | Week 5 | Polish, Performance & Advanced Features | ✅ Complete |
 | Week 6 | Backend Integration (Express API) | ✅ Complete |
+| Week 7 | Database & Advanced Backend | 🔄 Day 1 Complete |
 
 ---
 
@@ -238,6 +239,35 @@ Open `index.html` via [Live Server](https://marketplace.visualstudio.com/items?i
 
 ---
 
+## Week 7 — Database & Advanced Backend
+
+### Week 7 Day 1 — MongoDB Integration
+
+**Why:** The previous in-memory `users[]` array reset on every server restart. Any registered user was permanently lost. MongoDB provides persistent, reliable storage that survives restarts and scales to production.
+
+**Architecture:**
+```
+Frontend → Express → Mongoose → MongoDB Atlas
+```
+
+**What was built:**
+
+- `server/db.js` — `connectDB()` reads `MONGODB_URI` from `.env`, connects via Mongoose, throws fast on failure so the server never starts in a broken state
+- `server/models/User.js` — Mongoose schema: `name` (2–100 chars), `email` (unique index, lowercase), `passwordHash`, `createdAt`/`updatedAt` (auto via `timestamps: true`)
+- Schema `toJSON` transform — strips `passwordHash` and `__v` if a document is ever serialised directly, as a defence-in-depth measure
+- `server/server.js` — `const users = []` removed entirely; register and login now use `User.findOne()`, `new User().save()`, and `User.countDocuments()`
+- `startServer()` — server binds to port only after MongoDB connection is confirmed; exits with code 1 on DB failure
+- `mongoose@8.24.3` installed (upgraded from 8.5.1 to resolve a critical prototype pollution CVE — 0 vulnerabilities)
+- `server/.env.example` updated with `MONGODB_URI` placeholder and format examples for both Atlas and local MongoDB
+
+**Persistence verified:**
+- Registered a user → restarted the server → logged in successfully with the same account
+- Duplicate email, wrong password, and missing fields all still return correct error codes
+- `passwordHash` is absent from every API response
+- `GET /api/health` now queries `User.countDocuments()` for a live user count from MongoDB
+
+---
+
 ## File Structure
 
 ```
@@ -291,7 +321,10 @@ SkillForge/
 │
 ├── server/
 │   ├── server.js                     Express API server (port 3000)
-│   ├── package.json                  Server dependencies (express, cors, bcryptjs, jsonwebtoken, dotenv, nodemon)
+│   ├── db.js                         MongoDB connection (Mongoose)
+│   ├── models/
+│   │   └── User.js                   Mongoose User schema and model
+│   ├── package.json                  Server dependencies (express, cors, bcryptjs, jsonwebtoken, dotenv, mongoose, nodemon)
 │   ├── .env.example                  Environment variable template (copy to .env)
 │   └── .env                          Local secrets — gitignored, never committed
 │
@@ -417,6 +450,8 @@ npm run dev          # starts Express on http://localhost:3000
 
 Navigate to `http://127.0.0.1:5500` in your browser. The API server must be running for the courses catalog and course detail pages to load data.
 
+> **MongoDB:** The API requires a MongoDB connection. Add your Atlas connection string to `server/.env` as `MONGODB_URI`. See `server/.env.example` for the format.
+
 ---
 
 ## Roadmap
@@ -494,6 +529,18 @@ Navigate to `http://127.0.0.1:5500` in your browser. The API server must be runn
 **Mohit Khatri**
 B.Tech CSE (IoT)
 Passionate about frontend development, clean architecture, and building real-world projects.
+
+### Week 7 (In Progress)
+- [x] MongoDB Atlas connection via Mongoose (`server/db.js`)
+- [x] Mongoose User model with unique email index (`server/models/User.js`)
+- [x] Register endpoint writes to MongoDB (`User.save()`)
+- [x] Login endpoint reads from MongoDB (`User.findOne()`)
+- [x] In-memory `users[]` array removed
+- [x] Server startup fails fast if MongoDB is unreachable
+- [x] User data persists across server restarts
+- [ ] Protected API routes (JWT middleware)
+- [ ] User profile API (`GET /api/me`, `PUT /api/me`)
+- [ ] Move enrolled courses and progress to database
 
 ---
 
