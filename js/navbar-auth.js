@@ -2,7 +2,8 @@
    SKILLFORGE — NAVBAR AUTH STATE
 
    Reads auth state from localStorage and updates the navbar
-   on every page.
+   on every page. Also refreshes user data from GET /api/me
+   on load so the displayed name stays in sync with the database.
 
    INCLUDED ON: all pages via <script src="js/navbar-auth.js" defer>
 
@@ -19,7 +20,7 @@
    - Reloads the current page so all components reflect logged-out state
    - Cross-tab: a storage event fires so other open tabs update too
 
-   LAST UPDATED: Week 6, Day 4
+   LAST UPDATED: Week 7, Day 2
 ═══════════════════════════════════════════════════════════════ */
 
 
@@ -43,13 +44,6 @@ function navGetUser() {
   }
 }
 
-/**
- * getAuthLink
- *
- * Figures out the correct relative path to auth.html from
- * the current page. Pages in /pages/ use 'auth.html',
- * pages at the root (index.html) use 'pages/auth.html'.
- */
 function getAuthLink(tab) {
   const isRoot = !window.location.pathname.includes('/pages/');
   const base   = isRoot ? 'pages/auth.html' : 'auth.html';
@@ -67,22 +61,23 @@ function getProfileLink() {
 /**
  * updateNavbar
  *
- * Finds .navbar__actions on the current page and rewrites its
- * inner HTML based on auth state.
+ * Renders the navbar__actions block based on current auth state.
+ * Accepts an optional user object so callers can pass fresh DB
+ * data without re-reading localStorage.
  *
- * Called:
- * - Once on DOMContentLoaded (initial render)
- * - In response to 'storage' events (cross-tab sync)
+ * @param {object|null} [freshUser] - User object from GET /api/me
  */
-function updateNavbar() {
+function updateNavbar(freshUser) {
   const actionsEl = document.querySelector('.navbar__actions');
   if (!actionsEl) return;
 
   if (navIsLoggedIn()) {
-    const user = navGetUser();
+    // Prefer freshUser (from DB) over stale localStorage copy
+    const user        = freshUser || navGetUser();
     const displayName = user?.name || localStorage.getItem('sf_user_name') || 'You';
-    // Truncate long names to keep navbar tidy
-    const shortName = displayName.length > 20 ? displayName.slice(0, 18) + '…' : displayName;
+    const shortName   = displayName.length > 20
+      ? displayName.slice(0, 18) + '…'
+      : displayName;
 
     actionsEl.innerHTML = `
       <a href="${getProfileLink()}"
@@ -98,7 +93,6 @@ function updateNavbar() {
         Log Out
       </button>`;
 
-    // Wire up logout immediately after injecting
     document.getElementById('logout-btn')?.addEventListener('click', handleLogout);
 
   } else {
@@ -122,28 +116,15 @@ function updateNavbar() {
 
 /* ─── Logout Handler ─────────────────────────────────────────── */
 
-/**
- * handleLogout
- *
- * Clears only auth keys, then reloads.
- * localStorage.setItem is used for the removal so that a
- * 'storage' event fires in other open tabs.
- */
 function handleLogout() {
-  // Remove auth keys
   localStorage.removeItem(NAV_KEY_TOKEN);
   localStorage.removeItem(NAV_KEY_USER);
 
-  // Trigger a storage event for other tabs by writing a sentinel
-  // then immediately removing it
+  // Sentinel write/remove triggers 'storage' event in other tabs
   localStorage.setItem('sf_auth_logout', Date.now().toString());
   localStorage.removeItem('sf_auth_logout');
 
-  // Update navbar on this tab immediately
   updateNavbar();
-
-  // Optionally redirect to home if on a protected-feeling page
-  // For now, just reload the current page
   window.location.reload();
 }
 
@@ -151,7 +132,6 @@ function handleLogout() {
 /* ─── Cross-Tab Sync ─────────────────────────────────────────── */
 
 window.addEventListener('storage', (e) => {
-  // React when auth keys change in another tab
   if (e.key === NAV_KEY_TOKEN || e.key === NAV_KEY_USER || e.key === 'sf_auth_logout') {
     updateNavbar();
   }
@@ -160,6 +140,44 @@ window.addEventListener('storage', (e) => {
 
 /* ─── Init ───────────────────────────────────────────────────── */
 
-// Run as soon as the DOM is ready.
-// The script tag uses defer so the DOM is already parsed when this runs.
-updateNavbar();
+/**
+ * Render the navbar immediately from localStorage (instant, no
+ * network wait), then silently refresh user data from the DB.
+ * If the DB returns a fresher name, re-render and save to storage.
+ *
+ * WHY two-phase:
+ * The first render is synchronous so the navbar appears instantly
+ * without a flash of "Log In" buttons for logged-in users.
+ * The background fetch corrects stale data without the user
+ * noticing any delay.
+ *
+ * api.js (which provides getMe()) must be loaded on the same page.
+ * Pages that don't include api.js get only the localStorage render,
+ * which is the correct graceful-degradation behaviour.
+ */
+(async function init() {
+  // Phase 1: render immediately from localStorage
+  updateNavbar();
+
+  // Phase 2: if logged in and api.js is available, fetch fresh data
+  if (!navIsLoggedIn()) return;
+  if (typeof getMe !== 'function') return; // api.js not loaded on this page
+
+  const freshUser = await getMe();
+
+  if (!freshUser) {
+    // getMe() returned null — token was invalid/expired, already cleared
+    updateNavbar();
+    return;
+  }
+
+  // Update localStorage if name changed in DB
+  const stored = navGetUser();
+  if (stored?.name !== freshUser.name) {
+    localStorage.setItem(NAV_KEY_USER, JSON.stringify(freshUser));
+    localStorage.setItem('sf_user_name', freshUser.name);
+  }
+
+  // Re-render navbar with fresh name
+  updateNavbar(freshUser);
+})();

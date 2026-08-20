@@ -49,8 +49,9 @@ const path      = require('path');
 const fs        = require('fs');
 const bcrypt    = require('bcryptjs');
 const jwt       = require('jsonwebtoken');
-const connectDB = require('./db');
-const User      = require('./models/User');
+const connectDB    = require('./db');
+const User         = require('./models/User');
+const requireAuth  = require('./middleware/auth');
 
 
 /* ─── App Setup ─────────────────────────────────────────────── */
@@ -399,6 +400,121 @@ app.post('/api/auth/login', async (req, res) => {
 
   } catch (err) {
     console.error('[login]', err.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+/* ─── Protected User Routes ──────────────────────────────────── */
+
+/**
+ * GET /api/me
+ *
+ * Returns the currently authenticated user's profile.
+ * Protected — requires a valid JWT in the Authorization header.
+ *
+ * requireAuth runs first:
+ *   - valid token   → populates req.user, calls next()
+ *   - missing/bad   → returns 401, handler never runs
+ *
+ * Returns: 200 { id, name, email, createdAt }
+ *
+ * WHY THIS ROUTE EXISTS:
+ * localStorage holds the user object from login time. If the
+ * user's name is later updated via PUT /api/me, the stored copy
+ * goes stale. GET /api/me lets any page refresh the user data
+ * from the authoritative database source.
+ */
+app.get('/api/me', requireAuth, async (req, res) => {
+  try {
+    // req.user.id is the MongoDB _id, set by requireAuth
+    const user = await User.findById(req.user.id).select('-passwordHash -__v');
+
+    if (!user) {
+      // Token was valid but the user was deleted from the DB
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json({
+      id:        user._id.toString(),
+      name:      user.name,
+      email:     user.email,
+      createdAt: user.createdAt
+    });
+
+  } catch (err) {
+    console.error('[GET /api/me]', err.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+/**
+ * PUT /api/me
+ *
+ * Updates the currently authenticated user's display name.
+ * Protected — requires a valid JWT in the Authorization header.
+ *
+ * Body: { name: string }
+ *
+ * Validations:
+ *   - name required, 2–100 characters after trimming
+ *
+ * Returns: 200 { id, name, email, createdAt }
+ *
+ * WHY findByIdAndUpdate with { new: true }:
+ * Returns the document AFTER the update in a single atomic
+ * operation. No separate read needed, no race condition.
+ *
+ * WHY { runValidators: true }:
+ * By default Mongoose skips schema validators on update operations.
+ * runValidators re-applies them so minlength/maxlength on name
+ * are enforced even on updates.
+ */
+app.put('/api/me', requireAuth, async (req, res) => {
+  try {
+    const { name } = req.body;
+
+    // ── Validate input ───────────────────────────────────────
+    if (!name || typeof name !== 'string') {
+      return res.status(400).json({ error: 'name is required' });
+    }
+
+    const trimmedName = name.trim();
+
+    if (trimmedName.length < 2) {
+      return res.status(400).json({ error: 'name must be at least 2 characters' });
+    }
+
+    if (trimmedName.length > 100) {
+      return res.status(400).json({ error: 'name must be 100 characters or fewer' });
+    }
+
+    // ── Update in MongoDB ────────────────────────────────────
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      { name: trimmedName },
+      {
+        new:            true,   // return the updated document
+        runValidators:  true,   // enforce schema validators on update
+        select:         '-passwordHash -__v'  // exclude sensitive fields
+      }
+    );
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // ── Respond with updated user ────────────────────────────
+    res.json({
+      id:        user._id.toString(),
+      name:      user.name,
+      email:     user.email,
+      createdAt: user.createdAt
+    });
+
+  } catch (err) {
+    console.error('[PUT /api/me]', err.message);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
