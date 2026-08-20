@@ -21,7 +21,7 @@ Open `index.html` via [Live Server](https://marketplace.visualstudio.com/items?i
 | Week 3 | JavaScript Interactivity, Dynamic Content | ✅ Complete |
 | Week 4 | Dashboard, Profile, Multi-page Features | ✅ Complete |
 | Week 5 | Polish, Performance & Advanced Features | ✅ Complete |
-| Week 6 | Backend Integration (Express API) | 🔄 Day 4 Complete |
+| Week 6 | Backend Integration (Express API) | ✅ Complete |
 
 ---
 
@@ -214,7 +214,16 @@ Open `index.html` via [Live Server](https://marketplace.visualstudio.com/items?i
 - In-memory `users` array — resets on server restart, replaced by DB in a later week
 - Password never stored in plain text — only bcrypt hash
 
-**Day 4 — Frontend Authentication**
+**Day 5 — CORS Hardening, dotenv & Error Handling**
+- `dotenv@16.4.7` installed; `server/.env` loads `PORT`, `JWT_SECRET`, `ALLOWED_ORIGINS` at startup
+- `server/.env.example` committed as a safe template (`.env` itself is gitignored)
+- CORS uses a dynamic origin function — reads `ALLOWED_ORIGINS` from `.env`, rejects unknown origins with 403, logs every blocked request
+- `file://` protocol (`origin: 'null'`) allowed during development; same-origin and non-browser tools (curl/Postman) always pass through
+- Global error handler catches malformed JSON bodies (400), CORS rejections (403), and all other unhandled errors (500)
+- `process.on('unhandledRejection')` and `process.on('uncaughtException')` guards added
+- `GET /api/health` now returns `users` count and `env` field
+- `API_BASE` in `courses.js`, `course-detail.js`, and `auth.js` replaced with an environment-aware IIFE: `localhost`/`127.0.0.1` → `http://localhost:3000/api`, any other host → `/api` (same-origin for deployed builds)
+- Server startup logs show loaded courses count, allowed CORS origins, and a warning if `JWT_SECRET` is not set in `.env`
 - `pages/auth.html` — tabbed Sign Up / Log In page, ARIA tab pattern with keyboard support
 - `pages/login.html` + `pages/register.html` — instant-redirect shims so existing navbar links work
 - `js/auth.js` — register form (POST `/api/auth/register`), login form (POST `/api/auth/login`), client-side validation, error display, JWT + user stored in localStorage on success, redirect to dashboard
@@ -282,7 +291,9 @@ SkillForge/
 │
 ├── server/
 │   ├── server.js                     Express API server (port 3000)
-│   └── package.json                  Server dependencies (express, cors, nodemon)
+│   ├── package.json                  Server dependencies (express, cors, bcryptjs, jsonwebtoken, dotenv, nodemon)
+│   ├── .env.example                  Environment variable template (copy to .env)
+│   └── .env                          Local secrets — gitignored, never committed
 │
 ├── assets/                           Images and media (planned)
 ├── .gitignore
@@ -396,6 +407,7 @@ code SkillForge
 # Start the API server (terminal 1)
 cd server
 npm install
+cp .env.example .env        # then edit .env to set JWT_SECRET
 npm run dev          # starts Express on http://localhost:3000
 
 # Start the frontend (terminal 2)
@@ -459,7 +471,7 @@ Navigate to `http://127.0.0.1:5500` in your browser. The API server must be runn
 - [ ] Accessibility audit and keyboard navigation pass
 - [ ] Performance and Lighthouse audit
 
-### Week 6 (In Progress)
+### Week 6 (Complete ✅)
 - [x] Express server with CORS and validation
 - [x] `GET /api/health`, `GET /api/courses`, `GET /api/courses/:id`
 - [x] Frontend courses page fetches from Express API
@@ -472,8 +484,10 @@ Navigate to `http://127.0.0.1:5500` in your browser. The API server must be runn
 - [x] `js/navbar-auth.js` — dynamic navbar auth state on every page
 - [x] Logout removes JWT, restores logged-out navbar
 - [x] Cross-tab auth sync via `storage` event
-- [ ] CORS hardening, environment variables (`.env` + `dotenv`)
-- [ ] Protected API routes (require valid JWT)
+- [x] `dotenv` — `JWT_SECRET`, `PORT`, `ALLOWED_ORIGINS` from `.env`
+- [x] CORS hardened — dynamic origin check, unknown origins blocked with 403
+- [x] Global error handler — malformed JSON (400), CORS (403), unhandled errors (500)
+- [x] `API_BASE` environment-aware IIFE in all frontend JS files
 
 ---
 
