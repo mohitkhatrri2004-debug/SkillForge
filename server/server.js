@@ -43,12 +43,14 @@ require('dotenv').config();
 
 /* ─── Dependencies ───────────────────────────────────────────── */
 
-const express = require('express');
-const cors    = require('cors');
-const path    = require('path');
-const fs      = require('fs');
-const bcrypt  = require('bcryptjs');
-const jwt     = require('jsonwebtoken');
+const express   = require('express');
+const cors      = require('cors');
+const path      = require('path');
+const fs        = require('fs');
+const bcrypt    = require('bcryptjs');
+const jwt       = require('jsonwebtoken');
+const connectDB = require('./db');
+const User      = require('./models/User');
 
 
 /* ─── App Setup ─────────────────────────────────────────────── */
@@ -71,15 +73,6 @@ if (!process.env.JWT_SECRET) {
 
 
 /* ─── In-Memory User Store ──────────────────────────────────── */
-
-/**
- * users — array of { id, name, email, passwordHash, createdAt }
- *
- * Lives in memory: resets on server restart.
- * Week 8+ will replace this with a real database.
- * Passwords are NEVER stored in plain text — only the bcrypt hash.
- */
-const users = [];
 
 
 /* ─── CORS Configuration ─────────────────────────────────────── */
@@ -197,14 +190,26 @@ console.log(`[startup] Loaded ${courses.length} courses from courses.json`);
  * GET /api/health
  * Quick liveness check — useful for uptime monitoring.
  */
-app.get('/api/health', (req, res) => {
-  res.json({
-    status:    'ok',
-    courses:   courses.length,
-    users:     users.length,
-    timestamp: new Date().toISOString(),
-    env:       process.env.NODE_ENV || 'development'
-  });
+app.get('/api/health', async (req, res) => {
+  try {
+    const userCount = await User.countDocuments();
+    res.json({
+      status:    'ok',
+      courses:   courses.length,
+      users:     userCount,
+      timestamp: new Date().toISOString(),
+      env:       process.env.NODE_ENV || 'development'
+    });
+  } catch (err) {
+    // DB might be temporarily unreachable — still return a response
+    res.json({
+      status:    'degraded',
+      courses:   courses.length,
+      users:     null,
+      timestamp: new Date().toISOString(),
+      env:       process.env.NODE_ENV || 'development'
+    });
+  }
 });
 
 
@@ -291,31 +296,45 @@ app.post('/api/auth/register', async (req, res) => {
       return res.status(400).json({ error: 'password must be at least 6 characters' });
     }
 
-    if (users.find(u => u.email === trimmedEmail)) {
+    // ── Duplicate email check — now queries MongoDB ─────────
+    const existing = await User.findOne({ email: trimmedEmail });
+    if (existing) {
       return res.status(400).json({ error: 'An account with that email already exists' });
     }
 
+    // ── Hash password (unchanged from Day 3) ────────────────
     const passwordHash = await bcrypt.hash(trimmedPass, 10);
 
-    const user = {
-      id:           `user_${Date.now()}`,
+    // ── Persist to MongoDB ───────────────────────────────────
+    // new User({...}).save() writes the document to the 'users'
+    // collection. Mongoose sets _id and createdAt automatically.
+    // The schema's toJSON transform strips passwordHash before
+    // the document is serialised, but we build the response
+    // manually below to keep the format the frontend expects.
+    const user = await new User({
       name:         trimmedName,
       email:        trimmedEmail,
-      passwordHash,
-      createdAt:    new Date().toISOString()
-    };
+      passwordHash
+    }).save();
 
-    users.push(user);
-
+    // ── Sign JWT (unchanged from Day 3) ─────────────────────
     const token = jwt.sign(
-      { id: user.id, email: user.email },
+      { id: user._id, email: user.email },
       JWT_SECRET,
       { expiresIn: JWT_EXPIRES_IN }
     );
 
+    // ── Respond — same shape the frontend already expects ───
+    // user._id is a MongoDB ObjectId; .toString() gives a
+    // plain string identical in behaviour to the old user_${Date.now()} id.
     res.status(201).json({
       token,
-      user: { id: user.id, name: user.name, email: user.email, createdAt: user.createdAt }
+      user: {
+        id:        user._id.toString(),
+        name:      user.name,
+        email:     user.email,
+        createdAt: user.createdAt
+      }
     });
 
   } catch (err) {
@@ -345,7 +364,8 @@ app.post('/api/auth/login', async (req, res) => {
     const trimmedEmail = String(email).trim().toLowerCase();
     const trimmedPass  = String(password);
 
-    const user = users.find(u => u.email === trimmedEmail);
+    // ── Look up user in MongoDB ──────────────────────────────
+    const user = await User.findOne({ email: trimmedEmail });
 
     // Always run bcrypt.compare even when user is not found,
     // to prevent timing-based email enumeration.
@@ -359,15 +379,22 @@ app.post('/api/auth/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 
+    // ── Sign JWT (unchanged from Day 3) ─────────────────────
     const token = jwt.sign(
-      { id: user.id, email: user.email },
+      { id: user._id, email: user.email },
       JWT_SECRET,
       { expiresIn: JWT_EXPIRES_IN }
     );
 
+    // ── Respond — same shape the frontend expects ────────────
     res.json({
       token,
-      user: { id: user.id, name: user.name, email: user.email, createdAt: user.createdAt }
+      user: {
+        id:        user._id.toString(),
+        name:      user.name,
+        email:     user.email,
+        createdAt: user.createdAt
+      }
     });
 
   } catch (err) {
@@ -433,8 +460,22 @@ process.on('uncaughtException', (err) => {
 
 /* ─── Start ──────────────────────────────────────────────────── */
 
-app.listen(PORT, () => {
-  console.log(`\nSkillForge API running at http://localhost:${PORT}`);
-  console.log(`  Health:  http://localhost:${PORT}/api/health`);
-  console.log(`  Courses: http://localhost:${PORT}/api/courses\n`);
+/**
+ * Connect to MongoDB first, then start listening.
+ * If connectDB() throws (bad URI, network error), the process
+ * exits before binding to a port — no silent broken server.
+ */
+async function startServer() {
+  await connectDB();
+
+  app.listen(PORT, () => {
+    console.log(`\nSkillForge API running at http://localhost:${PORT}`);
+    console.log(`  Health:  http://localhost:${PORT}/api/health`);
+    console.log(`  Courses: http://localhost:${PORT}/api/courses\n`);
+  });
+}
+
+startServer().catch(err => {
+  console.error('[startup error]', err.message);
+  process.exit(1);
 });
