@@ -22,7 +22,7 @@ Open `index.html` via [Live Server](https://marketplace.visualstudio.com/items?i
 | Week 4 | Dashboard, Profile, Multi-page Features | ✅ Complete |
 | Week 5 | Polish, Performance & Advanced Features | ✅ Complete |
 | Week 6 | Backend Integration (Express API) | ✅ Complete |
-| Week 7 | Database & Advanced Backend | 🔄 Day 1 Complete |
+| Week 7 | Database & Advanced Backend | 🔄 Day 2 Complete |
 
 ---
 
@@ -266,9 +266,16 @@ Frontend → Express → Mongoose → MongoDB Atlas
 - `passwordHash` is absent from every API response
 - `GET /api/health` now queries `User.countDocuments()` for a live user count from MongoDB
 
----
+**Day 2 — JWT Middleware & Protected Routes**
+- `server/middleware/auth.js` — `requireAuth` middleware: reads `Authorization: Bearer <token>`, verifies signature and expiry with `jwt.verify()`, attaches `{ id, email }` to `req.user`, returns 401 on any failure (expired, tampered, missing)
+- `GET /api/me` — protected route returning the logged-in user's profile from MongoDB (`User.findById`)
+- `PUT /api/me` — protected route to update display name (`User.findByIdAndUpdate` with `runValidators: true`); validates 2–100 chars
+- `js/api.js` — frontend `apiFetch()` helper that auto-attaches `Authorization: Bearer <token>` header; exports `getMe()` and `updateMe()` methods
+- `js/navbar-auth.js` — two-phase init: instant render from localStorage (no flash), then silent `GET /api/me` call to refresh stale name from DB
+- All 5 pages (`index.html`, `courses.html`, `course-detail.html`, `dashboard.html`, `profile.html`) — `api.js` added before `navbar-auth.js` so `getMe` is available at navbar init time
+- Token expiry returns distinct "Session expired" message vs "Invalid token" for tampered/malformed tokens
 
-## File Structure
+---
 
 ```
 SkillForge/
@@ -313,7 +320,8 @@ SkillForge/
 │   ├── dashboard.js                  localStorage reads, course rendering, recommendations
 │   ├── profile.js                    Form validation, name save, danger zone, cross-tab sync
 │   ├── auth.js                       Register/login forms, API calls, JWT storage
-│   ├── navbar-auth.js                Navbar auth state (loaded on every page)
+│   ├── api.js                        Authenticated fetch helper (getMe, updateMe)
+│   ├── navbar-auth.js                Navbar auth state + DB refresh on load
 │   └── transitions.js                View Transitions API page animations
 │
 ├── data/
@@ -322,11 +330,13 @@ SkillForge/
 ├── server/
 │   ├── server.js                     Express API server (port 3000)
 │   ├── db.js                         MongoDB connection (Mongoose)
+│   ├── middleware/
+│   │   └── auth.js                   requireAuth JWT middleware
 │   ├── models/
 │   │   └── User.js                   Mongoose User schema and model
-│   ├── package.json                  Server dependencies (express, cors, bcryptjs, jsonwebtoken, dotenv, mongoose, nodemon)
-│   ├── .env.example                  Environment variable template (copy to .env)
-│   └── .env                          Local secrets — gitignored, never committed
+│   ├── package.json                  Server dependencies
+│   ├── .env.example                  Environment variable template
+│   └── .env                          Local secrets — gitignored
 │
 ├── assets/                           Images and media (planned)
 ├── .gitignore
@@ -538,8 +548,12 @@ Passionate about frontend development, clean architecture, and building real-wor
 - [x] In-memory `users[]` array removed
 - [x] Server startup fails fast if MongoDB is unreachable
 - [x] User data persists across server restarts
-- [ ] Protected API routes (JWT middleware)
-- [ ] User profile API (`GET /api/me`, `PUT /api/me`)
+- [x] `requireAuth` JWT middleware (`server/middleware/auth.js`)
+- [x] `GET /api/me` — protected route, returns user from MongoDB
+- [x] `PUT /api/me` — protected route, updates display name in MongoDB
+- [x] `js/api.js` — authenticated fetch helper with `getMe()` and `updateMe()`
+- [x] Navbar refreshes user name from DB on every page load
+- [ ] User profile API — move avatar/bio to database
 - [ ] Move enrolled courses and progress to database
 
 ---
