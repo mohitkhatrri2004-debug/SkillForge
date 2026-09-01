@@ -1,0 +1,18 @@
+# Maven build output
+target/
+
+# Maven wrapper jar (downloaded on first run — not committed)
+.mvn/wrapper/maven-wrapper.jar
+
+# IDE files
+.idea/
+*.iml
+.eclipse/
+.classpath
+.project
+.settings/
+*.class
+
+# Spring Boot local config
+application-local.properties
+application-local.yml

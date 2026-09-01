@@ -97,6 +97,14 @@ const API_BASE = (() => {
   return isDev ? 'http://localhost:3000/api' : '/api';
 })();
 
+// Week 7 Day 3 — Course data served by Spring Boot on :8080
+// Auth endpoints remain on Node.js :3000 via API_BASE above.
+const COURSES_API_BASE = (() => {
+  const { hostname } = window.location;
+  const isDev = hostname === 'localhost' || hostname === '127.0.0.1';
+  return isDev ? 'http://localhost:8080/api' : '/api';
+})();
+
 
 /* ═══════════════════════════════════════════════════════════════
    SECTION 2: STORAGE KEYS & STATE
@@ -940,7 +948,7 @@ async function loadCourses() {
     // Fetch courses from the Express API (Week 6+).
     // Falls back gracefully if the server is not running —
     // the error handler below shows a helpful message.
-    const response = await fetch(`${API_BASE}/courses`);
+    const response = await fetch(`${COURSES_API_BASE}/courses`);
 
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);

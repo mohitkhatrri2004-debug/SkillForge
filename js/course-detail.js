@@ -51,6 +51,13 @@ const API_BASE = (() => {
   return isDev ? 'http://localhost:3000/api' : '/api';
 })();
 
+// Week 7 Day 3 — Course data served by Spring Boot on :8080
+const COURSES_API_BASE = (() => {
+  const { hostname } = window.location;
+  const isDev = hostname === 'localhost' || hostname === '127.0.0.1';
+  return isDev ? 'http://localhost:8080/api' : '/api';
+})();
+
 
 function fill(fieldName, value) {
   const el = document.querySelector(`[data-field="${fieldName}"]`);
@@ -607,7 +614,7 @@ async function loadCourse() {
   let course;
 
   try {
-    const response = await fetch(`${API_BASE}/courses/${encodeURIComponent(courseId)}`);
+    const response = await fetch(`${COURSES_API_BASE}/courses/${encodeURIComponent(courseId)}`);
 
     // 404 means valid request but course not found — show friendly message
     if (response.status === 404) {

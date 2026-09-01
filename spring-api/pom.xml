@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+             https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- ── Spring Boot Parent ──────────────────────────────────
+         Inherits dependency versions, plugin config, and defaults.
+         This is the standard way to start a Spring Boot project.
+    ────────────────────────────────────────────────────────── -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.4.1</version>
+        <relativePath/>
+    </parent>
+
+    <!-- ── Project Coordinates ─────────────────────────────────
+         groupId:    reverse-domain convention
+         artifactId: the jar file name
+         version:    project version
+    ────────────────────────────────────────────────────────── -->
+    <groupId>com.skillforge</groupId>
+    <artifactId>spring-api</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>SkillForge Spring API</name>
+    <description>Course data REST API for SkillForge — Week 7 Day 3</description>
+
+    <!-- ── Java Version ─────────────────────────────────────────
+         Spring Boot 3.x requires Java 17 minimum.
+         JAVA_HOME points to JDK 17 (Eclipse Adoptium).
+         Using 17 here ensures compatibility with JAVA_HOME.
+    ────────────────────────────────────────────────────────── -->
+    <properties>
+        <java.version>17</java.version>
+    </properties>
+
+    <!-- ── Dependencies ─────────────────────────────────────────
+         spring-boot-starter-web:
+           - Spring MVC (REST controllers, @GetMapping, etc.)
+           - Embedded Tomcat server
+           - Jackson (JSON serialisation/deserialisation)
+           - Validation support
+
+         No database dependency yet — we read from courses.json.
+         MongoDB will be added in a later week when course data
+         moves from JSON files to the database.
+    ────────────────────────────────────────────────────────── -->
+    <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <!-- ── Build ────────────────────────────────────────────────
+         spring-boot-maven-plugin packages the app as an
+         executable "fat jar" containing all dependencies.
+         Run with: java -jar target/spring-api-0.0.1-SNAPSHOT.jar
+    ────────────────────────────────────────────────────────── -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
