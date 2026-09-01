@@ -22,7 +22,7 @@ Open `index.html` via [Live Server](https://marketplace.visualstudio.com/items?i
 | Week 4 | Dashboard, Profile, Multi-page Features | ✅ Complete |
 | Week 5 | Polish, Performance & Advanced Features | ✅ Complete |
 | Week 6 | Backend Integration (Express API) | ✅ Complete |
-| Week 7 | Database & Advanced Backend | 🔄 Day 2 Complete |
+| Week 7 | Database & Advanced Backend | ✅ Complete |
 
 ---
 
@@ -275,6 +275,22 @@ Frontend → Express → Mongoose → MongoDB Atlas
 - All 5 pages (`index.html`, `courses.html`, `course-detail.html`, `dashboard.html`, `profile.html`) — `api.js` added before `navbar-auth.js` so `getMe` is available at navbar init time
 - Token expiry returns distinct "Session expired" message vs "Invalid token" for tampered/malformed tokens
 
+**Day 3 — Java/Spring Boot Course API**
+- `spring-api/` — new Spring Boot 3.4.1 service on port 8080
+- `spring-api/pom.xml` — Maven project: `spring-boot-starter-web`, Java 17, embedded Tomcat
+- `spring-api/src/main/java/com/skillforge/api/model/Course.java` — Java record mapping all 22 fields from `courses.json`
+- `spring-api/src/main/java/com/skillforge/api/controller/CourseController.java` — `GET /api/health`, `GET /api/courses` (`?category=`, `?q=`), `GET /api/courses/{id}` (400 on bad ID, 404 if not found)
+- Courses loaded from `courses.json` once at startup via `@PostConstruct`, cached in memory
+- CORS configured via `@CrossOrigin` to allow Live Server origins
+- `js/courses.js` + `js/course-detail.js` — `COURSES_API_BASE` added pointing to `:8080`; course fetches hit Spring Boot, auth stays on Node.js `:3000`
+
+**Architecture:**
+```
+Frontend → Spring Boot :8080    (course data)
+         → Node.js :3000        (auth, user profile)
+         → MongoDB Atlas        (users)
+```
+
 ---
 
 ```
@@ -337,6 +353,15 @@ SkillForge/
 │   ├── package.json                  Server dependencies
 │   ├── .env.example                  Environment variable template
 │   └── .env                          Local secrets — gitignored
+│
+├── spring-api/                       Spring Boot course API (port 8080)
+│   ├── pom.xml                       Maven project descriptor
+│   ├── mvnw.cmd                      Maven Wrapper (Windows)
+│   ├── .mvn/wrapper/                 Maven Wrapper config
+│   └── src/main/java/com/skillforge/api/
+│       ├── SkillForgeApiApplication.java   Entry point
+│       ├── controller/CourseController.java REST endpoints
+│       └── model/Course.java              Java record data model
 │
 ├── assets/                           Images and media (planned)
 ├── .gitignore
@@ -447,11 +472,19 @@ git clone https://github.com/YOUR_USERNAME/SkillForge.git
 # Open in VS Code
 code SkillForge
 
-# Start the API server (terminal 1)
+# Start the API server (terminal 1) — Node.js auth + user API
 cd server
 npm install
-cp .env.example .env        # then edit .env to set JWT_SECRET
+cp .env.example .env        # then edit .env to set JWT_SECRET and MONGODB_URI
 npm run dev          # starts Express on http://localhost:3000
+
+# Start the Spring Boot course API (terminal 2)
+cd spring-api
+# Windows — Maven Wrapper downloads Maven automatically on first run:
+# mvnw.cmd spring-boot:run
+# Or with Maven installed globally:
+# mvn spring-boot:run
+# Starts on http://localhost:8080
 
 # Start the frontend (terminal 2)
 # Right-click index.html in the Explorer panel
@@ -540,7 +573,7 @@ Navigate to `http://127.0.0.1:5500` in your browser. The API server must be runn
 B.Tech CSE (IoT)
 Passionate about frontend development, clean architecture, and building real-world projects.
 
-### Week 7 (In Progress)
+### Week 7 (Complete ✅)
 - [x] MongoDB Atlas connection via Mongoose (`server/db.js`)
 - [x] Mongoose User model with unique email index (`server/models/User.js`)
 - [x] Register endpoint writes to MongoDB (`User.save()`)
@@ -553,8 +586,9 @@ Passionate about frontend development, clean architecture, and building real-wor
 - [x] `PUT /api/me` — protected route, updates display name in MongoDB
 - [x] `js/api.js` — authenticated fetch helper with `getMe()` and `updateMe()`
 - [x] Navbar refreshes user name from DB on every page load
-- [ ] User profile API — move avatar/bio to database
-- [ ] Move enrolled courses and progress to database
+- [x] Spring Boot 3.4.1 service (`spring-api/`) on port 8080
+- [x] `GET /api/courses` + `GET /api/courses/{id}` served by Java
+- [x] `COURSES_API_BASE` in frontend JS routes course fetches to `:8080`
 
 ---
 
