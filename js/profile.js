@@ -236,6 +236,14 @@ function loadProfile() {
    - Must not be empty after trimming whitespace
    - Must be at least 2 characters
    - Must not exceed 50 characters (enforced by maxlength too)
+
+   Week 8 Day 1:
+   If the user is logged in (sf_auth_token present), the name
+   is saved via PUT /api/me (api.js → updateMe()) instead of
+   directly to localStorage. The API response becomes the
+   source of truth; localStorage is updated from it.
+   If not logged in, the original localStorage-only path runs
+   unchanged — the form still works for guest users.
 ═══════════════════════════════════════════════════════════════ */
 function initNameForm() {
   const form  = document.getElementById('name-form');
@@ -243,7 +251,7 @@ function initNameForm() {
 
   if (!form || !input) return;
 
-  form.addEventListener('submit', (event) => {
+  form.addEventListener('submit', async (event) => {
 
     // CRITICAL: Stop the browser from reloading the page
     event.preventDefault();
@@ -252,8 +260,6 @@ function initNameForm() {
     clearFormError();
 
     // Read and normalise the value
-    // .trim() removes leading/trailing spaces
-    // "  Mohit  " → "Mohit"
     const value = input.value.trim();
 
     // ── Validation ──────────────────────────────────────────
@@ -269,23 +275,58 @@ function initNameForm() {
       return;
     }
 
-    // Passes validation — save to localStorage
+    // ── Route: logged in → save via API ─────────────────────
+    const isLoggedIn = Boolean(localStorage.getItem('sf_auth_token'));
+
+    if (isLoggedIn && typeof updateMe === 'function') {
+      // Disable the submit button while the request is in flight
+      const submitBtn = form.querySelector('button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Saving…';
+      }
+
+      try {
+        // updateMe() calls PUT /api/me and also writes
+        // sf_auth_user + sf_user_name to localStorage on success
+        const updatedUser = await updateMe(value);
+
+        // Use the name returned by the server (may differ slightly
+        // if the server trims differently than the client)
+        const savedName = updatedUser.name;
+
+        // Update input to show the server-confirmed value
+        input.value = savedName;
+
+        // Update all on-page name/avatar displays
+        updateAllNameDisplays(savedName);
+
+        showFeedback(`✓ Name saved as "${savedName}"`, 'success');
+
+      } catch (err) {
+        // Show the server's validation message (e.g. "name must be
+        // at least 2 characters") or a generic fallback
+        showFormError(err.message || 'Failed to save name. Please try again.');
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Save Name';
+        }
+      }
+
+      return; // do not fall through to the localStorage path
+    }
+
+    // ── Route: not logged in → save to localStorage only ────
+    // Original Week 4 behaviour — unchanged for guest users.
     localStorage.setItem(PROFILE_KEY_NAME, value);
-
-    // Update all name/avatar displays on the page immediately
     updateAllNameDisplays(value);
-
-    // Update the input to show the trimmed version
     input.value = value;
-
-    // Show success feedback
     showFeedback(`✓ Name saved as "${value}"`, 'success');
 
   });
 
   // Clear the error state as soon as the user starts typing again.
-  // Keeps the form feeling responsive — errors disappear when
-  // the user is actively fixing them.
   input.addEventListener('input', () => {
     clearFormError();
     const feedback = document.getElementById('name-feedback');
