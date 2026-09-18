@@ -187,8 +187,22 @@ function updateAllNameDisplays(name) {
 /* ═══════════════════════════════════════════════════════════════
    SECTION: LOAD PROFILE
 
-   Reads all user state and populates the page immediately.
-   Synchronous — no network request needed, all from localStorage.
+   TWO-PHASE LOADING (Week 8 Day 1, Milestone 2):
+
+   Phase 1 — loadProfile() [synchronous, instant]
+     Reads from localStorage and renders immediately.
+     User sees their name and stats with zero network wait.
+
+   Phase 2 — refreshProfileFromAPI() [async, background]
+     If logged in, fetches GET /api/me for the authoritative
+     name from MongoDB. If the name changed (e.g. updated on
+     another device), updates the page and localStorage.
+     If not logged in, skipped entirely — localStorage is enough.
+
+   WHY TWO PHASES:
+   A single async load would leave the page blank until the
+   network responds. Rendering from localStorage first then
+   correcting from the API gives instant display with fresh data.
 ═══════════════════════════════════════════════════════════════ */
 function loadProfile() {
 
@@ -214,12 +228,51 @@ function loadProfile() {
   fill('about-completed', completed.length);
 
   // ── Pre-fill the name input with current saved value ────────
-  // WHY: Users should see their current name in the field,
-  // not a blank box. Makes it feel like an edit form, not a
-  // first-time setup form.
   const nameInput = document.getElementById('name-input');
   if (nameInput && name !== 'Learner') {
     nameInput.value = name;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   SECTION: REFRESH PROFILE FROM API
+
+   Phase 2 of profile loading. Called after loadProfile() so the
+   page is already populated when this runs.
+
+   Only executes when:
+   - User is logged in (sf_auth_token present)
+   - api.js is loaded (getMe function is available)
+
+   On success:
+   - If DB name differs from localStorage → update page + storage
+   - Pre-fills the name input with the fresh value
+   - Silent — no feedback shown unless something changed
+
+   On failure (network error, expired token):
+   - getMe() handles token cleanup (removes invalid token)
+   - Page continues showing the localStorage version
+   - No error shown to user — graceful degradation
+═══════════════════════════════════════════════════════════════ */
+async function refreshProfileFromAPI() {
+  const isLoggedIn = Boolean(localStorage.getItem('sf_auth_token'));
+  if (!isLoggedIn)                       return;
+  if (typeof getMe !== 'function')       return;  // api.js not loaded
+
+  const user = await getMe();
+  if (!user) return;  // token expired or network error — getMe() already cleaned up
+
+  const storedName = localStorage.getItem(PROFILE_KEY_NAME) || 'Learner';
+
+  // Only update if the DB name differs from what localStorage has
+  if (user.name !== storedName) {
+    localStorage.setItem(PROFILE_KEY_NAME, user.name);
+    updateAllNameDisplays(user.name);
+
+    // Keep the name input in sync
+    const nameInput = document.getElementById('name-input');
+    if (nameInput) nameInput.value = user.name;
   }
 }
 
@@ -447,9 +500,13 @@ function initDangerZone() {
 /* ═══════════════════════════════════════════════════════════════
    ENTRY POINT
 
-   All three sections run on page load.
-   No async needed — everything reads from localStorage only.
+   Phase 1: loadProfile() — instant render from localStorage.
+   Phase 2: refreshProfileFromAPI() — silent DB refresh if logged in.
+   Both run on page load. Guest users only see Phase 1.
 ═══════════════════════════════════════════════════════════════ */
-loadProfile();
-initNameForm();
-initDangerZone();
+(async function init() {
+  loadProfile();              // Phase 1: instant, synchronous
+  initNameForm();
+  initDangerZone();
+  await refreshProfileFromAPI();  // Phase 2: background API refresh
+})();
