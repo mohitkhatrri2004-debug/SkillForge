@@ -34,7 +34,9 @@
          Using 17 here ensures compatibility with JAVA_HOME.
     ────────────────────────────────────────────────────────── -->
     <properties>
-        <java.version>17</java.version>
+        <java.version>21</java.version>
+        <!-- Pin MongoDB driver to 4.11.x — compatible with Atlas TLS on all JDK builds -->
+        <mongodb.version>4.11.4</mongodb.version>
     </properties>
 
     <!-- ── Dependencies ─────────────────────────────────────────
@@ -42,17 +44,22 @@
            - Spring MVC (REST controllers, @GetMapping, etc.)
            - Embedded Tomcat server
            - Jackson (JSON serialisation/deserialisation)
-           - Validation support
 
-         No database dependency yet — we read from courses.json.
-         MongoDB will be added in a later week when course data
-         moves from JSON files to the database.
+         spring-boot-starter-data-mongodb:
+           - Spring Data MongoDB (MongoRepository, @Document)
+           - Auto-configures MongoClient from spring.data.mongodb.uri
+           - Week 8 Day 2: course data moves from courses.json → Atlas
     ────────────────────────────────────────────────────────── -->
     <dependencies>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
 
     </dependencies>
