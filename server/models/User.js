@@ -53,9 +53,29 @@ const userSchema = new mongoose.Schema(
     passwordHash: {
       type:     String,
       required: [true, 'Password hash is required']
-      // No minlength here — the hash is always 60 chars from bcrypt.
-      // Validation of the original password happens in the route,
-      // before hashing.
+    },
+
+    // ── Week 8 Day 3 — Enrollment + Progress ──────────────────
+    // These replace localStorage as the source of truth.
+    // Existing users get empty arrays/maps by default (sparse: true
+    // means MongoDB won't index documents where the field is absent).
+
+    enrolledCourses: {
+      type:    [String],   // array of course ID slugs
+      default: []
+    },
+
+    courseProgress: {
+      // Map from course ID → progress percentage (0–100)
+      // e.g. { "complete-web-development": 75 }
+      type:    Map,
+      of:      Number,
+      default: {}
+    },
+
+    completedCourses: {
+      type:    [String],   // course IDs where progress reached 100
+      default: []
     }
   },
   {
@@ -69,8 +89,12 @@ const userSchema = new mongoose.Schema(
     // against accidentally sending it in the future.
     toJSON: {
       transform(doc, ret) {
-        delete ret.passwordHash; // never send the hash to the client
-        delete ret.__v;          // internal Mongoose version key
+        delete ret.passwordHash;
+        delete ret.__v;
+        // Convert courseProgress Map to a plain object for JSON
+        if (ret.courseProgress instanceof Map) {
+          ret.courseProgress = Object.fromEntries(ret.courseProgress);
+        }
         return ret;
       }
     }

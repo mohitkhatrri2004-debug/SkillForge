@@ -366,43 +366,43 @@ function initProgressControl(courseId) {
     return map[courseId] ?? 0;
   }
 
-  // Write updated progress to localStorage.
-  // Also manages sf_completed_courses:
-  // - progress === 100 → add courseId to completed array
-  // - progress  <  100 → remove courseId from completed array
-  function saveProgress(value) {
-    // Update the progress map
+  // Write updated progress — API when logged in, localStorage otherwise
+  async function saveProgress(value) {
+    const isLoggedIn = Boolean(localStorage.getItem('sf_auth_token'));
+
+    if (isLoggedIn && typeof updateProgress === 'function') {
+      try {
+        await updateProgress(courseId, value);
+        // updateProgress() already synced localStorage
+      } catch (err) {
+        // API failed — fall back to localStorage
+        _saveProgressLocal(value);
+      }
+    } else {
+      _saveProgressLocal(value);
+    }
+  }
+
+  function _saveProgressLocal(value) {
     const map = JSON.parse(localStorage.getItem(PROGRESS_KEY) || '{}');
     map[courseId] = value;
     localStorage.setItem(PROGRESS_KEY, JSON.stringify(map));
 
-    // Sync the completed courses array
     const COMPLETED_KEY = 'sf_completed_courses';
     const completed = JSON.parse(localStorage.getItem(COMPLETED_KEY) || '[]');
-
     if (value >= 100 && !completed.includes(courseId)) {
-      // Mark as complete
       localStorage.setItem(COMPLETED_KEY, JSON.stringify([...completed, courseId]));
     } else if (value < 100 && completed.includes(courseId)) {
-      // Un-mark as complete (user moved progress back below 100)
       localStorage.setItem(COMPLETED_KEY,
-        JSON.stringify(completed.filter(id => id !== courseId))
-      );
+        JSON.stringify(completed.filter(id => id !== courseId)));
     }
   }
 
   // Update the visual bar and button states
   function updateUI(value) {
-    // Update the fill bar width
     fill.style.width = `${value}%`;
-
-    // Toggle green colour at 100%
     fill.classList.toggle('progress-control__fill--complete', value >= 100);
-
-    // Update aria attributes for screen readers
     track.setAttribute('aria-valuenow', value);
-
-    // Highlight only the active button
     buttons.forEach(btn => {
       const isActive = Number(btn.dataset.progress) === value;
       btn.classList.toggle('progress-control__btn--active', isActive);
@@ -410,17 +410,13 @@ function initProgressControl(courseId) {
     });
   }
 
-  // Show the control (remove hidden attribute)
   control.hidden = false;
-
-  // Set the initial state from localStorage
   updateUI(getProgress());
 
-  // Wire up button clicks
   buttons.forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', async () => {
       const value = Number(btn.dataset.progress);
-      saveProgress(value);
+      await saveProgress(value);
       updateUI(value);
     });
   });
@@ -487,17 +483,38 @@ function initEnrollButton(courseId, courseTitle) {
   // Set the correct initial state from localStorage
   updateButtons(getEnrolled().includes(courseId));
 
-  // Toggle on click — same handler attached to both buttons
-  function handleClick() {
-    const enrolled  = getEnrolled();
-    const isEnrolled = enrolled.includes(courseId);
+  // Toggle on click — API when logged in, localStorage fallback otherwise
+  async function handleClick() {
+    const isCurrentlyEnrolled = getEnrolled().includes(courseId);
+    const isLoggedIn = Boolean(localStorage.getItem('sf_auth_token'));
 
-    const updated = isEnrolled
-      ? enrolled.filter(id => id !== courseId)   // unenroll
-      : [...enrolled, courseId];                  // enroll
+    if (isLoggedIn && typeof enrollCourse === 'function') {
+      try {
+        if (isCurrentlyEnrolled) {
+          await unenrollCourse(courseId);
+        } else {
+          await enrollCourse(courseId);
+        }
+        // localStorage was synced by api.js — read back the truth
+        updateButtons(!isCurrentlyEnrolled);
+        // Re-init progress control after enroll state changes
+        if (!isCurrentlyEnrolled) initProgressControl(courseId);
+      } catch (err) {
+        // API failed — fall back to localStorage
+        _toggleLocalStorage(isCurrentlyEnrolled);
+      }
+    } else {
+      _toggleLocalStorage(isCurrentlyEnrolled);
+    }
+  }
 
+  function _toggleLocalStorage(isCurrentlyEnrolled) {
+    const enrolled = getEnrolled();
+    const updated  = isCurrentlyEnrolled
+      ? enrolled.filter(id => id !== courseId)
+      : [...enrolled, courseId];
     setEnrolled(updated);
-    updateButtons(!isEnrolled);
+    updateButtons(!isCurrentlyEnrolled);
   }
 
   if (heroBtn)    heroBtn.addEventListener('click', handleClick);
@@ -588,6 +605,14 @@ function initSaveButton(courseId, courseTitle) {
    instead of crashing silently or showing a broken page.
 ═══════════════════════════════════════════════════════════════ */
 async function loadCourse() {
+
+  /* ─── Pre-load: sync enrollment + progress from API ────────
+     If logged in, fetch fresh data from MongoDB before rendering
+     the enroll/progress UI. Falls back to localStorage silently.
+  ─────────────────────────────────────────────────────────── */
+  if (typeof getMyData === 'function') {
+    await getMyData().catch(() => {}); // sync localStorage, ignore errors
+  }
 
   /* ─── STEP 1: Read the URL parameter ───────────────────────
      window.location.search is the query string portion of the URL.

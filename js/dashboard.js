@@ -388,6 +388,16 @@ function renderRecommendations(recommendations) {
 
 async function loadDashboard() {
 
+  /* ─── STEP 0: Sync enrollment + progress from API ──────────
+     If the user is logged in and api.js is available, fetch fresh
+     enrollment/progress data from MongoDB before reading localStorage.
+     This ensures the dashboard reflects the database truth, not
+     potentially stale browser storage.
+  ─────────────────────────────────────────────────────────── */
+  if (typeof getMyData === 'function') {
+    await getMyData().catch(() => {}); // syncs localStorage, ignores errors
+  }
+
   /* ─── STEP 1: Read all user state from localStorage ──────── */
 
   // User name — default to "Learner" for first-time visitors

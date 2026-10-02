@@ -129,3 +129,96 @@ async function updateMe(name) {
 
   return updated;
 }
+
+
+/* ─── Enrollment & Progress API Methods ─────────────────────── */
+
+/**
+ * getMyData
+ *
+ * Fetches the logged-in user's enrolledCourses, courseProgress,
+ * and completedCourses from GET /api/me/data.
+ *
+ * Also syncs localStorage keys so existing dashboard/course-detail
+ * code that still reads localStorage gets fresh data.
+ *
+ * Returns null if not logged in or request fails.
+ *
+ * @returns {Promise<{enrolledCourses, courseProgress, completedCourses}|null>}
+ */
+async function getMyData() {
+  if (!localStorage.getItem(SF_TOKEN_KEY)) return null;
+  try {
+    const data = await apiFetch('/me/data');
+    // Sync localStorage so legacy code still works
+    localStorage.setItem('sf_enrolled_courses',  JSON.stringify(data.enrolledCourses));
+    localStorage.setItem('sf_course_progress',   JSON.stringify(data.courseProgress));
+    localStorage.setItem('sf_completed_courses', JSON.stringify(data.completedCourses));
+    return data;
+  } catch (err) {
+    if (err.status === 401) {
+      localStorage.removeItem(SF_TOKEN_KEY);
+      localStorage.removeItem(SF_USER_KEY);
+    }
+    return null;
+  }
+}
+
+/**
+ * enrollCourse
+ *
+ * Enrols the logged-in user in a course via POST /api/me/enroll/:id.
+ * Syncs localStorage on success.
+ *
+ * @param {string} courseId
+ * @returns {Promise<{enrolledCourses, courseProgress, completedCourses}>}
+ */
+async function enrollCourse(courseId) {
+  const data = await apiFetch(`/me/enroll/${encodeURIComponent(courseId)}`, {
+    method: 'POST'
+  });
+  localStorage.setItem('sf_enrolled_courses',  JSON.stringify(data.enrolledCourses));
+  localStorage.setItem('sf_course_progress',   JSON.stringify(data.courseProgress));
+  localStorage.setItem('sf_completed_courses', JSON.stringify(data.completedCourses));
+  return data;
+}
+
+/**
+ * unenrollCourse
+ *
+ * Unenrols the logged-in user from a course via DELETE /api/me/enroll/:id.
+ * Also clears progress for that course. Syncs localStorage on success.
+ *
+ * @param {string} courseId
+ * @returns {Promise<{enrolledCourses, courseProgress, completedCourses}>}
+ */
+async function unenrollCourse(courseId) {
+  const data = await apiFetch(`/me/enroll/${encodeURIComponent(courseId)}`, {
+    method: 'DELETE'
+  });
+  localStorage.setItem('sf_enrolled_courses',  JSON.stringify(data.enrolledCourses));
+  localStorage.setItem('sf_course_progress',   JSON.stringify(data.courseProgress));
+  localStorage.setItem('sf_completed_courses', JSON.stringify(data.completedCourses));
+  return data;
+}
+
+/**
+ * updateProgress
+ *
+ * Updates course progress percentage via PUT /api/me/progress/:id.
+ * Automatically manages completedCourses at 100%. Syncs localStorage.
+ *
+ * @param {string} courseId
+ * @param {number} percentage - 0 to 100
+ * @returns {Promise<{enrolledCourses, courseProgress, completedCourses}>}
+ */
+async function updateProgress(courseId, percentage) {
+  const data = await apiFetch(`/me/progress/${encodeURIComponent(courseId)}`, {
+    method: 'PUT',
+    body:   JSON.stringify({ percentage })
+  });
+  localStorage.setItem('sf_enrolled_courses',  JSON.stringify(data.enrolledCourses));
+  localStorage.setItem('sf_course_progress',   JSON.stringify(data.courseProgress));
+  localStorage.setItem('sf_completed_courses', JSON.stringify(data.completedCourses));
+  return data;
+}

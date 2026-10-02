@@ -520,6 +520,176 @@ app.put('/api/me', requireAuth, async (req, res) => {
 });
 
 
+/* ─── Enrollment & Progress Routes ──────────────────────────── */
+
+/**
+ * GET /api/me/data
+ *
+ * Returns the logged-in user's enrolled courses, progress map,
+ * and completed courses — all from MongoDB.
+ * Used by dashboard.js and course-detail.js on page load.
+ */
+app.get('/api/me/data', requireAuth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id)
+      .select('enrolledCourses courseProgress completedCourses');
+
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    // Convert Mongoose Map to plain object for JSON
+    const progressObj = user.courseProgress
+      ? Object.fromEntries(user.courseProgress)
+      : {};
+
+    res.json({
+      enrolledCourses:  user.enrolledCourses  || [],
+      courseProgress:   progressObj,
+      completedCourses: user.completedCourses || []
+    });
+  } catch (err) {
+    console.error('[GET /api/me/data]', err.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+/**
+ * POST /api/me/enroll/:courseId
+ *
+ * Enrols the logged-in user in a course.
+ * Idempotent — enrolling twice has no effect.
+ */
+app.post('/api/me/enroll/:courseId', requireAuth, async (req, res) => {
+  try {
+    const { courseId } = req.params;
+
+    if (!courseId || !/^[a-z0-9-]{1,80}$/.test(courseId)) {
+      return res.status(400).json({ error: 'Invalid course ID' });
+    }
+
+    // $addToSet prevents duplicates atomically
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      { $addToSet: { enrolledCourses: courseId } },
+      { new: true, select: 'enrolledCourses courseProgress completedCourses' }
+    );
+
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    const progressObj = user.courseProgress
+      ? Object.fromEntries(user.courseProgress)
+      : {};
+
+    res.json({
+      enrolledCourses:  user.enrolledCourses,
+      courseProgress:   progressObj,
+      completedCourses: user.completedCourses
+    });
+  } catch (err) {
+    console.error('[POST /api/me/enroll]', err.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+/**
+ * DELETE /api/me/enroll/:courseId
+ *
+ * Unenrols the logged-in user from a course.
+ * Also removes progress and completed status for that course.
+ */
+app.delete('/api/me/enroll/:courseId', requireAuth, async (req, res) => {
+  try {
+    const { courseId } = req.params;
+
+    if (!courseId || !/^[a-z0-9-]{1,80}$/.test(courseId)) {
+      return res.status(400).json({ error: 'Invalid course ID' });
+    }
+
+    // Remove from enrolled + completed arrays; unset progress map entry
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      {
+        $pull: { enrolledCourses: courseId, completedCourses: courseId },
+        $unset: { [`courseProgress.${courseId}`]: '' }
+      },
+      { new: true, select: 'enrolledCourses courseProgress completedCourses' }
+    );
+
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    const progressObj = user.courseProgress
+      ? Object.fromEntries(user.courseProgress)
+      : {};
+
+    res.json({
+      enrolledCourses:  user.enrolledCourses,
+      courseProgress:   progressObj,
+      completedCourses: user.completedCourses
+    });
+  } catch (err) {
+    console.error('[DELETE /api/me/enroll]', err.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+/**
+ * PUT /api/me/progress/:courseId
+ *
+ * Updates progress percentage for a specific course.
+ * Body: { percentage: 0–100 }
+ * Automatically manages completedCourses at 100%.
+ */
+app.put('/api/me/progress/:courseId', requireAuth, async (req, res) => {
+  try {
+    const { courseId } = req.params;
+    const { percentage } = req.body;
+
+    if (!courseId || !/^[a-z0-9-]{1,80}$/.test(courseId)) {
+      return res.status(400).json({ error: 'Invalid course ID' });
+    }
+
+    const pct = Number(percentage);
+    if (isNaN(pct) || pct < 0 || pct > 100) {
+      return res.status(400).json({ error: 'percentage must be a number between 0 and 100' });
+    }
+
+    // Build the update — always set progress, conditionally update completed
+    const update = {
+      $set: { [`courseProgress.${courseId}`]: pct }
+    };
+
+    if (pct >= 100) {
+      update.$addToSet = { completedCourses: courseId };
+    } else {
+      update.$pull = { completedCourses: courseId };
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      update,
+      { new: true, select: 'enrolledCourses courseProgress completedCourses' }
+    );
+
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    const progressObj = user.courseProgress
+      ? Object.fromEntries(user.courseProgress)
+      : {};
+
+    res.json({
+      enrolledCourses:  user.enrolledCourses,
+      courseProgress:   progressObj,
+      completedCourses: user.completedCourses
+    });
+  } catch (err) {
+    console.error('[PUT /api/me/progress]', err.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
 /* ─── 404 Handler ────────────────────────────────────────────── */
 
 app.use((req, res) => {
