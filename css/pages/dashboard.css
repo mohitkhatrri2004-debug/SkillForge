@@ -682,3 +682,39 @@
 .continue-card__cta:hover {
   background-color: var(--color-primary-hover);
 }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   CERTIFICATE BUTTON — Certificate Week 9
+═══════════════════════════════════════════════════════════════ */
+
+.dash-card__certificate-btn {
+  margin-top: 0.75rem;
+  width: 100%;
+  padding: 0.625rem 1rem;
+  background: linear-gradient(135deg, var(--primary-color) 0%, #5548d9 100%);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(108, 99, 255, 0.2);
+}
+
+.dash-card__certificate-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
+  background: linear-gradient(135deg, #5548d9 0%, var(--primary-color) 100%);
+}
+
+.dash-card__certificate-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(108, 99, 255, 0.2);
+}
+
+.dash-card__certificate-btn:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}

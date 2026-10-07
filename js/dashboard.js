@@ -130,7 +130,15 @@ function buildDashCard(course, progress = null) {
     <div class="dash-card__progress-label">
       <span>${progress >= 100 ? '✓ Completed' : 'In Progress'}</span>
       <span>${progress}%</span>
-    </div>` : '';
+    </div>
+    ${progress >= 100 ? `
+      <button class="dash-card__certificate-btn"
+              data-course-id="${course.id}"
+              data-course-title="${course.title}"
+              data-instructor="${course.instructor}"
+              aria-label="Download certificate for ${course.title}">
+        🎓 Get Certificate
+      </button>` : ''}` : '';
 
   return `
     <article class="dash-card">
@@ -595,3 +603,131 @@ window.addEventListener('storage', (event) => {
 
   }
 });
+
+
+/* ═══════════════════════════════════════════════════════════════
+   CERTIFICATE GENERATION
+
+   Generates a downloadable PDF certificate for completed courses.
+   Uses jsPDF library loaded from CDN.
+   
+   Certificate Week 9
+═══════════════════════════════════════════════════════════════ */
+
+function generateCertificate(courseTitle, instructor) {
+  // Get user name from localStorage or API
+  const userName = localStorage.getItem('sf_user_name') || 'Learner';
+  const completionDate = new Date().toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+
+  // Check if jsPDF is loaded
+  if (typeof window.jspdf === 'undefined') {
+    alert('Certificate library is loading. Please try again in a moment.');
+    return;
+  }
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({
+    orientation: 'landscape',
+    unit: 'mm',
+    format: 'a4'
+  });
+
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+
+  // Background
+  doc.setFillColor(248, 249, 250);
+  doc.rect(0, 0, pageWidth, pageHeight, 'F');
+
+  // Border
+  doc.setDrawColor(108, 99, 255);
+  doc.setLineWidth(2);
+  doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
+
+  // Inner border
+  doc.setDrawColor(200, 200, 200);
+  doc.setLineWidth(0.5);
+  doc.rect(15, 15, pageWidth - 30, pageHeight - 30);
+
+  // Title
+  doc.setFontSize(40);
+  doc.setTextColor(108, 99, 255);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Certificate of Completion', pageWidth / 2, 40, { align: 'center' });
+
+  // Subtitle
+  doc.setFontSize(14);
+  doc.setTextColor(100, 100, 100);
+  doc.setFont('helvetica', 'normal');
+  doc.text('This certifies that', pageWidth / 2, 55, { align: 'center' });
+
+  // Student name
+  doc.setFontSize(32);
+  doc.setTextColor(33, 33, 33);
+  doc.setFont('helvetica', 'bold');
+  doc.text(userName, pageWidth / 2, 75, { align: 'center' });
+
+  // Has completed
+  doc.setFontSize(14);
+  doc.setTextColor(100, 100, 100);
+  doc.setFont('helvetica', 'normal');
+  doc.text('has successfully completed the course', pageWidth / 2, 90, { align: 'center' });
+
+  // Course title
+  doc.setFontSize(24);
+  doc.setTextColor(108, 99, 255);
+  doc.setFont('helvetica', 'bold');
+  
+  // Word wrap course title if too long
+  const maxWidth = pageWidth - 60;
+  const titleLines = doc.splitTextToSize(courseTitle, maxWidth);
+  const titleY = 105;
+  titleLines.forEach((line, index) => {
+    doc.text(line, pageWidth / 2, titleY + (index * 10), { align: 'center' });
+  });
+
+  // Instructor
+  doc.setFontSize(12);
+  doc.setTextColor(100, 100, 100);
+  doc.setFont('helvetica', 'normal');
+  const instructorY = titleY + (titleLines.length * 10) + 15;
+  doc.text(`Instructor: ${instructor}`, pageWidth / 2, instructorY, { align: 'center' });
+
+  // Date
+  doc.setFontSize(11);
+  doc.text(`Completed on ${completionDate}`, pageWidth / 2, instructorY + 12, { align: 'center' });
+
+  // Footer
+  doc.setFontSize(10);
+  doc.setTextColor(150, 150, 150);
+  doc.text('SkillForge — Learn skills that matter', pageWidth / 2, pageHeight - 20, { align: 'center' });
+
+  // Decorative elements
+  doc.setDrawColor(108, 99, 255);
+  doc.setLineWidth(1);
+  doc.line(40, 82, 80, 82);
+  doc.line(pageWidth - 80, 82, pageWidth - 40, 82);
+
+  // Save the PDF
+  const fileName = `${courseTitle.replace(/[^a-z0-9]/gi, '-').toLowerCase()}-certificate.pdf`;
+  doc.save(fileName);
+}
+
+function initCertificateButtons() {
+  // Delegate event listener to handle dynamically added buttons
+  document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('dash-card__certificate-btn')) {
+      const courseTitle = e.target.dataset.courseTitle;
+      const instructor = e.target.dataset.instructor;
+      
+      generateCertificate(courseTitle, instructor);
+    }
+  });
+}
+
+// Initialize certificate buttons
+initCertificateButtons();
