@@ -222,3 +222,24 @@ async function updateProgress(courseId, percentage) {
   localStorage.setItem('sf_completed_courses', JSON.stringify(data.completedCourses));
   return data;
 }
+
+
+/* ─── Password Management API Methods ───────────────────────── */
+
+/**
+ * changePassword
+ *
+ * Changes the logged-in user's password via PUT /api/auth/password.
+ * Requires the current password for verification.
+ *
+ * @param {string} currentPassword
+ * @param {string} newPassword - Must be at least 6 characters
+ * @returns {Promise<{message}>}
+ * @throws {Error} with server validation message on failure
+ */
+async function changePassword(currentPassword, newPassword) {
+  return await apiFetch('/auth/password', {
+    method: 'PUT',
+    body:   JSON.stringify({ currentPassword, newPassword })
+  });
+}

@@ -405,6 +405,71 @@ app.post('/api/auth/login', async (req, res) => {
 });
 
 
+/**
+ * PUT /api/auth/password
+ *
+ * Changes the logged-in user's password.
+ * Requires the current password for verification (prevents
+ * session hijacking from changing password without knowing it).
+ *
+ * Body: { currentPassword, newPassword }
+ * Returns: 200 { message: "Password updated successfully" }
+ *
+ * Security notes:
+ * - Requires valid JWT (requireAuth middleware)
+ * - Current password must be correct (prevents session hijack)
+ * - New password must be at least 6 characters
+ * - Same timing protection as login (bcrypt compare always runs)
+ */
+app.put('/api/auth/password', requireAuth, async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({
+        error: 'currentPassword and newPassword are required'
+      });
+    }
+
+    const trimmedCurrent = String(currentPassword);
+    const trimmedNew     = String(newPassword);
+
+    if (trimmedNew.length < 6) {
+      return res.status(400).json({
+        error: 'New password must be at least 6 characters'
+      });
+    }
+
+    // Fetch the user with password hash (normally excluded by toJSON)
+    const user = await User.findById(req.user.id).select('+passwordHash');
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Verify current password
+    const match = await bcrypt.compare(trimmedCurrent, user.passwordHash);
+
+    if (!match) {
+      return res.status(401).json({
+        error: 'Current password is incorrect'
+      });
+    }
+
+    // Hash and save new password
+    const newHash = await bcrypt.hash(trimmedNew, 10);
+    user.passwordHash = newHash;
+    await user.save();
+
+    res.json({ message: 'Password updated successfully' });
+
+  } catch (err) {
+    console.error('[PUT /api/auth/password]', err.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
 /* ─── Protected User Routes ──────────────────────────────────── */
 
 /**

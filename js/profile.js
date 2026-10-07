@@ -498,6 +498,138 @@ function initDangerZone() {
 
 
 /* ═══════════════════════════════════════════════════════════════
+   SECTION: PASSWORD CHANGE
+
+   Week 8 Day 4 — Password update form with validation.
+   Only shown when the user is logged in (sf_auth_token present).
+
+   VALIDATION:
+   - Both fields required
+   - New password must be at least 6 characters
+
+   SECURITY:
+   - Current password verified on server before update
+   - Server rejects if current password is wrong (401)
+   - Client shows inline error for bad current password
+═══════════════════════════════════════════════════════════════ */
+
+function showPasswordCard() {
+  const card = document.getElementById('password-card');
+  if (!card) return;
+
+  const isLoggedIn = Boolean(localStorage.getItem('sf_auth_token'));
+  card.hidden = !isLoggedIn;
+}
+
+function clearPasswordFormError() {
+  const currentInput = document.getElementById('current-password-input');
+  const newInput     = document.getElementById('new-password-input');
+  const error        = document.getElementById('password-error');
+
+  if (currentInput) currentInput.classList.remove('form-input--error');
+  if (newInput)     newInput.classList.remove('form-input--error');
+  if (error)        { error.textContent = ''; error.hidden = true; }
+}
+
+function showPasswordFormError(message) {
+  const currentInput = document.getElementById('current-password-input');
+  const newInput     = document.getElementById('new-password-input');
+  const error        = document.getElementById('password-error');
+
+  if (currentInput) currentInput.classList.add('form-input--error');
+  if (newInput)     newInput.classList.add('form-input--error');
+
+  if (error) {
+    error.textContent = message;
+    error.hidden = false;
+  }
+}
+
+function showPasswordFeedback(message, type) {
+  const feedback = document.getElementById('password-feedback');
+  if (!feedback) return;
+
+  feedback.textContent = message;
+  feedback.className = `form-feedback form-feedback--${type}`;
+  feedback.hidden = false;
+
+  if (type === 'success') {
+    setTimeout(() => { feedback.hidden = true; }, 4000);
+  }
+}
+
+function initPasswordForm() {
+  const form         = document.getElementById('password-form');
+  const currentInput = document.getElementById('current-password-input');
+  const newInput     = document.getElementById('new-password-input');
+
+  if (!form || !currentInput || !newInput) return;
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    clearPasswordFormError();
+
+    const current = currentInput.value;
+    const newPass = newInput.value;
+
+    // Validation
+    if (!current || !newPass) {
+      showPasswordFormError('Both fields are required.');
+      (!current ? currentInput : newInput).focus();
+      return;
+    }
+
+    if (newPass.length < 6) {
+      showPasswordFormError('New password must be at least 6 characters.');
+      newInput.focus();
+      return;
+    }
+
+    const isLoggedIn = Boolean(localStorage.getItem('sf_auth_token'));
+    if (!isLoggedIn || typeof changePassword !== 'function') {
+      showPasswordFormError('You must be logged in to change your password.');
+      return;
+    }
+
+    const submitBtn = form.querySelector('button[type="submit"]');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Updating…';
+    }
+
+    try {
+      await changePassword(current, newPass);
+
+      // Clear form on success
+      currentInput.value = '';
+      newInput.value = '';
+
+      showPasswordFeedback('✓ Password updated successfully.', 'success');
+
+    } catch (err) {
+      showPasswordFormError(err.message || 'Failed to update password. Please try again.');
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Update Password';
+      }
+    }
+  });
+
+  // Clear errors on input
+  [currentInput, newInput].forEach(input => {
+    input.addEventListener('input', () => {
+      clearPasswordFormError();
+      const feedback = document.getElementById('password-feedback');
+      if (feedback && feedback.classList.contains('form-feedback--error')) {
+        feedback.hidden = true;
+      }
+    });
+  });
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
    ENTRY POINT
 
    Phase 1: loadProfile() — instant render from localStorage.
@@ -505,8 +637,10 @@ function initDangerZone() {
    Both run on page load. Guest users only see Phase 1.
 ═══════════════════════════════════════════════════════════════ */
 (async function init() {
-  loadProfile();              // Phase 1: instant, synchronous
+  loadProfile();                  // Phase 1: instant, synchronous
   initNameForm();
+  showPasswordCard();             // Week 8 Day 4
+  initPasswordForm();             // Week 8 Day 4
   initDangerZone();
   await refreshProfileFromAPI();  // Phase 2: background API refresh
 })();

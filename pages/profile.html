@@ -216,6 +216,77 @@
       </div>
 
 
+      <!-- ─────────────────────────────────────────────────────
+           CHANGE PASSWORD CARD
+           
+           Only visible when logged in (hidden by default,
+           profile.js shows it if sf_auth_token exists).
+           
+           Week 8 Day 4
+      ───────────────────────────────────────────────────── -->
+      <div class="settings-card" id="password-card" hidden>
+
+        <h2 class="settings-card__title">Change Password</h2>
+        <p class="settings-card__description">
+          Update your password. You'll need your current password to confirm.
+        </p>
+
+        <form id="password-form" class="profile-form" novalidate>
+
+          <div class="form-group">
+            <label for="current-password-input" class="form-label">
+              Current password
+            </label>
+            <input
+              type="password"
+              id="current-password-input"
+              class="form-input"
+              placeholder="Enter current password"
+              autocomplete="current-password"
+              aria-describedby="password-hint password-error"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="new-password-input" class="form-label">
+              New password
+            </label>
+            <input
+              type="password"
+              id="new-password-input"
+              class="form-input"
+              placeholder="Enter new password (min 6 characters)"
+              autocomplete="new-password"
+              aria-describedby="password-hint password-error"
+            >
+            <span id="password-hint" class="form-hint">
+              Must be at least 6 characters. Choose something secure.
+            </span>
+            <span id="password-error"
+                  class="form-error-text"
+                  role="alert"
+                  hidden>
+            </span>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="form-btn--primary">
+              Update Password
+            </button>
+          </div>
+
+        </form>
+
+        <div id="password-feedback"
+             class="form-feedback"
+             role="status"
+             aria-live="polite"
+             hidden>
+        </div>
+
+      </div>
+
+
       <!-- About You Card — static, no JS needed -->
       <div class="settings-card">
 
